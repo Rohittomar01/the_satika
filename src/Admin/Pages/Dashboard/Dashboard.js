@@ -27,10 +27,7 @@ import {
   ListItemText,
 } from "@mui/material";
 import Category from "../../Components/Category";
-// import { mainListItems, secondaryListItems } from './listItems';
-// import Chart from './Chart';
-// import Deposits from './Deposits';
-// import Orders from './Orders';
+
 
 function Copyright(props) {
   return (
