@@ -1,0 +1,27 @@
+:root{
+    --dashboard_color:#282c34;
+    --font_family:sans-serif;
+    --marginBottom:2vh;
+    --box-shadow: 0 4px 8px rgba(255, 248, 220, 1);
+  }
+
+.category_mainContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+}
+#paper {
+  padding: 5%;
+  width: 50vw;
+  height: auto;
+  box-shadow: var(--box-shadow);
+}
+#category_mainHeading {
+  font-family: var(--font_family);
+  padding-bottom: var(--marginBottom);
+}
+#category_button {
+  background-color: var(--dashboard_color);
+  margin-bottom:var(--marginBottom) ;
+}
