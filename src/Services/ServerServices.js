@@ -1,5 +1,5 @@
 import axios from "axios";
-const ServerURL = "http://localhost:3000";
+const ServerURL = "http://localhost:5000";
 
 const getData = async (url) => {
   try {
@@ -12,7 +12,7 @@ const getData = async (url) => {
   }
 };
 
-const PostData = async (url,body) => {
+const postData = async (url,body) => {
     try {
       var response = await axios.post(`${ServerURL}/${url}`,body);
   
@@ -23,5 +23,5 @@ const PostData = async (url,body) => {
     }
   };
 
-  export{ServerURL,getData,PostData}
+  export{ServerURL,getData,postData}
   
