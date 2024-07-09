@@ -27,6 +27,7 @@ import {
   ListItemText,
 } from "@mui/material";
 import Category from "../../Components/Category";
+import Categories_List from "../../Components/Categories_List";
 // import { mainListItems, secondaryListItems } from './listItems';
 // import Chart from './Chart';
 // import Deposits from './Deposits';
@@ -111,6 +112,8 @@ export default function Dashboard() {
     switch (activeItem) {
       case "category":
         return <Category />;
+        case "categories_list":
+          return <Categories_List />;
       default:
         return <Category />;
     }
@@ -120,8 +123,13 @@ export default function Dashboard() {
     <ThemeProvider theme={defaultTheme}>
       <Box sx={{ display: "flex" }}>
         <CssBaseline />
-        <AppBar position="absolute" open={open}>
-          <Toolbar
+        <AppBar
+  position="absolute"
+  open={open}
+  sx={{
+    backgroundColor: 'black', // Light yellow with some transparency
+  }}
+>     <Toolbar
             sx={{
               pr: "24px", // keep right padding when drawer closed
             }}
@@ -178,6 +186,17 @@ export default function Dashboard() {
                   <CategoryIcon />
                 </ListItemIcon>
                 <ListItemText primary="Category" />
+              </ListItemButton>
+            </ListItem>
+            <ListItem disablePadding>
+              <ListItemButton
+                onClick={() => setActiveItem("categories_list")}
+                selected={activeItem === "categories_list"}
+              >
+                <ListItemIcon>
+                  <CategoryIcon />
+                </ListItemIcon>
+                <ListItemText primary="Categories List" />
               </ListItemButton>
             </ListItem>
             <Divider sx={{ my: 1 }} />

@@ -16,6 +16,7 @@ import "D:/The_Satika/the_satika/src/Admin/StyleSheets/Category.css";
 import { useState } from "react";
 import Swal from "sweetalert2";
 import Sweet_Alert from "../../Common_Components/alerts/Sweet_Alert";
+import { json } from "react-router-dom";
 
 export default function Category() {
   // const validationSchema = yup.object({
@@ -34,21 +35,19 @@ export default function Category() {
 
   const onSubmit = async (data) => {
     const date = new Date();
-    console.log("fileeeeeeeeeeeeee", file);
-
     const refineDate = `${date.getFullYear()}-${(date.getMonth() + 1)
       .toString()
       .padStart(2, "0")}-${date.getDate().toString().padStart(2, "0")}`;
     try {
-      const body = {
-        name: data.name,
-        description: data.description,
-        file: file,
-        created_at: refineDate,
-        updated_at: refineDate,
-        created_by: "admin",
-      };
-      const response = await postData("category/submitCategory_Data", body, {
+      const formData = new FormData();
+      formData.append("name", data.name);
+      formData.append("description", data.description);
+      formData.append("created_at", refineDate);
+      formData.append("updated_at", refineDate);
+      formData.append("file", file);
+      formData.append("created_by", "admin");
+
+      const response = await postData("category/submitCategory_Data", formData,{
         method: "POST",
       });
 
@@ -58,7 +57,7 @@ export default function Category() {
       } else {
         Sweet_Alert({ title: response.message, icon: "error" });
       }
-   
+
       reset();
     } catch (error) {
       console.error("Error submitting data:", error);
@@ -160,9 +159,11 @@ export default function Category() {
                   lg={6}
                 >
                   <Avatar
-                    alt="Remy Sharp"
-                    src="/static/images/avatar/1.jpg"
-                    sx={{ width: 56, height: 56 }}
+                    alt="Caqtegory Image"
+                    src={
+                      "https://th.bing.com/th/id/OIP.VOB_2CiLZ6FSNWDMMGdQKAHaLe?w=198&h=308&c=7&r=0&o=5&dpr=1.5&pid=1.7"
+                    }
+                    sx={{ width: 65, height: 65 }}
                   />
                 </Grid>
                 <Grid item xs={12} sm={6} md={6} lg={6}>
