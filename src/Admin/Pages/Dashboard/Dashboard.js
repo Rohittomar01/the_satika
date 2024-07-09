@@ -17,8 +17,9 @@ import Link from "@mui/material/Link";
 import MenuIcon from "@mui/icons-material/Menu";
 import CategoryIcon from '@mui/icons-material/Category';
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import NotificationsIcon from "@mui/icons-material/Notifications";
-import InboxIcon from "@mui/icons-material/Inbox";
+import ListIcon from '@mui/icons-material/List';
 
 import {
   ListItem,
@@ -27,6 +28,8 @@ import {
   ListItemText,
 } from "@mui/material";
 import Category from "../../Components/Category";
+import Product from "../../Components/Product";
+import ProductsList from "../../Components/ProductsList";
 
 
 function Copyright(props) {
@@ -98,7 +101,7 @@ const defaultTheme = createTheme();
 
 export default function Dashboard() {
   const [open, setOpen] = React.useState(true);
-  const [activeItem, setActiveItem] = useState("");
+  const [activeItem, setActiveItem] = useState("product");
   const toggleDrawer = () => {
     setOpen(!open);
   };
@@ -108,6 +111,10 @@ export default function Dashboard() {
     switch (activeItem) {
       case "category":
         return <Category />;
+        case "product":
+          return <Product/>
+        case "productlist":
+          return <ProductsList/>
       default:
         return <Category />;
     }
@@ -169,14 +176,38 @@ export default function Dashboard() {
             <ListItem disablePadding>
               <ListItemButton
                 onClick={() => setActiveItem("category")}
-                selected={activeItem === "category"}
+                // selected={activeItem === "category"}
               >
                 <ListItemIcon>
                   <CategoryIcon />
                 </ListItemIcon>
                 <ListItemText primary="Category" />
               </ListItemButton>
-            </ListItem>
+              </ListItem>
+
+              <ListItem disablePadding>
+              <ListItemButton
+                onClick={() => setActiveItem("product")}
+                // selected={activeItem === "product"}
+              >
+                <ListItemIcon>
+                  <AddShoppingCartIcon />
+                </ListItemIcon>
+                <ListItemText primary="Products" />
+              </ListItemButton>
+              </ListItem>
+              <ListItem disablePadding>
+              <ListItemButton
+                onClick={() => setActiveItem("productlist")}
+                // selected={activeItem === "product"}
+              >
+                <ListItemIcon>
+                  <ListIcon />
+                </ListItemIcon>
+                <ListItemText primary="Products List" />
+              </ListItemButton>
+              </ListItem>
+          
             <Divider sx={{ my: 1 }} />
           </List>
         </Drawer>
