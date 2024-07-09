@@ -14,24 +14,16 @@ import { useForm } from "react-hook-form";
 import { postData } from "../../Services/ServerServices";
 import "../StyleSheets/Category.css";
 import { useState } from "react";
-import Swal from "sweetalert2";
 import Sweet_Alert from "../../Common_Components/alerts/Sweet_Alert";
-import { json } from "react-router-dom";
 
 export default function Category() {
-  // const validationSchema = yup.object({
-  //   name: yup.string().required("Name is required"),
-  //   description: yup.string(),
-  // });
-  const [file, setFile] = useState([]);
-
+  const [file, setFile] = useState(null);
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
   } = useForm();
-  //   console.log("filllllllllllle",file)
 
   const onSubmit = async (data) => {
     const date = new Date();
@@ -47,9 +39,13 @@ export default function Category() {
       formData.append("file", file);
       formData.append("created_by", "admin");
 
-      const response = await postData("category/submitCategory_Data", formData,{
-        method: "POST",
-      });
+      const response = await postData(
+        "category/submitCategory_Data",
+        formData,
+        {
+          method: "POST",
+        }
+      );
 
       console.log("responce", response);
       if (response) {
@@ -161,7 +157,9 @@ export default function Category() {
                   <Avatar
                     alt="Caqtegory Image"
                     src={
-                      "https://th.bing.com/th/id/OIP.VOB_2CiLZ6FSNWDMMGdQKAHaLe?w=198&h=308&c=7&r=0&o=5&dpr=1.5&pid=1.7"
+                      file
+                        ? URL.createObjectURL(file)
+                        : "https://th.bing.com/th/id/OIP.VOB_2CiLZ6FSNWDMMGdQKAHaLe?w=198&h=308&c=7&r=0&o=5&dpr=1.5&pid=1.7"
                     }
                     sx={{ width: 65, height: 65 }}
                   />
