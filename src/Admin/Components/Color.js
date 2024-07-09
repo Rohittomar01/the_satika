@@ -29,9 +29,7 @@ export default function Color() {
         created_by: "admin",
       };
 
-      const response = await postData("color/submitColor_Data", body, {
-        method: "POST",
-      });
+      const response = await postData("product/add-color", body);
 
       if (response) {
         Sweet_Alert({ title: response.message, icon: "success" });

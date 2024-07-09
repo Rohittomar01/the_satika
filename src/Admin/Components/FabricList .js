@@ -11,55 +11,61 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
-import { Typography } from "@mui/material";
-import { useActiveItem } from "../../Common_Components/ActiveItemContext";
-import { Box, Tooltip } from "@mui/material";
+import { Box, Typography, Tooltip } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
+import { useActiveItem } from "../../Common_Components/ActiveItemContext";
 
-const ProductsList = () => {
+import moment from "moment";
+
+const FabricList = () => {
   const { setActiveItem } = useActiveItem();
   const [hover, setHover] = useState(false);
-  const [products, setProducts] = useState([]);
+  const [fabrics, setFabrics] = useState([]);
   const [editRowsModel, setEditRowsModel] = useState({});
   const [open, setOpen] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
 
   useEffect(() => {
-    fetchProducts();
+    fetchFabrics();
   }, []);
 
-  const fetchProducts = async () => {
+  const fetchFabrics = async () => {
     try {
-      const response = await getData("product/fetch-products");
-      setProducts(response.data);
-      console.log("Fetched products:", response.data);
+      const response = await getData("product/fetch-fabrics");
+      const formattedFabric = response.data.map((fabric) => ({
+        ...fabric,
+        created_at: moment(fabric.started_at).format("DD/MM/YYYY hh:mm A"),
+        updated_at: moment(fabric.ended_at).format("DD/MM/YYYY hh:mm A"),
+      }));
+      setFabrics(formattedFabric);
+      console.log("Fetched fabrics:", response.data);
     } catch (error) {
-      console.error("Error fetching products:", error);
+      console.error("Error fetching fabrics:", error);
     }
   };
 
   const handleProcessRowUpdate = (newRow) => {
-    setProducts((prevProducts) =>
-      prevProducts.map((row) =>
-        row.product_id === newRow.product_id ? newRow : row
+    setFabrics((prevFabrics) =>
+      prevFabrics.map((row) =>
+        row.fabric_id === newRow.fabric_id ? newRow : row
       )
     );
-    setEditRowsModel({ ...editRowsModel, [newRow.product_id]: true });
+    setEditRowsModel({ ...editRowsModel, [newRow.fabric_id]: true });
     return newRow;
   };
 
   const handleSaveEdit = async (id) => {
     try {
-      const updatedProduct = products.find((row) => row.product_id === id);
-      if (!updatedProduct) {
-        console.error(`Product ${id} not found in state.`);
+      const updatedFabric = fabrics.find((row) => row.fabric_id === id);
+      if (!updatedFabric) {
+        console.error(`Fabric ${id} not found in state.`);
         return;
       }
-      await updateData(`product/update-product/${id}`, updatedProduct);
+      await updateData(`product/update-fabric/${id}`, updatedFabric);
       setEditRowsModel({ ...editRowsModel, [id]: false });
-      console.log(`Product ${id} updated successfully!`);
+      console.log(`Fabric ${id} updated successfully!`);
     } catch (error) {
-      console.error(`Error updating product ${id}:`, error);
+      console.error(`Error updating fabric ${id}:`, error);
     }
   };
 
@@ -70,15 +76,15 @@ const ProductsList = () => {
 
   const confirmDelete = async () => {
     try {
-      await deleteData(`product/delete-product/${deleteId}`);
-      const updatedProducts = products.filter(
-        (row) => row.product_id !== deleteId
+      await deleteData(`product/delete-fabric/${deleteId}`);
+      const updatedFabrics = fabrics.filter(
+        (row) => row.fabric_id !== deleteId
       );
-      setProducts(updatedProducts);
-      console.log(`Product ${deleteId} deleted successfully!`);
+      setFabrics(updatedFabrics);
+      console.log(`Fabric ${deleteId} deleted successfully!`);
       setOpen(false);
     } catch (error) {
-      console.error(`Error deleting product ${deleteId}:`, error);
+      console.error(`Error deleting fabric ${deleteId}:`, error);
     }
   };
 
@@ -88,46 +94,35 @@ const ProductsList = () => {
   };
 
   const handleButtonClick = () => {
-    setActiveItem("product"); // Change this to your desired route
+    setActiveItem("fabric"); // Change this to your desired route
   };
 
   const columns = [
-    { field: "product_id", headerName: "ID", width: 70, editable: false },
+    { field: "fabric_id", headerName: "ID", width: 70, editable: false },
     {
-      field: "product_name",
-      headerName: "Product Name",
+      field: "fabric_name",
+      headerName: "Fabric Name",
       width: 200,
       editable: true,
     },
     {
-      field: "product_description",
+      field: "fabric_description",
       headerName: "Description",
       width: 300,
       editable: true,
     },
-    { field: "price", headerName: "Price", width: 120, editable: true },
-    { field: "discount", headerName: "Discount", width: 120, editable: true },
-    { field: "stock", headerName: "Stock", width: 120, editable: true },
-    { field: "trending", headerName: "Trending", width: 120, editable: true },
     {
-      field: "new_arrival",
-      headerName: "New Arrival",
-      width: 150,
-      editable: true,
+      field: "created_at",
+      headerName: "Created At",
+      width: 180,
+      editable: false,
     },
     {
-      field: "top_selling",
-      headerName: "Top Selling",
-      width: 150,
-      editable: true,
+      field: "updated_at",
+      headerName: "Updated At",
+      width: 180,
+      editable: false,
     },
-    { field: "category", headerName: "Category", width: 150, editable: true },
-    { field: "occasion", headerName: "Occasion", width: 150, editable: true },
-    { field: "craft", headerName: "Craft", width: 150, editable: true },
-    { field: "fabric", headerName: "Fabric", width: 150, editable: true },
-    { field: "color", headerName: "Color", width: 150, editable: true },
-    { field: "origin", headerName: "Origin", width: 150, editable: true },
-    { field: "brand", headerName: "Brand", width: 150, editable: true },
     {
       field: "created_by",
       headerName: "Created By",
@@ -139,7 +134,7 @@ const ProductsList = () => {
       headerName: "Actions",
       width: 150,
       renderCell: (params) => {
-        const id = params.row.product_id;
+        const id = params.row.fabric_id;
         if (editRowsModel[id]) {
           return (
             <IconButton onClick={() => handleSaveEdit(id)}>
@@ -173,9 +168,9 @@ const ProductsList = () => {
         }}
       >
         <Typography variant="h4" mb={3}>
-          Product List
+          Fabric List
         </Typography>
-        <Tooltip title={hover ? "Add New Product" : ""} arrow>
+        <Tooltip title={hover ? "Add New Fabric" : ""} arrow>
           <Button
             onMouseEnter={() => setHover(true)}
             onMouseLeave={() => setHover(false)}
@@ -194,16 +189,16 @@ const ProductsList = () => {
           </Button>
         </Tooltip>
       </Box>
-      {products.length > 0 ? (
+      {fabrics.length > 0 ? (
         <>
           <DataGrid
-            rows={products}
+            rows={fabrics}
             columns={columns}
             pageSize={10}
             rowsPerPageOptions={[10, 25, 50]}
             checkboxSelection
             disableSelectionOnClick
-            getRowId={(row) => row.product_id}
+            getRowId={(row) => row.fabric_id}
             processRowUpdate={handleProcessRowUpdate}
             editMode="row"
             sx={{
@@ -224,7 +219,7 @@ const ProductsList = () => {
             </DialogTitle>
             <DialogContent>
               <DialogContentText id="alert-dialog-description">
-                Are you sure you want to delete this product?
+                Are you sure you want to delete this fabric?
               </DialogContentText>
             </DialogContent>
             <DialogActions>
@@ -242,7 +237,7 @@ const ProductsList = () => {
           style={{ height: "80vh", display: "flex", justifyContent: "center" }}
         >
           <p style={{ color: "red", fontWeight: "bolder", fontSize: "1.5em" }}>
-            No products available
+            No fabrics available
           </p>
         </div>
       )}
@@ -250,4 +245,4 @@ const ProductsList = () => {
   );
 };
 
-export default ProductsList;
+export default FabricList;

@@ -27,11 +27,6 @@ import {
     } = useForm();
   
     const onSubmit = async (data) => {
-      const date = new Date();
-      const refineDate = `${date.getFullYear()}-${(date.getMonth() + 1)
-        .toString()
-        .padStart(2, "0")}-${date.getDate().toString().padStart(2, "0")}`;
-  
       try {
         const body = {
           occasion_name: data.occasion_name,
@@ -41,9 +36,7 @@ import {
           created_by: "admin",
         };
         console.log(body);
-        const response = await postData("occasion/submitOccasion_Data", body, {
-          method: "POST",
-        });
+        const response = await postData("product/add-occasion", body);
   
         if (response) {
           Sweet_Alert({ title: response.message, icon: "success" });

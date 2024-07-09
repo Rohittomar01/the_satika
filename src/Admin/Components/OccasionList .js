@@ -11,55 +11,65 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
-import { Typography } from "@mui/material";
-import { useActiveItem } from "../../Common_Components/ActiveItemContext";
-import { Box, Tooltip } from "@mui/material";
+import moment from "moment"; // Import moment.js
+import { useNavigate } from "react-router-dom";
+import { Box, Typography, Tooltip } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
+import { useActiveItem } from "../../Common_Components/ActiveItemContext";
 
-const ProductsList = () => {
+const OccasionList = () => {
   const { setActiveItem } = useActiveItem();
   const [hover, setHover] = useState(false);
-  const [products, setProducts] = useState([]);
+  const [occasions, setOccasions] = useState([]);
   const [editRowsModel, setEditRowsModel] = useState({});
   const [open, setOpen] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
 
+
+
+
   useEffect(() => {
-    fetchProducts();
+    fetchOccasions();
   }, []);
 
-  const fetchProducts = async () => {
+  const fetchOccasions = async () => {
     try {
-      const response = await getData("product/fetch-products");
-      setProducts(response.data);
-      console.log("Fetched products:", response.data);
+      const response = await getData("product/fetch-occasions");
+      // Format dates using moment.js
+      const formattedOccasions = response.data.map((occasion) => ({
+        ...occasion,
+        started_at: moment(occasion.started_at).format("DD/MM/YYYY hh:mm A"), // Example format: 01/07/2024 04:30 PM
+        ended_at: moment(occasion.ended_at).format("DD/MM/YYYY hh:mm A"),
+      }));
+      setOccasions(formattedOccasions);
+      console.log("Fetched occasions:", formattedOccasions);
     } catch (error) {
-      console.error("Error fetching products:", error);
+      console.error("Error fetching occasions:", error);
     }
   };
 
   const handleProcessRowUpdate = (newRow) => {
-    setProducts((prevProducts) =>
-      prevProducts.map((row) =>
-        row.product_id === newRow.product_id ? newRow : row
+    setOccasions((prevOccasions) =>
+      prevOccasions.map((row) =>
+        row.occasion_id === newRow.occasion_id ? newRow : row
       )
     );
-    setEditRowsModel({ ...editRowsModel, [newRow.product_id]: true });
+    setEditRowsModel({ ...editRowsModel, [newRow.occasion_id]: true });
     return newRow;
   };
 
   const handleSaveEdit = async (id) => {
     try {
-      const updatedProduct = products.find((row) => row.product_id === id);
-      if (!updatedProduct) {
-        console.error(`Product ${id} not found in state.`);
+      const updatedOccasion = occasions.find((row) => row.occasion_id === id);
+      if (!updatedOccasion) {
+        console.error(`Occasion ${id} not found in state.`);
         return;
       }
-      await updateData(`product/update-product/${id}`, updatedProduct);
+      await updateData(`product/update-occasion/${id}`, updatedOccasion);
       setEditRowsModel({ ...editRowsModel, [id]: false });
-      console.log(`Product ${id} updated successfully!`);
+      console.log(`Occasion ${id} updated successfully!`);
     } catch (error) {
-      console.error(`Error updating product ${id}:`, error);
+      console.error(`Error updating occasion ${id}:`, error);
     }
   };
 
@@ -70,15 +80,15 @@ const ProductsList = () => {
 
   const confirmDelete = async () => {
     try {
-      await deleteData(`product/delete-product/${deleteId}`);
-      const updatedProducts = products.filter(
-        (row) => row.product_id !== deleteId
+      await deleteData(`product/delete-occasion/${deleteId}`);
+      const updatedOccasions = occasions.filter(
+        (row) => row.occasion_id !== deleteId
       );
-      setProducts(updatedProducts);
-      console.log(`Product ${deleteId} deleted successfully!`);
+      setOccasions(updatedOccasions);
+      console.log(`Occasion ${deleteId} deleted successfully!`);
       setOpen(false);
     } catch (error) {
-      console.error(`Error deleting product ${deleteId}:`, error);
+      console.error(`Error deleting occasion ${deleteId}:`, error);
     }
   };
 
@@ -88,46 +98,30 @@ const ProductsList = () => {
   };
 
   const handleButtonClick = () => {
-    setActiveItem("product"); // Change this to your desired route
+   setActiveItem("occasion"); // Change this to your desired route
   };
 
   const columns = [
-    { field: "product_id", headerName: "ID", width: 70, editable: false },
+    { field: "occasion_id", headerName: "ID", width: 70, editable: false },
     {
-      field: "product_name",
-      headerName: "Product Name",
+      field: "occasion_name",
+      headerName: "Occasion Name",
       width: 200,
       editable: true,
     },
     {
-      field: "product_description",
+      field: "occasion_description",
       headerName: "Description",
       width: 300,
       editable: true,
     },
-    { field: "price", headerName: "Price", width: 120, editable: true },
-    { field: "discount", headerName: "Discount", width: 120, editable: true },
-    { field: "stock", headerName: "Stock", width: 120, editable: true },
-    { field: "trending", headerName: "Trending", width: 120, editable: true },
     {
-      field: "new_arrival",
-      headerName: "New Arrival",
-      width: 150,
+      field: "started_at",
+      headerName: "Start Date",
+      width: 180,
       editable: true,
     },
-    {
-      field: "top_selling",
-      headerName: "Top Selling",
-      width: 150,
-      editable: true,
-    },
-    { field: "category", headerName: "Category", width: 150, editable: true },
-    { field: "occasion", headerName: "Occasion", width: 150, editable: true },
-    { field: "craft", headerName: "Craft", width: 150, editable: true },
-    { field: "fabric", headerName: "Fabric", width: 150, editable: true },
-    { field: "color", headerName: "Color", width: 150, editable: true },
-    { field: "origin", headerName: "Origin", width: 150, editable: true },
-    { field: "brand", headerName: "Brand", width: 150, editable: true },
+    { field: "ended_at", headerName: "End Date", width: 180, editable: true },
     {
       field: "created_by",
       headerName: "Created By",
@@ -139,7 +133,7 @@ const ProductsList = () => {
       headerName: "Actions",
       width: 150,
       renderCell: (params) => {
-        const id = params.row.product_id;
+        const id = params.row.occasion_id;
         if (editRowsModel[id]) {
           return (
             <IconButton onClick={() => handleSaveEdit(id)}>
@@ -173,9 +167,9 @@ const ProductsList = () => {
         }}
       >
         <Typography variant="h4" mb={3}>
-          Product List
+          Occasion List
         </Typography>
-        <Tooltip title={hover ? "Add New Product" : ""} arrow>
+        <Tooltip title={hover ? "Add Record" : ""} arrow>
           <Button
             onMouseEnter={() => setHover(true)}
             onMouseLeave={() => setHover(false)}
@@ -194,16 +188,16 @@ const ProductsList = () => {
           </Button>
         </Tooltip>
       </Box>
-      {products.length > 0 ? (
+      {occasions.length > 0 ? (
         <>
           <DataGrid
-            rows={products}
+            rows={occasions}
             columns={columns}
             pageSize={10}
             rowsPerPageOptions={[10, 25, 50]}
             checkboxSelection
             disableSelectionOnClick
-            getRowId={(row) => row.product_id}
+            getRowId={(row) => row.occasion_id}
             processRowUpdate={handleProcessRowUpdate}
             editMode="row"
             sx={{
@@ -224,7 +218,7 @@ const ProductsList = () => {
             </DialogTitle>
             <DialogContent>
               <DialogContentText id="alert-dialog-description">
-                Are you sure you want to delete this product?
+                Are you sure you want to delete this occasion?
               </DialogContentText>
             </DialogContent>
             <DialogActions>
@@ -242,7 +236,7 @@ const ProductsList = () => {
           style={{ height: "80vh", display: "flex", justifyContent: "center" }}
         >
           <p style={{ color: "red", fontWeight: "bolder", fontSize: "1.5em" }}>
-            No products available
+            No occasions available
           </p>
         </div>
       )}
@@ -250,4 +244,4 @@ const ProductsList = () => {
   );
 };
 
-export default ProductsList;
+export default OccasionList;

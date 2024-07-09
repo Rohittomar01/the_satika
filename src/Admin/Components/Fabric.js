@@ -29,9 +29,7 @@ export default function Fabric() {
         created_by: "admin",
       };
 
-      const response = await postData("fabric/submitFabric_Data", body, {
-        method: "POST",
-      });
+      const response = await postData("product/add-fabric", body);
 
       if (response) {
         Sweet_Alert({ title: response.message, icon: "success" });
