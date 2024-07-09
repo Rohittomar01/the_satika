@@ -12,7 +12,7 @@ import { styled } from "@mui/material/styles";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { useForm } from "react-hook-form";
 import { postData } from "../../Services/ServerServices";
-import "D:/The_Satika/the_satika/src/Admin/StyleSheets/Category.css";
+import "../StyleSheets/Category.css";
 import { useState } from "react";
 import Swal from "sweetalert2";
 import Sweet_Alert from "../../Common_Components/alerts/Sweet_Alert";
