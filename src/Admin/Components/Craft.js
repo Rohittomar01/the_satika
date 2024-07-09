@@ -29,9 +29,7 @@ export default function Craft() {
         created_by: "admin",
       };
 
-      const response = await postData("craft/submitCraft_Data", body, {
-        method: "POST",
-      });
+      const response = await postData("product/add-craft", body);
 
       if (response) {
         Sweet_Alert({ title: response.message, icon: "success" });

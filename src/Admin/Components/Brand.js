@@ -29,9 +29,7 @@ export default function Brand() {
         created_by: "admin",
       };
 
-      const response = await postData("brand/submitBrand_Data", body, {
-        method: "POST",
-      });
+      const response = await postData("product/add-brand", body);
 
       if (response) {
         Sweet_Alert({ title: response.message, icon: "success" });

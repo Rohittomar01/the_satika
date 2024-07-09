@@ -30,9 +30,7 @@ export default function Origin() {
         created_by: "admin",
       };
 
-      const response = await postData("origin/submitOrigin_Data", body, {
-        method: "POST",
-      });
+      const response = await postData("product/add-origin", body);
 
       if (response) {
         Sweet_Alert({ title: response.message, icon: "success" });

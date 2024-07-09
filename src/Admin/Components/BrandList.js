@@ -11,55 +11,58 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
-import { Typography } from "@mui/material";
-import { useActiveItem } from "../../Common_Components/ActiveItemContext";
-import { Box, Tooltip } from "@mui/material";
+import { Box, Typography, Tooltip } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
+import { useActiveItem } from "../../Common_Components/ActiveItemContext";
+import moment from "moment";
 
-const ProductsList = () => {
+const BrandList = () => {
   const { setActiveItem } = useActiveItem();
   const [hover, setHover] = useState(false);
-  const [products, setProducts] = useState([]);
+  const [brands, setBrands] = useState([]);
   const [editRowsModel, setEditRowsModel] = useState({});
   const [open, setOpen] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
 
   useEffect(() => {
-    fetchProducts();
+    fetchBrands();
   }, []);
 
-  const fetchProducts = async () => {
+  const fetchBrands = async () => {
     try {
-      const response = await getData("product/fetch-products");
-      setProducts(response.data);
-      console.log("Fetched products:", response.data);
+      const response = await getData("product/fetch-brands");
+      const formattedBrands = response.data.map((brand) => ({
+        ...brand,
+        created_at: moment(brand.started_at).format("DD/MM/YYYY hh:mm A"),
+        updated_at: moment(brand.ended_at).format("DD/MM/YYYY hh:mm A"),
+      }));
+      setBrands(formattedBrands);
+      console.log("Fetched brands:", response.data);
     } catch (error) {
-      console.error("Error fetching products:", error);
+      console.error("Error fetching brands:", error);
     }
   };
 
   const handleProcessRowUpdate = (newRow) => {
-    setProducts((prevProducts) =>
-      prevProducts.map((row) =>
-        row.product_id === newRow.product_id ? newRow : row
-      )
+    setBrands((prevBrands) =>
+      prevBrands.map((row) => (row.brand_id === newRow.brand_id ? newRow : row))
     );
-    setEditRowsModel({ ...editRowsModel, [newRow.product_id]: true });
+    setEditRowsModel({ ...editRowsModel, [newRow.brand_id]: true });
     return newRow;
   };
 
   const handleSaveEdit = async (id) => {
     try {
-      const updatedProduct = products.find((row) => row.product_id === id);
-      if (!updatedProduct) {
-        console.error(`Product ${id} not found in state.`);
+      const updatedBrand = brands.find((row) => row.brand_id === id);
+      if (!updatedBrand) {
+        console.error(`Brand ${id} not found in state.`);
         return;
       }
-      await updateData(`product/update-product/${id}`, updatedProduct);
+      await updateData(`product/update-brand/${id}`, updatedBrand);
       setEditRowsModel({ ...editRowsModel, [id]: false });
-      console.log(`Product ${id} updated successfully!`);
+      console.log(`Brand ${id} updated successfully!`);
     } catch (error) {
-      console.error(`Error updating product ${id}:`, error);
+      console.error(`Error updating brand ${id}:`, error);
     }
   };
 
@@ -70,15 +73,13 @@ const ProductsList = () => {
 
   const confirmDelete = async () => {
     try {
-      await deleteData(`product/delete-product/${deleteId}`);
-      const updatedProducts = products.filter(
-        (row) => row.product_id !== deleteId
-      );
-      setProducts(updatedProducts);
-      console.log(`Product ${deleteId} deleted successfully!`);
+      await deleteData(`product/delete-brand/${deleteId}`);
+      const updatedBrands = brands.filter((row) => row.brand_id !== deleteId);
+      setBrands(updatedBrands);
+      console.log(`Brand ${deleteId} deleted successfully!`);
       setOpen(false);
     } catch (error) {
-      console.error(`Error deleting product ${deleteId}:`, error);
+      console.error(`Error deleting brand ${deleteId}:`, error);
     }
   };
 
@@ -88,46 +89,35 @@ const ProductsList = () => {
   };
 
   const handleButtonClick = () => {
-    setActiveItem("product"); // Change this to your desired route
+    setActiveItem("brand"); // Change this to your desired route
   };
 
   const columns = [
-    { field: "product_id", headerName: "ID", width: 70, editable: false },
+    { field: "brand_id", headerName: "ID", width: 70, editable: false },
     {
-      field: "product_name",
-      headerName: "Product Name",
+      field: "brand_name",
+      headerName: "Brand Name",
       width: 200,
       editable: true,
     },
     {
-      field: "product_description",
+      field: "brand_description",
       headerName: "Description",
       width: 300,
       editable: true,
     },
-    { field: "price", headerName: "Price", width: 120, editable: true },
-    { field: "discount", headerName: "Discount", width: 120, editable: true },
-    { field: "stock", headerName: "Stock", width: 120, editable: true },
-    { field: "trending", headerName: "Trending", width: 120, editable: true },
     {
-      field: "new_arrival",
-      headerName: "New Arrival",
-      width: 150,
-      editable: true,
+      field: "created_at",
+      headerName: "Created At",
+      width: 180,
+      editable: false,
     },
     {
-      field: "top_selling",
-      headerName: "Top Selling",
-      width: 150,
-      editable: true,
+      field: "updated_at",
+      headerName: "Updated At",
+      width: 180,
+      editable: false,
     },
-    { field: "category", headerName: "Category", width: 150, editable: true },
-    { field: "occasion", headerName: "Occasion", width: 150, editable: true },
-    { field: "craft", headerName: "Craft", width: 150, editable: true },
-    { field: "fabric", headerName: "Fabric", width: 150, editable: true },
-    { field: "color", headerName: "Color", width: 150, editable: true },
-    { field: "origin", headerName: "Origin", width: 150, editable: true },
-    { field: "brand", headerName: "Brand", width: 150, editable: true },
     {
       field: "created_by",
       headerName: "Created By",
@@ -139,7 +129,7 @@ const ProductsList = () => {
       headerName: "Actions",
       width: 150,
       renderCell: (params) => {
-        const id = params.row.product_id;
+        const id = params.row.brand_id;
         if (editRowsModel[id]) {
           return (
             <IconButton onClick={() => handleSaveEdit(id)}>
@@ -173,9 +163,9 @@ const ProductsList = () => {
         }}
       >
         <Typography variant="h4" mb={3}>
-          Product List
+          Brand List
         </Typography>
-        <Tooltip title={hover ? "Add New Product" : ""} arrow>
+        <Tooltip title={hover ? "Add New Brand" : ""} arrow>
           <Button
             onMouseEnter={() => setHover(true)}
             onMouseLeave={() => setHover(false)}
@@ -194,16 +184,16 @@ const ProductsList = () => {
           </Button>
         </Tooltip>
       </Box>
-      {products.length > 0 ? (
+      {brands.length > 0 ? (
         <>
           <DataGrid
-            rows={products}
+            rows={brands}
             columns={columns}
             pageSize={10}
             rowsPerPageOptions={[10, 25, 50]}
             checkboxSelection
             disableSelectionOnClick
-            getRowId={(row) => row.product_id}
+            getRowId={(row) => row.brand_id}
             processRowUpdate={handleProcessRowUpdate}
             editMode="row"
             sx={{
@@ -224,7 +214,7 @@ const ProductsList = () => {
             </DialogTitle>
             <DialogContent>
               <DialogContentText id="alert-dialog-description">
-                Are you sure you want to delete this product?
+                Are you sure you want to delete this brand?
               </DialogContentText>
             </DialogContent>
             <DialogActions>
@@ -242,7 +232,7 @@ const ProductsList = () => {
           style={{ height: "80vh", display: "flex", justifyContent: "center" }}
         >
           <p style={{ color: "red", fontWeight: "bolder", fontSize: "1.5em" }}>
-            No products available
+            No brands available
           </p>
         </div>
       )}
@@ -250,4 +240,4 @@ const ProductsList = () => {
   );
 };
 
-export default ProductsList;
+export default BrandList;

@@ -23,9 +23,9 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import AutoFixHighIcon from "@mui/icons-material/AutoFixHigh";
 import ListIcon from "@mui/icons-material/List";
 import CheckroomIcon from "@mui/icons-material/Checkroom";
-import ColorLensIcon from '@mui/icons-material/ColorLens';
-import FlagCircleIcon from '@mui/icons-material/FlagCircle';
-import BrandingWatermarkIcon from '@mui/icons-material/BrandingWatermark';
+import ColorLensIcon from "@mui/icons-material/ColorLens";
+import FlagCircleIcon from "@mui/icons-material/FlagCircle";
+import BrandingWatermarkIcon from "@mui/icons-material/BrandingWatermark";
 import {
   ListItem,
   ListItemIcon,
@@ -46,6 +46,14 @@ import Fabric from "../../Components/Fabric";
 import Color from "../../Components/Color";
 import Origin from "../../Components/Origin";
 import Brand from "../../Components/Brand";
+import OccasionList from "../../Components/OccasionList ";
+import CraftList from "../../Components/CraftList";
+import FabricList from "../../Components/FabricList ";
+import ColorList from "../../Components/ColorList";
+import OriginList from "../../Components/OriginList";
+import { useActiveItem } from "../../../Common_Components/ActiveItemContext";
+import BrandList from "../../Components/BrandList";
+import DashboardSidebar from "./DashboardSidebar";
 
 function Copyright(props) {
   return (
@@ -115,13 +123,15 @@ const Drawer = styled(MuiDrawer, {
 const defaultTheme = createTheme();
 
 export default function Dashboard() {
+  const { activeItem } = useActiveItem();
   const [open, setOpen] = React.useState(true);
-  const [activeItem, setActiveItem] = useState("product");
+  // const [Item, setItem] = useState("product");
   const toggleDrawer = () => {
     setOpen(!open);
   };
 
   const renderComponents = () => {
+    // const itemToRender = activeItem || Item;
     console.log("active ITEMS", activeItem);
     switch (activeItem) {
       case "category":
@@ -132,16 +142,28 @@ export default function Dashboard() {
         return <ProductsList />;
       case "occasion":
         return <Occasion />;
+      case "occasionlist":
+        return <OccasionList />;
       case "craft":
         return <Craft />;
+      case "craftlist":
+        return <CraftList />;
       case "fabric":
         return <Fabric />;
+      case "fabriclist":
+        return <FabricList />;
       case "color":
         return <Color />;
+      case "colorlist":
+        return <ColorList />;
       case "origin":
         return <Origin />;
+      case "originlist":
+        return <OriginList />;
       case "brand":
         return <Brand />;
+      case "brandlist":
+        return <BrandList />;
       default:
         return <Category />;
     }
@@ -204,119 +226,7 @@ export default function Dashboard() {
             </IconButton>
           </Toolbar>
           <Divider />
-          <List component="nav">
-            {/******************* category list **********************/}
-            <ListItem disablePadding>
-              <ListItemButton
-                onClick={() => setActiveItem("category")}
-                // selected={activeItem === "category"}
-              >
-                <ListItemIcon>
-                  <CategoryIcon />
-                </ListItemIcon>
-                <ListItemText primary="Category" />
-              </ListItemButton>
-            </ListItem>
-            {/******************* product list **********************/}
-            <ListItem disablePadding>
-              <ListItemButton
-                onClick={() => setActiveItem("product")}
-                // selected={activeItem === "product"}
-              >
-                <ListItemIcon>
-                  <AddShoppingCartIcon />
-                </ListItemIcon>
-                <ListItemText primary="Products" />
-              </ListItemButton>
-            </ListItem>
-            {/******************* productlist list **********************/}
-            <ListItem disablePadding>
-              <ListItemButton
-                onClick={() => setActiveItem("productlist")}
-                // selected={activeItem === "product"}
-              >
-                <ListItemIcon>
-                  <ListIcon />
-                </ListItemIcon>
-                <ListItemText primary="Products List" />
-              </ListItemButton>
-            </ListItem>
-
-            {/******************* occasion list **********************/}
-            <ListItem disablePadding>
-              <ListItemButton
-                onClick={() => setActiveItem("occasion")}
-                // selected={activeItem === "product"}
-              >
-                <ListItemIcon>
-                  <LiquorIcon />
-                </ListItemIcon>
-                <ListItemText primary="Occasion" />
-              </ListItemButton>
-            </ListItem>
-            {/******************* craft list **********************/}
-            <ListItem disablePadding>
-              <ListItemButton
-                onClick={() => setActiveItem("craft")}
-                // selected={activeItem === "product"}
-              >
-                <ListItemIcon>
-                  <AutoFixHighIcon />
-                </ListItemIcon>
-                <ListItemText primary="Craft" />
-              </ListItemButton>
-            </ListItem>
-            {/******************* fabric list **********************/}
-            <ListItem disablePadding>
-              <ListItemButton
-                onClick={() => setActiveItem("fabric")}
-                // selected={activeItem === "product"}
-              >
-                <ListItemIcon>
-                  <CheckroomIcon />
-                </ListItemIcon>
-                <ListItemText primary="Fabric" />
-              </ListItemButton>
-            </ListItem>
-            {/******************* color list **********************/}
-            <ListItem disablePadding>
-              <ListItemButton
-                onClick={() => setActiveItem("color")}
-                // selected={activeItem === "product"}
-              >
-                <ListItemIcon>
-                  <ColorLensIcon />
-                </ListItemIcon>
-                <ListItemText primary="Color" />
-              </ListItemButton>
-            </ListItem>
-            {/******************* origin list **********************/}
-            <ListItem disablePadding>
-              <ListItemButton
-                onClick={() => setActiveItem("origin")}
-                // selected={activeItem === "product"}
-              >
-                <ListItemIcon>
-                  <FlagCircleIcon />
-                </ListItemIcon>
-                <ListItemText primary="Origin" />
-              </ListItemButton>
-            </ListItem>
-            {/******************* brand list **********************/}
-            <ListItem disablePadding>
-              <ListItemButton
-                onClick={() => setActiveItem("brand")}
-                // selected={activeItem === "product"}
-              >
-                <ListItemIcon>
-                  <BrandingWatermarkIcon />
-                </ListItemIcon>
-                <ListItemText primary="Brand" />
-              </ListItemButton>
-            </ListItem>
-
-            <Divider sx={{ my: 1 }} />
-          </List>
+         <DashboardSidebar/>
         </Drawer>
         <Box
           component="main"
