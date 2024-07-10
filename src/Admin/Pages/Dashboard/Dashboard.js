@@ -47,6 +47,7 @@ import Color from "../../Components/Color";
 import Origin from "../../Components/Origin";
 import Brand from "../../Components/Brand";
 import Offers from "../../Components/Offers";
+import OffersList from "../../Components/Offers_List";
 
 function Copyright(props) {
   return (
@@ -144,6 +145,8 @@ export default function Dashboard() {
         return <Brand />;
         case "offers":
           return <Offers />;
+          case "offers_list":
+            return <OffersList/>;
       default:
         return <Category />;
     }
@@ -319,6 +322,17 @@ export default function Dashboard() {
             <ListItem disablePadding>
               <ListItemButton
                 onClick={() => setActiveItem("offers")}
+                // selected={activeItem === "product"}
+              >
+                <ListItemIcon>
+                  <BrandingWatermarkIcon />
+                </ListItemIcon>
+                <ListItemText primary="Offers" />
+              </ListItemButton>
+            </ListItem>
+            <ListItem disablePadding>
+              <ListItemButton
+                onClick={() => setActiveItem("offers_list")}
                 // selected={activeItem === "product"}
               >
                 <ListItemIcon>

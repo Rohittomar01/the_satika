@@ -1,16 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import { DataGrid } from '@mui/x-data-grid';
+import React, { useState, useEffect } from "react";
+import { DataGrid } from "@mui/x-data-grid";
 import { getData, updateData, deleteData } from "../../Services/ServerServices";
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
-import SaveIcon from '@mui/icons-material/Save';
-import IconButton from '@mui/material/IconButton';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
-import Button from '@mui/material/Button';
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+import SaveIcon from "@mui/icons-material/Save";
+import IconButton from "@mui/material/IconButton";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import Button from "@mui/material/Button";
+import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";
 
 const OffersList = () => {
   const [offers, setOffers] = useState([]);
@@ -24,11 +25,11 @@ const OffersList = () => {
 
   const fetchOffers = async () => {
     try {
-      const response = await getData("offers/fetch-offers");
+      const response = await getData("offers/fetch_offers");
       setOffers(response.data);
       console.log("Fetched offers:", response.data);
     } catch (error) {
-      console.error('Error fetching offers:', error);
+      console.error("Error fetching offers:", error);
     }
   };
 
@@ -47,7 +48,7 @@ const OffersList = () => {
         console.error(`Offer ${id} not found in state.`);
         return;
       }
-      await updateData(`offers/update-offer/${id}`, updatedOffer);
+      await updateData(`offers/update_offer/${id}`, updatedOffer);
       setEditRowsModel({ ...editRowsModel, [id]: false });
       console.log(`Offer ${id} updated successfully!`);
     } catch (error) {
@@ -62,7 +63,7 @@ const OffersList = () => {
 
   const confirmDelete = async () => {
     try {
-      await deleteData(`offers/delete-offer/${deleteId}`);
+      await deleteData(`offers/delete_offer/${deleteId}`);
       const updatedOffers = offers.filter((row) => row.offer_id !== deleteId);
       setOffers(updatedOffers);
       console.log(`Offer ${deleteId} deleted successfully!`);
@@ -78,16 +79,85 @@ const OffersList = () => {
   };
 
   const columns = [
-    { field: 'offer_id', headerName: 'ID', width: 70, editable: false },
-    { field: 'offer_name', headerName: 'Offer Name', width: 200, editable: true },
-    { field: 'offer_description', headerName: 'Description', width: 300, editable: true },
-    { field: 'discount_percentage', headerName: 'Discount (%)', width: 150, editable: true },
-    { field: 'valid_from', headerName: 'Valid From', width: 200, editable: true },
-    { field: 'valid_to', headerName: 'Valid To', width: 200, editable: true },
-    { field: 'created_by', headerName: 'Created By', width: 150, editable: false },
+    { field: "offer_id", headerName: "ID", width: 70, editable: false },
+    { field: "title", headerName: "Offer Name", width: 200, editable: true },
     {
-      field: 'actions',
-      headerName: 'Actions',
+      field: "offer_description",
+      headerName: "Description",
+      width: 300,
+      editable: true,
+    },
+    {
+      field: "start_date",
+      headerName: "Start Date",
+      width: 200,
+      editable: true,
+    },
+    { field: "end_date", headerName: "End Date", width: 200, editable: true },
+    {
+      field: "created_at",
+      headerName: "Created At",
+      width: 200,
+      editable: false,
+    },
+    {
+      field: "updated_at",
+      headerName: "Updated At",
+      width: 200,
+      editable: false,
+    },
+    {
+      field: "discount_type",
+      headerName: "Discount Type",
+      width: 150,
+      editable: true,
+    },
+    {
+      field: "discount_value",
+      headerName: "Discount Value",
+      width: 150,
+      editable: true,
+    },
+    {
+      field: "minimum_order_value",
+      headerName: "Minimum Order Value",
+      width: 200,
+      editable: true,
+    },
+    {
+      field: "maximum_discount_amount",
+      headerName: "Maximum Discount Amount",
+      width: 200,
+      editable: true,
+    },
+    {
+      field: "applicable_to",
+      headerName: "Applicable To",
+      width: 150,
+      editable: true,
+    },
+    {
+      field: "usage_limit",
+      headerName: "Usage Limit",
+      width: 150,
+      editable: true,
+    },
+    {
+      field: "per_user_limit",
+      headerName: "Per User Limit",
+      width: 150,
+      editable: true,
+    },
+    { field: "status", headerName: "Status", width: 150, editable: true },
+    {
+      field: "created_by",
+      headerName: "Created By",
+      width: 150,
+      editable: false,
+    },
+    {
+      field: "actions",
+      headerName: "Actions",
       width: 150,
       renderCell: (params) => {
         const id = params.row.offer_id;
@@ -100,7 +170,9 @@ const OffersList = () => {
         }
         return (
           <>
-            <IconButton onClick={() => setEditRowsModel({ ...editRowsModel, [id]: true })}>
+            <IconButton
+              onClick={() => setEditRowsModel({ ...editRowsModel, [id]: true })}
+            >
               <EditIcon />
             </IconButton>
             <IconButton onClick={() => handleDeleteRow(id)}>
@@ -113,9 +185,23 @@ const OffersList = () => {
   ];
 
   return (
-    <div style={{ height: 600, width: '90%', marginTop: "10%" }}>
+    <div style={{ height: 600, width: "90%", marginTop: "20%" }}>
       {offers.length > 0 ? (
         <>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <div>
+              <h2>Offers List</h2>
+            </div>
+            <IconButton aria-label="delete">
+              <PlaylistAddIcon sx={{ size: "2%" }} />
+            </IconButton>
+          </div>
           <DataGrid
             rows={offers}
             columns={columns}
@@ -127,8 +213,8 @@ const OffersList = () => {
             processRowUpdate={handleProcessRowUpdate}
             editMode="row"
             sx={{
-               '& .MuiDataGrid-cell:hover': {
-                color: 'primary.main',
+              "& .MuiDataGrid-cell:hover": {
+                color: "primary.main",
               },
             }}
           />
@@ -138,7 +224,9 @@ const OffersList = () => {
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
           >
-            <DialogTitle id="alert-dialog-title">{"Confirm Delete"}</DialogTitle>
+            <DialogTitle id="alert-dialog-title">
+              {"Confirm Delete"}
+            </DialogTitle>
             <DialogContent>
               <DialogContentText id="alert-dialog-description">
                 Are you sure you want to delete this offer?
@@ -155,9 +243,13 @@ const OffersList = () => {
           </Dialog>
         </>
       ) : (
-       <div style={{height:"80vh",display:"flex",justifyContent:"center"}}>
-         <p style={{color:"red",fontWeight:"bolder",fontSize:"1.5em"}}>No offers available</p>
-       </div>
+        <div
+          style={{ height: "80vh", display: "flex", justifyContent: "center" }}
+        >
+          <p style={{ fontWeight: "bolder", fontSize: "1.5em" }}>
+            No offers available
+          </p>
+        </div>
       )}
     </div>
   );
