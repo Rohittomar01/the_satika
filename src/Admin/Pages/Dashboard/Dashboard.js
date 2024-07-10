@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { BrowserRouter as Router, Route, Routes, useNavigate } from "react-router-dom";
 import { styled, createTheme, ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import MuiDrawer from "@mui/material/Drawer";
@@ -23,9 +24,10 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import AutoFixHighIcon from "@mui/icons-material/AutoFixHigh";
 import ListIcon from "@mui/icons-material/List";
 import CheckroomIcon from "@mui/icons-material/Checkroom";
-import ColorLensIcon from '@mui/icons-material/ColorLens';
-import FlagCircleIcon from '@mui/icons-material/FlagCircle';
-import BrandingWatermarkIcon from '@mui/icons-material/BrandingWatermark';
+import ColorLensIcon from "@mui/icons-material/ColorLens";
+import FlagCircleIcon from "@mui/icons-material/FlagCircle";
+import LocalOfferIcon from "@mui/icons-material/LocalOffer";
+import BrandingWatermarkIcon from "@mui/icons-material/BrandingWatermark";
 import {
   ListItem,
   ListItemIcon,
@@ -117,52 +119,28 @@ const Drawer = styled(MuiDrawer, {
 const defaultTheme = createTheme();
 
 export default function Dashboard() {
+
+  const navigate=useNavigate();
   const [open, setOpen] = React.useState(true);
-  const [activeItem, setActiveItem] = useState("product");
   const toggleDrawer = () => {
     setOpen(!open);
   };
 
-  const renderComponents = () => {
-    switch (activeItem) {
-      case "category":
-        return <Category />;
-      case "product":
-        return <Product />;
-      case "productlist":
-        return <ProductsList />;
-      case "occasion":
-        return <Occasion />;
-      case "craft":
-        return <Craft />;
-      case "fabric":
-        return <Fabric />;
-      case "color":
-        return <Color />;
-      case "origin":
-        return <Origin />;
-      case "brand":
-        return <Brand />;
-        case "offers":
-          return <Offers />;
-          case "offers_list":
-            return <OffersList/>;
-      default:
-        return <Category />;
-    }
-  };
+ 
 
   return (
     <ThemeProvider theme={defaultTheme}>
       <Box sx={{ display: "flex" }}>
         <CssBaseline />
         <AppBar
-  position="absolute"
-  open={open}
-  sx={{
-    backgroundColor: 'black', // Light yellow with some transparency
-  }}
->     <Toolbar
+          position="absolute"
+          open={open}
+          sx={{
+            backgroundColor: "black", // Light yellow with some transparency
+          }}
+        >
+          {" "}
+          <Toolbar
             sx={{
               pr: "24px", // keep right padding when drawer closed
             }}
@@ -213,7 +191,7 @@ export default function Dashboard() {
             {/******************* category list **********************/}
             <ListItem disablePadding>
               <ListItemButton
-                onClick={() => setActiveItem("category")}
+                onClick={() => navigate("/dashboard/Category")}
                 // selected={activeItem === "category"}
               >
                 <ListItemIcon>
@@ -225,7 +203,7 @@ export default function Dashboard() {
             {/******************* product list **********************/}
             <ListItem disablePadding>
               <ListItemButton
-                onClick={() => setActiveItem("product")}
+                onClick={() => navigate("/dashboard/product")}
                 // selected={activeItem === "product"}
               >
                 <ListItemIcon>
@@ -237,7 +215,7 @@ export default function Dashboard() {
             {/******************* productlist list **********************/}
             <ListItem disablePadding>
               <ListItemButton
-                onClick={() => setActiveItem("productlist")}
+                onClick={() => navigate("/dashboard/productlist")}
                 // selected={activeItem === "product"}
               >
                 <ListItemIcon>
@@ -250,7 +228,7 @@ export default function Dashboard() {
             {/******************* occasion list **********************/}
             <ListItem disablePadding>
               <ListItemButton
-                onClick={() => setActiveItem("occasion")}
+                onClick={() => navigate("/dashboard/occasion")}
                 // selected={activeItem === "product"}
               >
                 <ListItemIcon>
@@ -262,7 +240,7 @@ export default function Dashboard() {
             {/******************* craft list **********************/}
             <ListItem disablePadding>
               <ListItemButton
-                onClick={() => setActiveItem("craft")}
+                onClick={() => navigate("/dashboard/craft")}
                 // selected={activeItem === "product"}
               >
                 <ListItemIcon>
@@ -274,7 +252,7 @@ export default function Dashboard() {
             {/******************* fabric list **********************/}
             <ListItem disablePadding>
               <ListItemButton
-                onClick={() => setActiveItem("fabric")}
+                onClick={() => navigate("/dashboard/fabric")}
                 // selected={activeItem === "product"}
               >
                 <ListItemIcon>
@@ -286,7 +264,7 @@ export default function Dashboard() {
             {/******************* color list **********************/}
             <ListItem disablePadding>
               <ListItemButton
-                onClick={() => setActiveItem("color")}
+                onClick={() => navigate("/dashboard/color")}
                 // selected={activeItem === "product"}
               >
                 <ListItemIcon>
@@ -298,7 +276,7 @@ export default function Dashboard() {
             {/******************* origin list **********************/}
             <ListItem disablePadding>
               <ListItemButton
-                onClick={() => setActiveItem("origin")}
+                onClick={() => navigate("/dashboard/origin")}
                 // selected={activeItem === "product"}
               >
                 <ListItemIcon>
@@ -310,7 +288,7 @@ export default function Dashboard() {
             {/******************* brand list **********************/}
             <ListItem disablePadding>
               <ListItemButton
-                onClick={() => setActiveItem("brand")}
+                onClick={() => navigate("/dashboard/brand")}
                 // selected={activeItem === "product"}
               >
                 <ListItemIcon>
@@ -319,24 +297,14 @@ export default function Dashboard() {
                 <ListItemText primary="Brand" />
               </ListItemButton>
             </ListItem>
+           
             <ListItem disablePadding>
               <ListItemButton
-                onClick={() => setActiveItem("offers")}
+                onClick={() => navigate("/dashboard/OffersList")}
                 // selected={activeItem === "product"}
               >
                 <ListItemIcon>
-                  <BrandingWatermarkIcon />
-                </ListItemIcon>
-                <ListItemText primary="Offers" />
-              </ListItemButton>
-            </ListItem>
-            <ListItem disablePadding>
-              <ListItemButton
-                onClick={() => setActiveItem("offers_list")}
-                // selected={activeItem === "product"}
-              >
-                <ListItemIcon>
-                  <BrandingWatermarkIcon />
+                  <LocalOfferIcon />
                 </ListItemIcon>
                 <ListItemText primary="Offers" />
               </ListItemButton>
@@ -345,6 +313,7 @@ export default function Dashboard() {
             <Divider sx={{ my: 1 }} />
           </List>
         </Drawer>
+
         <Box
           component="main"
           sx={{
@@ -361,7 +330,22 @@ export default function Dashboard() {
           }}
         >
           <Toolbar />
-          {renderComponents()}
+          {/* {renderComponents()} */}
+          <Routes>
+            <Route element={<Offers />} path={"/Offers"}></Route>
+            <Route element={<OffersList />} path={"/OffersList"}></Route>
+            <Route element={<Category />} path={"/Category"}></Route>
+            <Route element={<Product />} path={"/Product"}></Route>
+            <Route element={<ProductsList />} path={"/ProductsList"}></Route>
+            <Route element={<Occasion />} path={"/Occasion"}></Route>
+            <Route element={<Craft />} path={"/Craft"}></Route>
+            <Route element={<Fabric />} path={"/Fabric"}></Route>
+            <Route element={<Color />} path={"/Color"}></Route>
+            <Route element={<Origin />} path={"/Origin"}></Route>
+            <Route element={<Brand />} path={"/Brand"}></Route>
+            <Route element={<Offers />} path={"/Offers"}></Route>
+            <Route element={<OffersList />} path={"/OffersList"}></Route>
+          </Routes>
         </Box>
       </Box>
     </ThemeProvider>

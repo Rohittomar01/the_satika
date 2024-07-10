@@ -12,8 +12,10 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
 import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";
-
+import { useNavigate } from "react-router-dom";
 const OffersList = () => {
+
+  const navigate=useNavigate();
   const [offers, setOffers] = useState([]);
   const [editRowsModel, setEditRowsModel] = useState({});
   const [open, setOpen] = useState(false);
@@ -198,7 +200,7 @@ const OffersList = () => {
             <div>
               <h2>Offers List</h2>
             </div>
-            <IconButton aria-label="delete">
+            <IconButton onClick={()=>navigate('/dashboard/Offers')} aria-label="delete">
               <PlaylistAddIcon sx={{ size: "2%" }} />
             </IconButton>
           </div>

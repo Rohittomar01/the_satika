@@ -1,14 +1,14 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Dashboard from "./Admin/Pages/Dashboard/Dashboard";
-import Category from "./Admin/Components/Category";
+import Discounts from "./Admin/Components/Discounts";
 
 
 function App() {
   return (
     <Router className="App">
       <Routes>
-      <Route path="/" element={<Dashboard />} />
-      <Route path="/category" element={<Category />} />
+      <Route path="dashboard/*" element={<Dashboard />} />
+      <Route path="/discounts" element={<Discounts />} />
     </Routes>
     </Router>
   );
