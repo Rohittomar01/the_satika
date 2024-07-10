@@ -123,7 +123,6 @@ export default function Dashboard() {
   };
 
   const renderComponents = () => {
-    console.log("active ITEMS", activeItem);
     switch (activeItem) {
       case "category":
         return <Category />;
@@ -325,7 +324,7 @@ export default function Dashboard() {
                 <ListItemIcon>
                   <BrandingWatermarkIcon />
                 </ListItemIcon>
-                <ListItemText primary="Brand" />
+                <ListItemText primary="Offers" />
               </ListItemButton>
             </ListItem>
 
