@@ -28,6 +28,8 @@ import ColorLensIcon from "@mui/icons-material/ColorLens";
 import FlagCircleIcon from "@mui/icons-material/FlagCircle";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import BrandingWatermarkIcon from "@mui/icons-material/BrandingWatermark";
+import CelebrationIcon from '@mui/icons-material/Celebration';
+import CastConnectedIcon from '@mui/icons-material/CastConnected';
 import {
   ListItem,
   ListItemIcon,
@@ -50,6 +52,11 @@ import Origin from "../../Components/Origin";
 import Brand from "../../Components/Brand";
 import Offers from "../../Components/Offers";
 import OffersList from "../../Components/Offers_List";
+import Discounts from "../../Components/Discounts";
+import DiscountList from "../../Components/Discount_List";
+import Promotions from "../../Components/Promotions";
+import PromotionsList from "../../Components/PromotionsList";
+
 
 function Copyright(props) {
   return (
@@ -309,6 +316,28 @@ export default function Dashboard() {
                 <ListItemText primary="Offers" />
               </ListItemButton>
             </ListItem>
+            <ListItem disablePadding>
+              <ListItemButton
+                onClick={() => navigate("/dashboard/DiscountList")}
+                // selected={activeItem === "product"}
+              >
+                <ListItemIcon>
+                  <CelebrationIcon />
+                </ListItemIcon>
+                <ListItemText primary="Discounts" />
+              </ListItemButton>
+            </ListItem>
+            <ListItem disablePadding>
+              <ListItemButton
+                onClick={() => navigate("/dashboard/PromotionsList")}
+                // selected={activeItem === "product"}
+              >
+                <ListItemIcon>
+                  <CastConnectedIcon />
+                </ListItemIcon>
+                <ListItemText primary="Promotions" />
+              </ListItemButton>
+            </ListItem>
 
             <Divider sx={{ my: 1 }} />
           </List>
@@ -345,6 +374,11 @@ export default function Dashboard() {
             <Route element={<Brand />} path={"/Brand"}></Route>
             <Route element={<Offers />} path={"/Offers"}></Route>
             <Route element={<OffersList />} path={"/OffersList"}></Route>
+            <Route element={<Discounts />} path={"/Discounts"}></Route>
+            <Route element={<DiscountList />} path={"/DiscountList"}></Route>
+            <Route element={<Promotions />} path={"/Promotions"}></Route>
+            <Route element={<PromotionsList />} path={"/PromotionsList"}></Route>
+
           </Routes>
         </Box>
       </Box>

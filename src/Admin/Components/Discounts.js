@@ -85,7 +85,7 @@ import {
               lg={6}
             >
               <IconButton
-                onClick={() => navigate("/dashboard/DiscountsList")}
+                onClick={() => navigate("/dashboard/DiscountList")}
                 aria-label="list"
               >
                 <FormatListBulletedIcon />
@@ -127,7 +127,7 @@ import {
                       <MenuItem value="fixed">Fixed Amount</MenuItem>
                     </TextField>
                   </Grid>
-                  <Grid item xs={12} sm={12} md={12} lg={12}>
+                  <Grid item xs={12} sm={6} md={6} lg={6}>
                     <TextField
                     multiline
                       fullWidth
@@ -141,6 +141,24 @@ import {
                       error={!!errors.discount_description}
                       helperText={errors.discount_description?.message}
                     />
+                  </Grid>
+                  <Grid item xs={12} sm={6} md={6} lg={6}>
+                    <TextField
+                      fullWidth
+                      id="Status"
+                      label="Status"
+                      name="status"
+                      variant="outlined"
+                      select
+                      {...register("status", {
+                        required: "Status is required",
+                      })}
+                      error={!!errors.status}
+                      helperText={errors.status?.message}
+                    >
+                      <MenuItem value="true">True</MenuItem>
+                      <MenuItem value="false">False</MenuItem>
+                    </TextField>
                   </Grid>
                  
                   <Grid item xs={12} sm={6} md={6} lg={6}>
@@ -210,7 +228,7 @@ import {
                       name="uses_limit"
                       variant="outlined"
                       type="number"
-                      {...register("uses_limit", {
+                      {...register("usage_limit", {
                         required: "Uses limit is required",
                       })}
                       error={!!errors.uses_limit}
