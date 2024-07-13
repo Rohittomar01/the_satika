@@ -39,9 +39,9 @@ export default function Category() {
       formData.append("file", file);
       formData.append("created_by", "admin");
       let base64File = null;
-      if (file) {
-        base64File = await convertToBase64(file);
-      }
+      // if (file) {
+      //   base64File = await convertToBase64(file);
+      // }
 
 
       const body = {

@@ -1,0 +1,16 @@
+@font-face {
+  font-family: "Futura";
+  src: url("../../../Fonts/futura/futur.ttf") format("truetype");
+}
+
+.companyName {
+  font-family:Futura,;
+  flex-grow: 1;
+  letter-spacing: 0.8vw;
+  color: black;
+  font-size: 1.875rem;
+  line-height: 1.875rem;
+  /* font-family: sans-serif; */
+  text-transform: uppercase;
+  font-weight: 700;
+}
