@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useState} from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
 import Fade from "embla-carousel-fade";
@@ -14,9 +14,14 @@ import {
 import "../../StyleSheets/Gallery.css";
 const Gallery = ({ images }) => {
   const options = { axis: "x", dragFree: true, loop: true };
+  const [isGrabbing, setIsGrabbing] = useState(false);
 
   const [emblaRef, emblaApi] = useEmblaCarousel(options, [
-    Autoplay({ stopOnInteraction: false, stopOnFocusIn: true,stopOnMouseEnter:true }),
+    Autoplay({
+      stopOnInteraction: false,
+      stopOnFocusIn: true,
+      stopOnMouseEnter: true,
+    }),
   ]);
 
   const {
@@ -25,6 +30,14 @@ const Gallery = ({ images }) => {
     onPrevButtonClick,
     onNextButtonClick,
   } = usePrevNextButtons(emblaApi);
+
+  const handleMouseDown = () => {
+    setIsGrabbing(true);
+  };
+
+  const handleMouseUp = () => {
+    setIsGrabbing(false);
+  };
 
   const ProductsData = [
     {
@@ -101,12 +114,8 @@ const Gallery = ({ images }) => {
   const renderImages = () => {
     return ProductsData.map((item, index) => (
       <div className="image-slide" key={index}>
-        <ImageListItem  key={item.img}>
-          <img
-            id="gallery-image"
-            src={`${item.product_image}?w=248&fit=crop&auto=format`}
-            alt={item.title}
-          />
+        <ImageListItem key={item.img}>
+          <img id="gallery-image" src={item.product_image} alt={item.title} />
           <ImageListItemBar
             title={item.title}
             subtitle={item.author}
@@ -117,6 +126,7 @@ const Gallery = ({ images }) => {
             }
           />
         </ImageListItem>
+        
       </div>
     ));
   };
@@ -130,8 +140,14 @@ const Gallery = ({ images }) => {
           <NextButton onClick={onNextButtonClick} disabled={nextBtnDisabled} />
         </div>
       </div>
-      <div className="gallery-main-container" ref={emblaRef}>
-        <div className="gallery-sub-container">{renderImages()}</div>
+      <div
+        className="gallery-main-container"
+        onMouseDown={handleMouseDown}
+        onMouseUp={handleMouseUp}
+        onMouseLeave={handleMouseUp}
+        ref={emblaRef}
+      >
+        <div className={isGrabbing?"grabbing":"gallery-sub-container"}>{renderImages()}</div>
       </div>
       <div className="view_more">
         <Button variant="outlined">View More</Button>

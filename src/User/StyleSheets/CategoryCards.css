@@ -1,11 +1,9 @@
-.category-superContainer{
+.category-superContainer {
   margin-top: 12vh;
-  /* margin: 0 auto;
-  padding: 20px; */
   max-width: 1200px;
 }
 .categoryAvatar {
- width: 10px;
+  width: 10px;
 }
 .categoryHeading {
   font-family: sans-serif;
@@ -18,10 +16,15 @@
   padding: 1rem;
   position: relative;
 }
-/* .category-mainContainer{
-
-} */
-.category-subContainer{
+.category_mainContainer {
+  display: flex;
+  cursor: grab;
+}
+.category_mainContainer_grabbing {
+  display: flex;
+  cursor: grabbing;
+}
+.category-subContainer {
   backface-visibility: hidden;
   display: flex;
   gap: 2vw;
@@ -29,24 +32,24 @@
   margin-top: calc(var(--slide-spacing) * -1);
   height: calc(var(--slide-spacing) + var(--slide-height));
   flex-direction: row;
-  cursor:-webkit-grab;
+  cursor: grab;
 }
-.card-heading{
+.card-heading {
   font-family: sans-serif;
   font-size: 1.5rem;
-  text-align:center;
+  text-align: center;
 }
 
-.carousel-control{
-display: flex;
-justify-content: space-between;
+.carousel-control {
+  display: flex;
+  justify-content: space-between;
 }
-.control__buttonsContainer{
+.control__buttonsContainer {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  gap: 1rem
+  gap: 1rem;
 }
 .control__button {
   -webkit-tap-highlight-color: rgba(var(--text-high-contrast-rgb-value), 0.5);
@@ -60,8 +63,10 @@ justify-content: space-between;
   border: 0;
   padding: 0;
   margin: 0;
-  box-shadow: inset 0 0 0 0.2rem var(--detail-medium-contrast), 0 4px 8px rgba(0, 0, 0, 0.2);
-  transition: box-shadow 0.3s ease;    width: 3.6rem;
+  box-shadow: inset 0 0 0 0.2rem var(--detail-medium-contrast),
+    0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: box-shadow 0.3s ease;
+  width: 3.6rem;
   height: 3rem;
   width: 3rem;
   z-index: 1;
@@ -70,9 +75,8 @@ justify-content: space-between;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color:lightgray;
+  background-color: lightgray;
   color: #fff;
-
 }
 .image-container {
   width: 15rem;
@@ -89,12 +93,3 @@ justify-content: space-between;
   height: 100%;
   object-fit: cover;
 }
-
-
-
-
-
-
-
-
-

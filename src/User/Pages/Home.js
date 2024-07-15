@@ -5,6 +5,8 @@ import CategoryCards from "../Components/Home/Category_cards/CategoryCards";
 import TrendingProducts from "../Common_Components/TrendingProducts";
 import Gallery from "../Components/Home/Gallery";
 import Testimonials from "../Components/Home/Testimonials";
+import Footer from "../Common_Components/Footer";
+import Footer_02 from "../Common_Components/Footer_02";
 
 export default function Home() {
   const OPTIONS = { axis: "y", loop: true };
@@ -100,6 +102,12 @@ export default function Home() {
           <div>
             <Testimonials reviews={reviews} />
           </div>
+          <div>
+            <Footer/>
+          </div>
+          {/* <div>
+            <Footer_02/>
+          </div> */}
         </div>
       </div>
     </div>

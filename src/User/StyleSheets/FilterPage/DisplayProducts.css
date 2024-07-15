@@ -1,0 +1,21 @@
+.sub_container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  height: 78vh;
+  overflow: scroll;
+}
+.products-content-container {
+  justify-content: center;
+  align-items: center;
+  padding: 2%;
+  position: relative;
+  overflow: hidden;
+  flex: 0 0 auto;
+  width: auto;
+  transition: transform 0.3s ease;
+}
+.product-media {
+  height: 40vh;
+  width: auto;
+}

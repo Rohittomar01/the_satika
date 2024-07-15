@@ -1,9 +1,9 @@
-import React, { useRef } from "react";
+import React, { useState } from "react";
 // import { Avatar } from "@mui/material";
 import "../../../StyleSheets/CategoryCards.css";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
-import Fade from 'embla-carousel-fade'
+import Fade from "embla-carousel-fade";
 
 import {
   NextButton,
@@ -12,7 +12,8 @@ import {
 } from "./CarouselArrowsButtons";
 
 export default function CategoryCards() {
-  const options = { axis: "x" ,dragFree: true};
+  const options = { axis: "x", dragFree: true };
+  const [isGrabbing, setIsGrabbing] = useState(false);
 
   const [emblaRef, emblaApi] = useEmblaCarousel(options);
   const {
@@ -21,6 +22,14 @@ export default function CategoryCards() {
     onPrevButtonClick,
     onNextButtonClick,
   } = usePrevNextButtons(emblaApi);
+
+  const handleMouseDown = () => {
+    setIsGrabbing(true);
+  };
+
+  const handleMouseUp = () => {
+    setIsGrabbing(false);
+  };
   const cards = [
     {
       id: 1,
@@ -89,7 +98,17 @@ export default function CategoryCards() {
           <NextButton onClick={onNextButtonClick} disabled={nextBtnDisabled} />
         </div>
       </div>
-      <div className="category-mainContainer" ref={emblaRef}>
+      <div
+        onMouseDown={handleMouseDown}
+        // className={
+        //   isGrabbing
+        //     ? "category_mainContainer_grabbing"
+        //     : "category_mainContainer"
+        // }
+        onMouseUp={handleMouseUp}
+        onMouseLeave={handleMouseUp}
+        ref={emblaRef}
+      >
         <div className="category-subContainer">{renderCard()}</div>
       </div>
     </div>

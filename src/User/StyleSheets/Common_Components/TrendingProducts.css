@@ -57,6 +57,7 @@
 .product-subContainer {
   display: flex;
   gap: 10px;
+  cursor: grab;
 }
 
 .product-content-container {

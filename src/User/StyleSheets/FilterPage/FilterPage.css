@@ -1,0 +1,47 @@
+:root {
+  --black-color: black;
+  --grey-color: grey;
+}
+.main_grid {
+  display: flex;
+  justify-content: center;
+}
+.grid_container02{
+    margin-top: 3%;
+}
+
+.filter_actions {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+}
+.expend_icon {
+    transition: transform 0.3s ease;
+  }
+  
+  .expend_icon.open {
+    transform: rotate(180deg);
+  }
+  
+#reset_button {
+  color: var(--grey-color);
+}
+.expend_icon {
+  color: var(--black-color);
+}
+.filterBy_dropdown {
+  display: flex;
+  justify-content: end;
+}
+.filterBy_dropdown {
+  display: flex;
+  justify-content: end;
+  align-items: center;
+}
+#footer{
+  margin-top: 5%;
+}

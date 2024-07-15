@@ -1,0 +1,41 @@
+.cart-page {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    padding: 20px;
+  }
+  
+  .left-section, .right-section {
+    flex: 1;
+    min-width: 300px;
+    margin: 10px;
+  }
+  
+  .left-card, .right-card {
+    width: 100%;
+  }
+  
+  .original-price {
+    text-decoration: line-through;
+    color: grey;
+  }
+  
+  .quantity-container {
+    display: flex;
+    align-items: center;
+  }
+  
+  .quantity-input {
+    width: 40px;
+    text-align: center;
+  }
+  
+  .coupons-available {
+    color: red;
+  }
+  
+  .gift-message-input {
+    width: 100%;
+    margin: 10px 0;
+  }
+  

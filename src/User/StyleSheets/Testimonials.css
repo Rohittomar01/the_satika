@@ -26,6 +26,8 @@
 
 .review-subContainer {
   display: flex;
+  cursor: grab;
+
 }
 
 .review-card {

@@ -26,6 +26,12 @@
 
 .gallery-sub-container {
   display: flex;
+  cursor: grab;
+
+}
+.grabbing {
+  display: flex;
+  cursor: grabbing;
 }
 
 .image-slide {
