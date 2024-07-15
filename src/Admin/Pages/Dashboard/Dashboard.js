@@ -57,6 +57,17 @@ import DiscountList from "../../Components/Discount_List";
 import Promotions from "../../Components/Promotions";
 import PromotionsList from "../../Components/PromotionsList";
 
+import OccasionList from "../../Components/OccasionList ";
+import CraftList from "../../Components/CraftList";
+import FabricList from "../../Components/FabricList ";
+import ColorList from "../../Components/ColorList";
+import OriginList from "../../Components/OriginList";
+import { useActiveItem } from "../../../Common_Components/ActiveItemContext";
+import BrandList from "../../Components/BrandList";
+import DashboardSidebar from "./DashboardSidebar";
+import StockList from "../../Components/StockList";
+import Stock from "../../Components/Stock";
+import Banner from "../../Components/Banner";
 
 function Copyright(props) {
   return (
@@ -134,6 +145,50 @@ export default function Dashboard() {
   };
 
  
+  // const renderComponents = () => {
+  //   // const itemToRender = activeItem || Item;
+  //   console.log("active ITEMS", activeItem);
+  //   switch (activeItem) {
+  //     case "category":
+  //       return <Category />;
+  //     case "product":
+  //       return <Product />;
+  //     case "productlist":
+  //       return <ProductsList />;
+  //     case "occasion":
+  //       return <Occasion />;
+  //     case "occasionlist":
+  //       return <OccasionList />;
+  //     case "craft":
+  //       return <Craft />;
+  //     case "craftlist":
+  //       return <CraftList />;
+  //     case "fabric":
+  //       return <Fabric />;
+  //     case "fabriclist":
+  //       return <FabricList />;
+  //     case "color":
+  //       return <Color />;
+  //     case "colorlist":
+  //       return <ColorList />;
+  //     case "origin":
+  //       return <Origin />;
+  //     case "originlist":
+  //       return <OriginList />;
+  //     case "brand":
+  //       return <Brand />;
+  //     case "brandlist":
+  //       return <BrandList />;
+  //     case "stock":
+  //       return <Stock />;
+  //     case "stocklist":
+  //       return <StockList />;
+  //     case "banner":
+  //       return <Banner />;
+  //     default:
+  //       return null;
+  //   }
+  // };
 
   return (
     <ThemeProvider theme={defaultTheme}>

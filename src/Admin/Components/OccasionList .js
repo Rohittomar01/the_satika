@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { DataGrid } from "@mui/x-data-grid";
+import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { getData, updateData, deleteData } from "../../Services/ServerServices";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -25,9 +25,6 @@ const OccasionList = () => {
   const [open, setOpen] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
 
-
-
-
   useEffect(() => {
     fetchOccasions();
   }, []);
@@ -42,7 +39,7 @@ const OccasionList = () => {
         ended_at: moment(occasion.ended_at).format("DD/MM/YYYY hh:mm A"),
       }));
       setOccasions(formattedOccasions);
-      console.log("Fetched occasions:", formattedOccasions);
+      // console.log("Fetched occasions:", formattedOccasions);
     } catch (error) {
       console.error("Error fetching occasions:", error);
     }
@@ -98,7 +95,7 @@ const OccasionList = () => {
   };
 
   const handleButtonClick = () => {
-   setActiveItem("occasion"); // Change this to your desired route
+    setActiveItem("occasion"); // Change this to your desired route
   };
 
   const columns = [
@@ -130,6 +127,7 @@ const OccasionList = () => {
     },
     {
       field: "actions",
+      disableExport: true,
       headerName: "Actions",
       width: 150,
       renderCell: (params) => {
@@ -200,6 +198,7 @@ const OccasionList = () => {
             getRowId={(row) => row.occasion_id}
             processRowUpdate={handleProcessRowUpdate}
             editMode="row"
+            slots={{ toolbar: GridToolbar }}
             sx={{
               "& .MuiDataGrid-cell:hover": {
                 color: "primary.main",

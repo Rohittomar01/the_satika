@@ -9,14 +9,17 @@ import {
   Switch,
   FormControlLabel,
   Autocomplete,
+  Tooltip,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { useForm, Controller } from "react-hook-form";
-import { postData } from "../../Services/ServerServices";
+import { getData, postData } from "../../Services/ServerServices";
 import "../StyleSheets/Category.css";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Sweet_Alert from "../../Common_Components/alerts/Sweet_Alert";
 import UploadButton from "../../Common_Components/UploadButton";
+import { useActiveItem } from "../../Common_Components/ActiveItemContext";
+import ListIcon from "@mui/icons-material/List";
 
 const sampleData = {
   categories: [
@@ -50,7 +53,52 @@ const sampleData = {
 };
 
 export default function Product() {
+  const { setActiveItem } = useActiveItem();
+  const [hover, setHover] = useState(false);
   const [file, setFile] = useState(null);
+  const [occasions, setOccasions] = useState([]);
+  const [Crafts, setCrafts] = useState([]);
+  const [Fabrics, setFabrics] = useState([]);
+  const [Colors, setColors] = useState([]);
+  const [Origins, setOrigins] = useState([]);
+  const [Brands, setBrands] = useState([]);
+
+  const fetchOccasions = useCallback(async () => {
+    var response = await getData("product/fetch-occasions")
+    setOccasions(response.data)
+  });
+  const fetchCrafts = useCallback(async () => {
+    var response = await getData("product/fetch-crafts")
+    setCrafts(response.data)
+  });
+  const fetchFabrics = useCallback(async () => {
+    var response = await getData("product/fetch-fabrics")
+    setFabrics(response.data)
+  });
+  const fetchColors = useCallback(async () => {
+    var response = await getData("product/fetch-colors")
+    setColors(response.data)
+  });
+  const fetchOrigins = useCallback(async () => {
+    var response = await getData("product/fetch-origins")
+    setOrigins(response.data)
+  });
+  const fetchBrands = useCallback(async () => {
+    var response = await getData("product/fetch-brands")
+    setBrands(response.data)
+  });
+
+  // console.log(occasions)
+
+  useEffect(()=>{
+    fetchOccasions();
+    fetchCrafts();
+    fetchFabrics();
+    fetchColors();
+    fetchOrigins();
+    fetchBrands();
+
+  },[])
 
   const {
     register,
@@ -61,9 +109,9 @@ export default function Product() {
   } = useForm();
 
   const onSubmit = async (data) => {
-    var body={
+    var body = {
       ...data,
-    }
+    };
 
     try {
       const response = await postData("product/add-product", body);
@@ -89,6 +137,10 @@ export default function Product() {
     setFile(null);
   };
 
+  const handleButtonClick = () => {
+    setActiveItem("productlist");
+  };
+
   return (
     <Box
       component={"div"}
@@ -98,9 +150,35 @@ export default function Product() {
       <Paper elevation={4} id="paper">
         <Grid container>
           <Grid item xs={12}>
-            <Typography id="category_mainHeading" variant="h5">
-              Product Details
-            </Typography>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <Typography variant="h4" mb={3}>
+                Product Details
+              </Typography>
+              <Tooltip title={hover ? "View Product List" : ""} arrow>
+                <Button
+                  onMouseEnter={() => setHover(true)}
+                  onMouseLeave={() => setHover(false)}
+                  onClick={handleButtonClick}
+                  sx={{
+                    mb: 3,
+                    cursor: "pointer",
+                    borderRadius: "50%",
+                    width: 40,
+                    height: 40,
+                    minWidth: 0,
+                    padding: 0,
+                  }}
+                >
+                  <ListIcon sx={{ color: "black" }} />
+                </Button>
+              </Tooltip>
+            </Box>
           </Grid>
           <Grid item xs={12}>
             <form onSubmit={handleSubmit(onSubmit)}>
@@ -235,8 +313,8 @@ export default function Product() {
                     render={({ field }) => (
                       <Autocomplete
                         {...field}
-                        options={sampleData.occasions.map(
-                          (option) => option.name
+                        options={occasions.map(
+                          (option) => option.occasion_name
                         )}
                         renderInput={(params) => (
                           <TextField
@@ -263,7 +341,7 @@ export default function Product() {
                     render={({ field }) => (
                       <Autocomplete
                         {...field}
-                        options={sampleData.crafts.map((option) => option.name)}
+                        options={Crafts.map((option) => option.craft_name)}
                         renderInput={(params) => (
                           <TextField
                             {...register("craft", {
@@ -289,8 +367,8 @@ export default function Product() {
                     render={({ field }) => (
                       <Autocomplete
                         {...field}
-                        options={sampleData.fabrics.map(
-                          (option) => option.name
+                        options={Fabrics.map(
+                          (option) => option.fabric_name
                         )}
                         renderInput={(params) => (
                           <TextField
@@ -317,7 +395,7 @@ export default function Product() {
                     render={({ field }) => (
                       <Autocomplete
                         {...field}
-                        options={sampleData.colors.map((option) => option.name)}
+                        options={Colors.map((option) => option.color_name)}
                         renderInput={(params) => (
                           <TextField
                             {...register("color", {
@@ -343,8 +421,8 @@ export default function Product() {
                     render={({ field }) => (
                       <Autocomplete
                         {...field}
-                        options={sampleData.origins.map(
-                          (option) => option.name
+                        options={Origins.map(
+                          (option) => option.region_name
                         )}
                         renderInput={(params) => (
                           <TextField
@@ -371,7 +449,7 @@ export default function Product() {
                     render={({ field }) => (
                       <Autocomplete
                         {...field}
-                        options={sampleData.brands.map((option) => option.name)}
+                        options={Brands.map((option) => option.brand_name)}
                         renderInput={(params) => (
                           <TextField
                             {...register("brand", {

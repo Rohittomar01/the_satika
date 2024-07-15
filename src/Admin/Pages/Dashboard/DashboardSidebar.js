@@ -7,11 +7,16 @@ import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import AutoFixHighIcon from "@mui/icons-material/AutoFixHigh";
 import ListIcon from "@mui/icons-material/List";
+import InventoryIcon from '@mui/icons-material/Inventory';
 import CheckroomIcon from "@mui/icons-material/Checkroom";
 import ColorLensIcon from "@mui/icons-material/ColorLens";
 import FlagCircleIcon from "@mui/icons-material/FlagCircle";
 import BrandingWatermarkIcon from "@mui/icons-material/BrandingWatermark";
 import { useActiveItem } from '../../../Common_Components/ActiveItemContext';
+import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
+
+
+
 const DashboardSidebar = () => {
     const { setActiveItem } = useActiveItem();
   const [Item, setItem] = useState('product'); // Default to 'product'
@@ -123,6 +128,30 @@ const DashboardSidebar = () => {
           <BrandingWatermarkIcon />
         </ListItemIcon>
         <ListItemText primary="Brand List" />
+      </ListItemButton>
+    </ListItem>
+    {/******************* stock list **********************/}
+    <ListItem disablePadding>
+      <ListItemButton
+         onClick={() => handleItemClick("stocklist")}
+        // selected={activeItem === "product"}
+      >
+        <ListItemIcon>
+          <InventoryIcon />
+        </ListItemIcon>
+        <ListItemText primary="Stock List" />
+      </ListItemButton>
+    </ListItem>
+    {/******************* stock list **********************/}
+    <ListItem disablePadding>
+      <ListItemButton
+         onClick={() => handleItemClick("banner")}
+        // selected={activeItem === "product"}
+      >
+        <ListItemIcon>
+          <AddPhotoAlternateIcon />
+        </ListItemIcon>
+        <ListItemText primary="Add Banner" />
       </ListItemButton>
     </ListItem>
 
