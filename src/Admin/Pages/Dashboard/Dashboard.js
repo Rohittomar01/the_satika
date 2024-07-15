@@ -49,6 +49,9 @@ import OriginList from "../../Components/OriginList";
 import { useActiveItem } from "../../../Common_Components/ActiveItemContext";
 import BrandList from "../../Components/BrandList";
 import DashboardSidebar from "./DashboardSidebar";
+import StockList from "../../Components/StockList";
+import Stock from "../../Components/Stock";
+import Banner from "../../Components/Banner";
 
 function Copyright(props) {
   return (
@@ -159,8 +162,14 @@ export default function Dashboard() {
         return <Brand />;
       case "brandlist":
         return <BrandList />;
+      case "stock":
+        return <Stock />;
+      case "stocklist":
+        return <StockList />;
+      case "banner":
+        return <Banner />;
       default:
-        return <Category />;
+        return null;
     }
   };
 

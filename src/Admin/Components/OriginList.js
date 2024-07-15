@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { DataGrid } from '@mui/x-data-grid';
+import { DataGrid,GridToolbar} from '@mui/x-data-grid';
 import { getData, updateData, deleteData } from "../../Services/ServerServices";
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -102,6 +102,7 @@ const OriginList = () => {
     { field: 'created_by', headerName: 'Created By', width: 150, editable: false },
     {
       field: 'actions',
+      disableExport: true,
       headerName: 'Actions',
       width: 150,
       renderCell: (params) => {
@@ -170,6 +171,7 @@ const OriginList = () => {
             getRowId={(row) => row.origin_id}
             processRowUpdate={handleProcessRowUpdate}
             editMode="row"
+            slots={{ toolbar: GridToolbar }}
             sx={{
               '& .MuiDataGrid-cell:hover': {
                 origin: 'primary.main',

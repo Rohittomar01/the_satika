@@ -11,59 +11,59 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Button from '@mui/material/Button';
-import { Typography, Tooltip,Box } from '@mui/material';
-import moment from 'moment'; 
-import AddIcon from "@mui/icons-material/Add";
+import { Typography } from '@mui/material';
 import { useActiveItem } from "../../Common_Components/ActiveItemContext";
+import { Box, Tooltip } from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
+import moment from 'moment';
 
-
-const CraftList = () => {
+const StockList = () => {
   const { setActiveItem } = useActiveItem();
   const [hover, setHover] = useState(false);
-  const [crafts, setCrafts] = useState([]);
+  const [stocks, setStocks] = useState([]);
   const [editRowsModel, setEditRowsModel] = useState({});
   const [open, setOpen] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
 
   useEffect(() => {
-    fetchCrafts();
+    fetchStocks();
   }, []);
 
-  const fetchCrafts = async () => {
+  const fetchStocks = async () => {
     try {
-      const response = await getData("product/fetch-crafts");
-      const formattedCrafts = response.data.map(craft => ({
+      const response = await getData("product/fetch-stocks");
+      const formattedStocks = response.data.map(craft => ({
         ...craft,
         created_at: moment(craft.started_at).format('DD/MM/YYYY hh:mm A'),
         updated_at: moment(craft.ended_at).format('DD/MM/YYYY hh:mm A'),
       }));
-      setCrafts(formattedCrafts);
-      console.log("Fetched crafts:", formattedCrafts);
+      setStocks(formattedStocks);
+      console.log("Fetched stocks:", response.data);
     } catch (error) {
-      console.error('Error fetching crafts:', error);
+      console.error('Error fetching stocks:', error);
     }
   };
 
   const handleProcessRowUpdate = (newRow) => {
-    setCrafts((prevCrafts) =>
-      prevCrafts.map((row) => (row.craft_id === newRow.craft_id ? newRow : row))
+    setStocks((prevStocks) =>
+      prevStocks.map((row) => (row.stock_id === newRow.stock_id ? newRow : row))
     );
-    setEditRowsModel({ ...editRowsModel, [newRow.craft_id]: true });
+    setEditRowsModel({ ...editRowsModel, [newRow.stock_id]: true });
     return newRow;
   };
 
   const handleSaveEdit = async (id) => {
     try {
-      const updatedCraft = crafts.find((row) => row.craft_id === id);
-      if (!updatedCraft) {
-        console.error(`Craft ${id} not found in state.`);
+      const updatedStock = stocks.find((row) => row.stock_id === id);
+      if (!updatedStock) {
+        console.error(`Stock ${id} not found in state.`);
         return;
       }
-      await updateData(`product/update-craft/${id}`, updatedCraft);
+      await updateData(`product/update-stock/${id}`, updatedStock);
       setEditRowsModel({ ...editRowsModel, [id]: false });
-      console.log(`Craft ${id} updated successfully!`);
+      console.log(`Stock ${id} updated successfully!`);
     } catch (error) {
-      console.error(`Error updating craft ${id}:`, error);
+      console.error(`Error updating stock ${id}:`, error);
     }
   };
 
@@ -74,13 +74,13 @@ const CraftList = () => {
 
   const confirmDelete = async () => {
     try {
-      await deleteData(`product/delete-craft/${deleteId}`);
-      const updatedCrafts = crafts.filter((row) => row.craft_id !== deleteId);
-      setCrafts(updatedCrafts);
-      console.log(`Craft ${deleteId} deleted successfully!`);
+      await deleteData(`product/delete-stock/${deleteId}`);
+      const updatedStocks = stocks.filter((row) => row.stock_id !== deleteId);
+      setStocks(updatedStocks);
+      console.log(`Stock ${deleteId} deleted successfully!`);
       setOpen(false);
     } catch (error) {
-      console.error(`Error deleting craft ${deleteId}:`, error);
+      console.error(`Error deleting stock ${deleteId}:`, error);
     }
   };
 
@@ -90,13 +90,13 @@ const CraftList = () => {
   };
 
   const handleButtonClick = () => {
-    setActiveItem("craft"); // Change this to your desired route
+    setActiveItem("stock"); // Change this to your desired route
    };
 
   const columns = [
-    { field: 'craft_id', headerName: 'ID', width: 70, editable: false },
-    { field: 'craft_name', headerName: 'Craft Name', width: 200, editable: true },
-    { field: 'craft_description', headerName: 'Description', width: 300, editable: true },
+    { field: 'stock_id', headerName: 'ID', width: 70, editable: false },
+    { field: 'product_name', headerName: 'Product Name', width: 150, editable: true },
+    { field: 'stock_quantity', headerName: 'Stock Quantity', width: 150, editable: true },
     { field: 'created_at', headerName: 'Created At', width: 180, editable: false },
     { field: 'updated_at', headerName: 'Updated At', width: 180, editable: false },
     { field: 'created_by', headerName: 'Created By', width: 150, editable: false },
@@ -106,7 +106,7 @@ const CraftList = () => {
       headerName: 'Actions',
       width: 150,
       renderCell: (params) => {
-        const id = params.row.craft_id;
+        const id = params.row.stock_id;
         if (editRowsModel[id]) {
           return (
             <IconButton onClick={() => handleSaveEdit(id)}>
@@ -130,7 +130,7 @@ const CraftList = () => {
 
   return (
     <div style={{ height: 600, width: '90%', marginTop: "10%" }}>
-       <Box
+        <Box
         sx={{
           display: "flex",
           justifyContent: "space-between",
@@ -138,9 +138,9 @@ const CraftList = () => {
         }}
       >
         <Typography variant="h4" mb={3}>
-        Craft List
+        Stock List
         </Typography>
-        <Tooltip title={hover ? "Add New Craft" : ""} arrow>
+        <Tooltip title={hover ? "Add New Stock" : ""} arrow>
           <Button
             onMouseEnter={() => setHover(true)}
             onMouseLeave={() => setHover(false)}
@@ -159,18 +159,17 @@ const CraftList = () => {
           </Button>
         </Tooltip>
       </Box>
-     
-     
-      {crafts.length > 0 ? (
+      
+      {stocks.length > 0 ? (
         <>
           <DataGrid
-            rows={crafts}
+            rows={stocks}
             columns={columns}
             pageSize={10}
             rowsPerPageOptions={[10, 25, 50]}
             checkboxSelection
             disableSelectionOnClick
-            getRowId={(row) => row.craft_id}
+            getRowId={(row) => row.stock_id}
             processRowUpdate={handleProcessRowUpdate}
             editMode="row"
             slots={{ toolbar: GridToolbar }}
@@ -178,7 +177,6 @@ const CraftList = () => {
               '& .MuiDataGrid-cell:hover': {
                 color: 'primary.main',
               },
-              textTransform: "capitalize"
             }}
           />
           <Dialog
@@ -190,7 +188,7 @@ const CraftList = () => {
             <DialogTitle id="alert-dialog-title">{"Confirm Delete"}</DialogTitle>
             <DialogContent>
               <DialogContentText id="alert-dialog-description">
-                Are you sure you want to delete this craft?
+                Are you sure you want to delete this stock?
               </DialogContentText>
             </DialogContent>
             <DialogActions>
@@ -205,11 +203,11 @@ const CraftList = () => {
         </>
       ) : (
         <div style={{ height: "80vh", display: "flex", justifyContent: "center" }}>
-          <p style={{ color: "red", fontWeight: "bolder", fontSize: "1.5em" }}>No crafts available</p>
+          <p style={{ color: "red", fontWeight: "bolder", fontSize: "1.5em" }}>No stocks available</p>
         </div>
       )}
     </div>
   );
 };
 
-export default CraftList;
+export default StockList;

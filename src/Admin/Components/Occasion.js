@@ -15,6 +15,12 @@ import {
   import { useState } from "react";
   import Swal from "sweetalert2";
   import Sweet_Alert from "../../Common_Components/alerts/Sweet_Alert";
+
+  const StyledTextField = styled(TextField)({
+    "& input::placeholder": {
+      textTransform: "capitalize",
+    },
+  });
   
   export default function Occasion() {
     const [file, setFile] = useState([]);
@@ -35,7 +41,7 @@ import {
           ended_at: data.ended_at,
           created_by: "admin",
         };
-        console.log(body);
+        // console.log(body);
         const response = await postData("product/add-occasion", body);
   
         if (response) {
@@ -50,21 +56,6 @@ import {
       }
     };
   
-    const VisuallyHiddenInput = styled("input")({
-      clip: "rect(0 0 0 0)",
-      clipPath: "inset(50%)",
-      height: 1,
-      overflow: "hidden",
-      position: "absolute",
-      bottom: 0,
-      left: 0,
-      whiteSpace: "nowrap",
-      width: 1,
-    });
-  
-    const handleFile = (event) => {
-      setFile(event.target.files[0]);
-    };
   
     const handleReset = () => {
       reset();
@@ -83,8 +74,9 @@ import {
               <form onSubmit={handleSubmit(onSubmit)}>
                 <Grid container spacing={2}>
                   <Grid item xs={12} sm={6}>
-                    <TextField
+                    <StyledTextField
                       fullWidth
+                      inputProps={{ style: { textTransform: "capitalize" } }}
                       id="occasion_name"
                       label="Occasion Name"
                       name="occasion_name"
@@ -95,8 +87,9 @@ import {
                     />
                   </Grid>
                   <Grid item xs={12} sm={6}>
-                    <TextField
+                    <StyledTextField
                       fullWidth
+                      inputProps={{ style: { textTransform: "capitalize" } }}
                       id="occasion_description"
                       label="Occasion Description"
                       name="occasion_description"
