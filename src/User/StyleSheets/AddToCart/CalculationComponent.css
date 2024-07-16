@@ -1,0 +1,46 @@
+/* PriceDetails.css */
+.main_Container{
+  height: 58vh;
+}
+.price-details {
+  padding: 16px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+}
+
+.price-details .row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.price-details .total {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  font-weight: bold;
+}
+
+.price-details .divider {
+  margin: 16px 0;
+  border-top: 1px solid #e0e0e0;
+}
+
+.price-details .buy-button {
+  background: linear-gradient(to right, #ff6a00, #ee0979);
+  color: white;
+  margin-bottom: 16px;
+}
+
+.price-details .continue-button {
+  color: #b76e79;
+  border-color: #b76e79;
+}
+
+.price-details .wishlist-button {
+  padding: 8px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  text-align: center;
+  margin-top: 16px;
+}
