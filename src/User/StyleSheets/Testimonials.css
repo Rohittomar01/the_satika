@@ -1,0 +1,100 @@
+.review-superContainer {
+  margin-top: 12vh;
+  width: 100%;
+}
+
+.carousel-control {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.reviewHeading {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.control__buttonsContainer {
+  display: flex;
+  gap: 10px;
+}
+
+.review-mainContainer {
+  overflow: hidden;
+}
+
+.review-subContainer {
+  display: flex;
+  cursor: grab;
+
+}
+
+.review-card {
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 16px;
+  margin: 0 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  flex: 0 0 300px;
+}
+
+.review-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.stars {
+  display: flex;
+}
+
+.star {
+  color: #ddd;
+}
+
+.star.filled {
+  color: #ff4081;
+}
+
+.review-date {
+  font-size: 14px;
+  color: #999;
+}
+
+.review-location {
+  font-size: 18px;
+  font-weight: bold;
+  margin: 8px 0;
+}
+
+.review-content {
+  margin: 8px 0;
+}
+
+.review-content blockquote {
+  font-style: italic;
+  margin: 0;
+}
+
+.reviewer {
+  display: block;
+  margin-top: 8px;
+  font-size: 16px;
+  font-weight: bold;
+}
+#review-reviewer {
+  font-weight: 700;
+}
+.view_more {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 3%;
+}
+.view_more Button {
+  color: black;
+  border-color: black;
+  size: large;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+}

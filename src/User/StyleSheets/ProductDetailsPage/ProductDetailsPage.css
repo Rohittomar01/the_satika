@@ -1,0 +1,15 @@
+.productCarousel_Container {
+  margin-top: 5%;
+}
+.BreadCrumbs_Container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.breadCrumbs {
+  margin-top: 2%;
+  width: 92vw;
+}
+.Productcarousel_container {
+  padding-left: 2%;
+}

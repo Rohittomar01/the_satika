@@ -14,43 +14,54 @@ import { useForm } from "react-hook-form";
 import { postData } from "../../Services/ServerServices";
 import "../StyleSheets/Category.css";
 import { useState } from "react";
-import Swal from "sweetalert2";
 import Sweet_Alert from "../../Common_Components/alerts/Sweet_Alert";
 
 export default function Category() {
-  // const validationSchema = yup.object({
-  //   name: yup.string().required("Name is required"),
-  //   description: yup.string(),
-  // });
-  const [file, setFile] = useState([]);
-
+  const [file, setFile] = useState(null);
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
   } = useForm();
-  //   console.log("filllllllllllle",file)
 
   const onSubmit = async (data) => {
     const date = new Date();
-    console.log("fileeeeeeeeeeeeee", file);
-
     const refineDate = `${date.getFullYear()}-${(date.getMonth() + 1)
       .toString()
       .padStart(2, "0")}-${date.getDate().toString().padStart(2, "0")}`;
     try {
+      const formData = new FormData();
+      formData.append("name", data.name);
+      formData.append("description", data.description);
+      formData.append("created_at", refineDate);
+      formData.append("updated_at", refineDate);
+      formData.append("file", file);
+      formData.append("created_by", "admin");
+      let base64File = null;
+      // if (file) {
+      //   base64File = await convertToBase64(file);
+      // }
+
+
       const body = {
         name: data.name,
         description: data.description,
-        file: file,
         created_at: refineDate,
         updated_at: refineDate,
+        file: base64File, // You might need to handle file differently as JSON does not support File objects.
         created_by: "admin",
+        data: formData,
       };
-      const response = await postData("category/submitCategory_Data", body, {
-        method: "POST",
-      });
+
+     
+
+      const response = await postData(
+        "category/submitCategory_Data",body, {
+          method: 'POST',
+          
+        }
+      );
 
       console.log("responce", response);
       if (response) {
@@ -58,13 +69,22 @@ export default function Category() {
       } else {
         Sweet_Alert({ title: response.message, icon: "error" });
       }
-   
+
       reset();
     } catch (error) {
       console.error("Error submitting data:", error);
     }
   };
 
+
+  const convertToBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+    });
+  };
   const VisuallyHiddenInput = styled("input")({
     clip: "rect(0 0 0 0)",
     clipPath: "inset(50%)",
@@ -160,9 +180,13 @@ export default function Category() {
                   lg={6}
                 >
                   <Avatar
-                    alt="Remy Sharp"
-                    src="/static/images/avatar/1.jpg"
-                    sx={{ width: 56, height: 56 }}
+                    alt="Caqtegory Image"
+                    src={
+                      file
+                        ? URL.createObjectURL(file)
+                        : "https://th.bing.com/th/id/OIP.VOB_2CiLZ6FSNWDMMGdQKAHaLe?w=198&h=308&c=7&r=0&o=5&dpr=1.5&pid=1.7"
+                    }
+                    sx={{ width: 65, height: 65 }}
                   />
                 </Grid>
                 <Grid item xs={12} sm={6} md={6} lg={6}>

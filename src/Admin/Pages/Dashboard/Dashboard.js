@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { BrowserRouter as Router, Route, Routes, useNavigate } from "react-router-dom";
 import { styled, createTheme, ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import MuiDrawer from "@mui/material/Drawer";
@@ -25,7 +26,10 @@ import ListIcon from "@mui/icons-material/List";
 import CheckroomIcon from "@mui/icons-material/Checkroom";
 import ColorLensIcon from "@mui/icons-material/ColorLens";
 import FlagCircleIcon from "@mui/icons-material/FlagCircle";
+import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import BrandingWatermarkIcon from "@mui/icons-material/BrandingWatermark";
+import CelebrationIcon from '@mui/icons-material/Celebration';
+import CastConnectedIcon from '@mui/icons-material/CastConnected';
 import {
   ListItem,
   ListItemIcon,
@@ -33,6 +37,11 @@ import {
   ListItemText,
 } from "@mui/material";
 import Category from "../../Components/Category";
+import Categories_List from "../../Components/Categories_List";
+// import { mainListItems, secondaryListItems } from './listItems';
+// import Chart from './Chart';
+// import Deposits from './Deposits';
+// import Orders from './Orders';
 import Product from "../../Components/Product";
 import ProductsList from "../../Components/ProductsList";
 import Occasion from "../../Components/Occasion";
@@ -41,6 +50,13 @@ import Fabric from "../../Components/Fabric";
 import Color from "../../Components/Color";
 import Origin from "../../Components/Origin";
 import Brand from "../../Components/Brand";
+import Offers from "../../Components/Offers";
+import OffersList from "../../Components/Offers_List";
+import Discounts from "../../Components/Discounts";
+import DiscountList from "../../Components/Discount_List";
+import Promotions from "../../Components/Promotions";
+import PromotionsList from "../../Components/PromotionsList";
+
 import OccasionList from "../../Components/OccasionList ";
 import CraftList from "../../Components/CraftList";
 import FabricList from "../../Components/FabricList ";
@@ -121,63 +137,71 @@ const Drawer = styled(MuiDrawer, {
 const defaultTheme = createTheme();
 
 export default function Dashboard() {
-  const { activeItem } = useActiveItem();
+
+  const navigate=useNavigate();
   const [open, setOpen] = React.useState(true);
-  // const [Item, setItem] = useState("product");
   const toggleDrawer = () => {
     setOpen(!open);
   };
 
-  const renderComponents = () => {
-    // const itemToRender = activeItem || Item;
-    console.log("active ITEMS", activeItem);
-    switch (activeItem) {
-      case "category":
-        return <Category />;
-      case "product":
-        return <Product />;
-      case "productlist":
-        return <ProductsList />;
-      case "occasion":
-        return <Occasion />;
-      case "occasionlist":
-        return <OccasionList />;
-      case "craft":
-        return <Craft />;
-      case "craftlist":
-        return <CraftList />;
-      case "fabric":
-        return <Fabric />;
-      case "fabriclist":
-        return <FabricList />;
-      case "color":
-        return <Color />;
-      case "colorlist":
-        return <ColorList />;
-      case "origin":
-        return <Origin />;
-      case "originlist":
-        return <OriginList />;
-      case "brand":
-        return <Brand />;
-      case "brandlist":
-        return <BrandList />;
-      case "stock":
-        return <Stock />;
-      case "stocklist":
-        return <StockList />;
-      case "banner":
-        return <Banner />;
-      default:
-        return null;
-    }
-  };
+ 
+  // const renderComponents = () => {
+  //   // const itemToRender = activeItem || Item;
+  //   console.log("active ITEMS", activeItem);
+  //   switch (activeItem) {
+  //     case "category":
+  //       return <Category />;
+  //     case "product":
+  //       return <Product />;
+  //     case "productlist":
+  //       return <ProductsList />;
+  //     case "occasion":
+  //       return <Occasion />;
+  //     case "occasionlist":
+  //       return <OccasionList />;
+  //     case "craft":
+  //       return <Craft />;
+  //     case "craftlist":
+  //       return <CraftList />;
+  //     case "fabric":
+  //       return <Fabric />;
+  //     case "fabriclist":
+  //       return <FabricList />;
+  //     case "color":
+  //       return <Color />;
+  //     case "colorlist":
+  //       return <ColorList />;
+  //     case "origin":
+  //       return <Origin />;
+  //     case "originlist":
+  //       return <OriginList />;
+  //     case "brand":
+  //       return <Brand />;
+  //     case "brandlist":
+  //       return <BrandList />;
+  //     case "stock":
+  //       return <Stock />;
+  //     case "stocklist":
+  //       return <StockList />;
+  //     case "banner":
+  //       return <Banner />;
+  //     default:
+  //       return null;
+  //   }
+  // };
 
   return (
     <ThemeProvider theme={defaultTheme}>
       <Box sx={{ display: "flex" }}>
         <CssBaseline />
-        <AppBar position="absolute" open={open}>
+        <AppBar
+          position="absolute"
+          open={open}
+          sx={{
+            backgroundColor: "black", // Light yellow with some transparency
+          }}
+        >
+          {" "}
           <Toolbar
             sx={{
               pr: "24px", // keep right padding when drawer closed
@@ -200,15 +224,15 @@ export default function Dashboard() {
               variant="h6"
               color="inherit"
               noWrap
-              sx={{ flexGrow: 1 }}
+              sx={{ flexGrow: 1 ,fontFamily:"sans-serif"}}
             >
-              Dashboard
+              The Satika
             </Typography>
-            <IconButton color="inherit">
+            {/* <IconButton color="inherit">
               <Badge badgeContent={4} color="secondary">
                 <NotificationsIcon />
               </Badge>
-            </IconButton>
+            </IconButton> */}
           </Toolbar>
         </AppBar>
         <Drawer variant="permanent" open={open}>
@@ -225,8 +249,155 @@ export default function Dashboard() {
             </IconButton>
           </Toolbar>
           <Divider />
-         <DashboardSidebar/>
+          <List component="nav">
+            {/******************* category list **********************/}
+            <ListItem disablePadding>
+              <ListItemButton
+                onClick={() => navigate("/dashboard/Category")}
+                // selected={activeItem === "category"}
+              >
+                <ListItemIcon>
+                  <CategoryIcon />
+                </ListItemIcon>
+                <ListItemText primary="Category" />
+              </ListItemButton>
+            </ListItem>
+            {/******************* product list **********************/}
+            <ListItem disablePadding>
+              <ListItemButton
+                onClick={() => navigate("/dashboard/product")}
+                // selected={activeItem === "product"}
+              >
+                <ListItemIcon>
+                  <AddShoppingCartIcon />
+                </ListItemIcon>
+                <ListItemText primary="Products" />
+              </ListItemButton>
+            </ListItem>
+            {/******************* productlist list **********************/}
+            <ListItem disablePadding>
+              <ListItemButton
+                onClick={() => navigate("/dashboard/productlist")}
+                // selected={activeItem === "product"}
+              >
+                <ListItemIcon>
+                  <ListIcon />
+                </ListItemIcon>
+                <ListItemText primary="Products List" />
+              </ListItemButton>
+            </ListItem>
+
+            {/******************* occasion list **********************/}
+            <ListItem disablePadding>
+              <ListItemButton
+                onClick={() => navigate("/dashboard/occasion")}
+                // selected={activeItem === "product"}
+              >
+                <ListItemIcon>
+                  <LiquorIcon />
+                </ListItemIcon>
+                <ListItemText primary="Occasion" />
+              </ListItemButton>
+            </ListItem>
+            {/******************* craft list **********************/}
+            <ListItem disablePadding>
+              <ListItemButton
+                onClick={() => navigate("/dashboard/craft")}
+                // selected={activeItem === "product"}
+              >
+                <ListItemIcon>
+                  <AutoFixHighIcon />
+                </ListItemIcon>
+                <ListItemText primary="Craft" />
+              </ListItemButton>
+            </ListItem>
+            {/******************* fabric list **********************/}
+            <ListItem disablePadding>
+              <ListItemButton
+                onClick={() => navigate("/dashboard/fabric")}
+                // selected={activeItem === "product"}
+              >
+                <ListItemIcon>
+                  <CheckroomIcon />
+                </ListItemIcon>
+                <ListItemText primary="Fabric" />
+              </ListItemButton>
+            </ListItem>
+            {/******************* color list **********************/}
+            <ListItem disablePadding>
+              <ListItemButton
+                onClick={() => navigate("/dashboard/color")}
+                // selected={activeItem === "product"}
+              >
+                <ListItemIcon>
+                  <ColorLensIcon />
+                </ListItemIcon>
+                <ListItemText primary="Color" />
+              </ListItemButton>
+            </ListItem>
+            {/******************* origin list **********************/}
+            <ListItem disablePadding>
+              <ListItemButton
+                onClick={() => navigate("/dashboard/origin")}
+                // selected={activeItem === "product"}
+              >
+                <ListItemIcon>
+                  <FlagCircleIcon />
+                </ListItemIcon>
+                <ListItemText primary="Origin" />
+              </ListItemButton>
+            </ListItem>
+            {/******************* brand list **********************/}
+            <ListItem disablePadding>
+              <ListItemButton
+                onClick={() => navigate("/dashboard/brand")}
+                // selected={activeItem === "product"}
+              >
+                <ListItemIcon>
+                  <BrandingWatermarkIcon />
+                </ListItemIcon>
+                <ListItemText primary="Brand" />
+              </ListItemButton>
+            </ListItem>
+           
+            <ListItem disablePadding>
+              <ListItemButton
+                onClick={() => navigate("/dashboard/OffersList")}
+                // selected={activeItem === "product"}
+              >
+                <ListItemIcon>
+                  <LocalOfferIcon />
+                </ListItemIcon>
+                <ListItemText primary="Offers" />
+              </ListItemButton>
+            </ListItem>
+            <ListItem disablePadding>
+              <ListItemButton
+                onClick={() => navigate("/dashboard/DiscountList")}
+                // selected={activeItem === "product"}
+              >
+                <ListItemIcon>
+                  <CelebrationIcon />
+                </ListItemIcon>
+                <ListItemText primary="Discounts" />
+              </ListItemButton>
+            </ListItem>
+            <ListItem disablePadding>
+              <ListItemButton
+                onClick={() => navigate("/dashboard/PromotionsList")}
+                // selected={activeItem === "product"}
+              >
+                <ListItemIcon>
+                  <CastConnectedIcon />
+                </ListItemIcon>
+                <ListItemText primary="Promotions" />
+              </ListItemButton>
+            </ListItem>
+
+            <Divider sx={{ my: 1 }} />
+          </List>
         </Drawer>
+
         <Box
           component="main"
           sx={{
@@ -243,7 +414,27 @@ export default function Dashboard() {
           }}
         >
           <Toolbar />
-          {renderComponents()}
+          {/* {renderComponents()} */}
+          <Routes>
+            <Route element={<Offers />} path={"/Offers"}></Route>
+            <Route element={<OffersList />} path={"/OffersList"}></Route>
+            <Route element={<Category />} path={"/Category"}></Route>
+            <Route element={<Product />} path={"/Product"}></Route>
+            <Route element={<ProductsList />} path={"/ProductsList"}></Route>
+            <Route element={<Occasion />} path={"/Occasion"}></Route>
+            <Route element={<Craft />} path={"/Craft"}></Route>
+            <Route element={<Fabric />} path={"/Fabric"}></Route>
+            <Route element={<Color />} path={"/Color"}></Route>
+            <Route element={<Origin />} path={"/Origin"}></Route>
+            <Route element={<Brand />} path={"/Brand"}></Route>
+            <Route element={<Offers />} path={"/Offers"}></Route>
+            <Route element={<OffersList />} path={"/OffersList"}></Route>
+            <Route element={<Discounts />} path={"/Discounts"}></Route>
+            <Route element={<DiscountList />} path={"/DiscountList"}></Route>
+            <Route element={<Promotions />} path={"/Promotions"}></Route>
+            <Route element={<PromotionsList />} path={"/PromotionsList"}></Route>
+
+          </Routes>
         </Box>
       </Box>
     </ThemeProvider>

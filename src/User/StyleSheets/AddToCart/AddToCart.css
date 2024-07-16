@@ -1,0 +1,9 @@
+.stepper_container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.stepper_container_Box {
+    margin-top: 4%;
+  width: 60vw;
+}
