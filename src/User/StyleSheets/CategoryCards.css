@@ -1,13 +1,13 @@
 .category-superContainer {
   margin-top: 12vh;
-  max-width: 1200px;
+  overflow: hidden;
 }
 .categoryAvatar {
   width: 10px;
 }
 .categoryHeading {
-  font-family: sans-serif;
-  font-size: 2rem;
+  /* font-family: sans-serif; */
+  /* font-size: 2rem; */
 }
 .content-container {
   display: flex;
@@ -38,11 +38,13 @@
   font-family: sans-serif;
   font-size: 1.5rem;
   text-align: center;
+  margin-top: 15%;
 }
 
 .carousel-control {
   display: flex;
   justify-content: space-between;
+  width: 95vw;
 }
 .control__buttonsContainer {
   display: flex;
@@ -92,4 +94,45 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+@media (max-width: 768px) {
+  .category-superContainer {
+    margin-top: 4vh; /* Adjust margin for smaller screens */
+  }
+
+  .categoryHeading {
+    font-size: 1.5rem; /* Decrease font size for smaller screens */
+  }
+
+  .control__button {
+    display: none; /* Hide control buttons on smaller screens */
+  }
+}
+
+@media (max-width: 480px) {
+  .category-superContainer {
+    margin-top: 3vh; /* Further adjust margin for very small screens */
+  }
+  .control__button{
+    display: none;
+  }
+  .content-container{
+    height: 300px;
+  }
+  .content-container img{
+    border-radius: 10px;
+  }
+
+  .categoryHeading {
+    font-size: 1.5rem; /* Adjust font size for very small screens */
+  }
+  .card-heading {
+    font-size: 1.3rem; /* Adjust font size for very small screens */
+  }
+  
+
+  .image-container {
+    border-radius: 0; /* No border-radius for images on very small screens */
+  }
 }

@@ -1,4 +1,4 @@
-import React,{useState} from "react";
+import React, { useState } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
 import Fade from "embla-carousel-fade";
@@ -126,7 +126,6 @@ const Gallery = ({ images }) => {
             }
           />
         </ImageListItem>
-        
       </div>
     ));
   };
@@ -147,7 +146,9 @@ const Gallery = ({ images }) => {
         onMouseLeave={handleMouseUp}
         ref={emblaRef}
       >
-        <div className={isGrabbing?"grabbing":"gallery-sub-container"}>{renderImages()}</div>
+        <div className={isGrabbing ? "grabbing" : "gallery-sub-container"}>
+          {renderImages()}
+        </div>
       </div>
       <div className="view_more">
         <Button variant="outlined">View More</Button>

@@ -11,9 +11,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import FormGroup from "@mui/material/FormGroup";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
-// import "../StyleSheets/Common_Components/NavBar.css";
-import '../StyleSheets/Common_Components/NavBar.css'
-
+import "../StyleSheets/Common_Components/NavBar.css"
 export default function NavBar() {
   const [auth, setAuth] = React.useState(true);
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -51,7 +49,7 @@ export default function NavBar() {
           display: "flex",
           justifyContent: "center",
           bgcolor: "white",
-          height: "15vh",
+          height: "12vh",
         }}
       >
         <Toolbar

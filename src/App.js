@@ -10,7 +10,7 @@ import AddToCart from "./User/Pages/AddToCart";
 
 function App() {
   return (
-    <Router style={{Margin:0,Padding:0}}>
+    <Router >
       <Routes>
       <Route path="dashboard/*" element={<Dashboard />} />
       <Route path="/discounts" element={<Discounts />} />

@@ -44,7 +44,8 @@ export default function Home() {
       rating: 5,
       date: "30/06/24",
       location: "Taneira T.Nagar Chennai",
-      review: "We had an excellent shopping experience in Pondy bazar Taneira showroom. Wide range of collection, excellent customer service.... ...",
+      review:
+        "We had an excellent shopping experience in Pondy bazar Taneira showroom. Wide range of collection, excellent customer service.... ...",
       reviewer: "Bharathi N.",
     },
     {
@@ -52,7 +53,8 @@ export default function Home() {
       rating: 4,
       date: "15/07/24",
       location: "Taneira Koramangala Bangalore",
-      review: "Great collection and the staff were very helpful and courteous. Highly recommend this place for traditional wear.",
+      review:
+        "Great collection and the staff were very helpful and courteous. Highly recommend this place for traditional wear.",
       reviewer: "Anitha K.",
     },
     {
@@ -60,7 +62,8 @@ export default function Home() {
       rating: 4,
       date: "15/07/24",
       location: "Taneira Koramangala Bangalore",
-      review: "Great collection and the staff were very helpful and courteous. Highly recommend this place for traditional wear.",
+      review:
+        "Great collection and the staff were very helpful and courteous. Highly recommend this place for traditional wear.",
       reviewer: "Anitha K.",
     },
     {
@@ -68,47 +71,36 @@ export default function Home() {
       rating: 4,
       date: "15/07/24",
       location: "Taneira Koramangala Bangalore",
-      review: "Great collection and the staff were very helpful and courteous. Highly recommend this place for traditional wear.",
+      review:
+        "Great collection and the staff were very helpful and courteous. Highly recommend this place for traditional wear.",
       reviewer: "Anitha K.",
     },
     // Add more reviews as needed
   ];
   return (
     <div>
-      <div style={{ margin: 0, padding: 0 }}>
+      <div>
         <NavBar />
       </div>
       <div>
         <Carousel slides={SLIDES} options={OPTIONS} />
       </div>
-      <div
-        style={{
-          margin: 0,
-          padding: 0,
-          display: "flex",
-          justifyContent: "center",
-        }}
-      >
-        <div style={{ width: "95vw", overflow: "hidden" }}>
-          <div>
-            <CategoryCards />
-          </div>
-          <div>
-            <TrendingProducts />
-          </div>
-          <div>
-            <Gallery />
-          </div>
-          <div>
-            <Testimonials reviews={reviews} />
-          </div>
-          <div>
-            <Footer/>
-          </div>
-          {/* <div>
-            <Footer_02/>
-          </div> */}
+      <div style={{ width: "100%"}}>
+        <div style={{padding:"0px 20px"}}>
+          <CategoryCards />
         </div>
+        <div style={{padding:"0px 20px"}}>
+          <TrendingProducts />
+        </div>
+        <div style={{padding:"0px 20px"}}>
+          <Gallery />
+        </div>
+        <div style={{padding:"0px 30px"}}>
+          <Testimonials reviews={reviews} />
+        </div>
+      </div>
+      <div>
+        <Footer />
       </div>
     </div>
   );

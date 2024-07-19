@@ -1,16 +1,36 @@
-@font-face {
-  font-family: "Futura";
-  src: url("../../../Fonts/futura/futur.ttf") format("truetype");
-}
 
 .companyName {
-  font-family:Futura,;
+  font-family: "Futura", sans-serif;
   flex-grow: 1;
   letter-spacing: 0.8vw;
   color: black;
-  font-size: 1.875rem;
+  font-size: 1.875rem; /* Base font size for larger screens */
   line-height: 1.875rem;
-  /* font-family: sans-serif; */
   text-transform: uppercase;
   font-weight: 700;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+  .companyName {
+    font-size: 1.5rem; 
+    line-height: 1.5rem;
+    letter-spacing: 0.6vw;
+  }
+}
+
+@media (max-width: 768px) {
+  .companyName {
+    font-size: 1.25rem; 
+    line-height: 1.25rem;
+    letter-spacing: 0.5vw;
+  }
+}
+
+@media (max-width: 480px) {
+  .companyName {
+    font-size: 1rem; 
+    line-height: 1rem;
+    letter-spacing: 0.4vw;
+  }
 }
