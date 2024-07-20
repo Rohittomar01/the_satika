@@ -79,40 +79,28 @@ export default function Home() {
   ];
   return (
     <div>
-      <div style={{ margin: 0, padding: 0 }}>
+      <div>
         <NavBar />
       </div>
       <div>
         <Carousel slides={SLIDES} options={OPTIONS} />
       </div>
-      <div
-        style={{
-          margin: 0,
-          padding: 0,
-          display: "flex",
-          justifyContent: "center",
-        }}
-      >
-        <div style={{ width: "95vw", overflow: "hidden" }}>
-          <div>
-            <CategoryCards />
-          </div>
-          <div>
-            <TrendingProducts />
-          </div>
-          <div>
-            <GallerySlider />
-          </div>
-          <div>
-            <Testimonials reviews={reviews} />
-          </div>
-          <div>
-            <Footer />
-          </div>
-          {/* <div>
-            <Footer_02/>
-          </div> */}
+      <div style={{ width: "100%"}}>
+        <div style={{padding:"0px 20px"}}>
+          <CategoryCards />
         </div>
+        <div style={{padding:"0px 20px"}}>
+          <TrendingProducts />
+        </div>
+        <div style={{padding:"0px 20px"}}>
+          <GallerySlider />
+        </div>
+        <div style={{padding:"0px 30px"}}>
+          <Testimonials reviews={reviews} />
+        </div>
+      </div>
+      <div>
+        <Footer />
       </div>
     </div>
   );

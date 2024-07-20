@@ -1,6 +1,6 @@
 .category-superContainer {
   margin-top: 12vh;
-  max-width: 1200px;
+  overflow: hidden;
 }
 
 .categoryAvatar {
@@ -46,11 +46,13 @@
   font-family: sans-serif;
   font-size: 1.5rem;
   text-align: center;
+  margin-top: 15%;
 }
 
 .carousel-control {
   display: flex;
   justify-content: space-between;
+  width: 95vw;
 }
 
 .control__buttonsContainer {

@@ -37,7 +37,6 @@
 
 .product-superContainer {
   margin-top: 12vh;
-  max-width: 1200px;
   position: relative;
 }
 
@@ -93,4 +92,35 @@
 .addtocart_now_button {
   border-color: black;
   color: black;
+}
+
+
+@media (max-width: 768px) {
+  .product-superContainer {
+    margin-top: 4vh;
+  }
+
+  .productHeading {
+    font-size: 1.5em; /* Decrease font size for smaller screens */
+  }
+
+  .card-media {
+    height: 35vh; /* Adjust card media height for smaller screens */
+  }
+  .view_moreButton Button{
+    margin-top: 5%;
+  }
+}
+@media (max-width: 468px) {
+  .product-superContainer {
+    margin-top: 4vh;
+  }
+
+  .productHeading {
+    font-size: 1.5em; /* Decrease font size for smaller screens */
+  }
+
+  .card-media {
+    height: 35vh; /* Adjust card media height for smaller screens */
+  }
 }

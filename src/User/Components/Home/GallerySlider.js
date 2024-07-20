@@ -155,11 +155,6 @@ const GallerySlider = ({ images }) => {
             Quick View
           </Button>
         </ImageListItem>
-          {/* <QuickView
-            open={dialogOpen}
-            onClose={() => setDialogOpen(false)}
-            product={item}
-          /> */}
       </div>
     ));
   };

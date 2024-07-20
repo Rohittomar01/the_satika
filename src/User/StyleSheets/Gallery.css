@@ -56,3 +56,25 @@
   /* font-family: "Futura Medium Italic", sans-serif; */
   
 }
+
+
+@media (max-width: 768px) {
+  #gallery-image{
+    width: 100%;
+    object-fit: cover;
+  }
+.view_more Button{
+  margin-top: 5%;
+}
+
+}
+
+@media (max-width: 468px) {
+  #gallery-image{
+    width: 100%;
+    object-fit: cover;
+  }
+.view_more Button{
+  margin-top: 10%;
+}
+}

@@ -18,6 +18,7 @@ import NavBar_Drawer from "./NavBar_Drawer";
 import "../StyleSheets/Common_Components/NavBar.css";
 import { useNavigate } from "react-router-dom";
 
+import "../StyleSheets/Common_Components/NavBar.css"
 export default function NavBar() {
   const navigate = useNavigate();
   const [auth, setAuth] = React.useState(true);
@@ -60,7 +61,7 @@ export default function NavBar() {
           display: "flex",
           justifyContent: "center",
           bgcolor: "white",
-          height: "4.8307rem",
+          height: "12vh",
         }}
       >
         <Toolbar
