@@ -8,7 +8,7 @@
 .products-content-container {
   justify-content: center;
   align-items: center;
-  padding: 2%;
+  padding: 1%;
   position: relative;
   overflow: hidden;
   flex: 0 0 auto;
@@ -19,3 +19,14 @@
   height: 40vh;
   width: auto;
 }
+#card-description {
+  font-family: "Futura Light Italic", sans-serif;
+  font-size: medium;
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+#card-price {
+  font-weight: 700;
+  font-family: "Futura Light Italic",sans-serif;}

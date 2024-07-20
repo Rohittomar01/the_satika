@@ -1,0 +1,108 @@
+.image-gallery-container {
+  margin-top: 12vh;
+  max-width: 1200px;
+}
+
+.carousel-control {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+#gallerySlider_imageTitle {
+  font-family: "Futura Light Italic";
+}
+
+.gallery-heading {
+  font-family: "Futura Medium Italic";
+}
+
+.control-buttons-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.gallery-main-container {
+  overflow: hidden;
+}
+
+.gallery-sub-container {
+  display: flex;
+  cursor: pointer;
+}
+
+.grabbing {
+  display: flex;
+  cursor: pointer;
+}
+
+.image-slide {
+  flex: 0 0 auto; /* Adjust as needed */
+  margin-right: 10px;
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative; /* Added for quick view button positioning */
+}
+
+.image-slide img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+#gallery-image {
+  height: 65vh;
+  width: 25vw;
+  transition: filter 0.3s ease-in-out; /* Added for blur effect */
+}
+
+#gallery-image:hover {
+  filter: blur(4px); /* Added for blur effect on hover */
+}
+
+#gallery_button {
+  color: whitesmoke;
+  border-color: white;
+  margin-right: 1vw;
+}
+
+.view_more {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 3%;
+}
+
+.view_more Button {
+  color: black;
+  border-color: black;
+  size: large;
+}
+
+#quick-view-button {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: none; /* Initially hidden */
+  color: white;
+  border-color: white;
+  background-color: transparent;
+  border: 1px solid;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  font-family: "Futura Medium Italic", sans-serif;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+}
+
+.image-slide:hover #quick-view-button {
+  display: block; 
+  background-color: rgba(255, 255, 255, 0.2);
+}
+#quick-view-button:hover .image-slide  {
+  background-color: rgba(255, 255, 255, 0.2);
+  filter: blur(4px);
+}
+

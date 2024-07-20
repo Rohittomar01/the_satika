@@ -108,10 +108,10 @@ export default function Testimonials() {
             <div className="review-date">{review.date}</div>
           </div>
           <div className="review-content">
-            <Typography variant="h6" className="review-title">
+            <Typography variant="h6" id="review-title">
               {review.title}
             </Typography>
-            <Typography variant="body2" className="review-description">
+            <Typography variant="body2" id="review-description">
               {review.description}
             </Typography>
             <Typography variant="subtitle2" id="review-reviewer">
@@ -135,9 +135,9 @@ export default function Testimonials() {
       <div className="review-mainContainer" ref={emblaRef}>
         <div className="review-subContainer">{renderReview()}</div>
       </div>
-      <div className="view_more">
+      {/* <div className="view_more">
         <Button  variant="outlined">View More</Button>
-      </div>
+      </div> */}
     </div>
   );
 }

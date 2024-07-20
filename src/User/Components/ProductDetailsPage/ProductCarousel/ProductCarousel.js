@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useCallback } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import { Thumb } from "./CarouselThumbsButton";
+import $ from "jquery";
+import ReactImageMagnify from "react-image-magnify";
 import "../../../StyleSheets/ProductDetailsPage/ProductCarousel.css";
 
 const ProductCarousel = (props) => {
@@ -59,6 +61,14 @@ const ProductCarousel = (props) => {
     emblaMainApi.on("select", onSelect).on("reInit", onSelect);
   }, [emblaMainApi, onSelect]);
 
+  // $(function () {
+  //   $(".product_carousel_images").xzoom({
+  //     zoomWidth: 500,
+  //     title: false,
+  //     tint: "#333",
+  //     Xoffset: 15,
+  //   });
+  // });
   return (
     <div className="carousel">
       <div className="carousel__viewport" ref={emblaMainRef}>
@@ -66,10 +76,27 @@ const ProductCarousel = (props) => {
           {slides.map((index) => (
             <div className="carousel__slide" key={index.id}>
               <div className="carousel__slide__number">
-                <img
+                <div className="product_carousel_images">
+                  <ReactImageMagnify
+                    {...{
+                      smallImage: {
+                        alt: "Wristwatch by Ted Baker London",
+                        isFluidWidth: true,
+                        src: index.image,
+                      },
+                      largeImage: {
+                        src: index.image,
+                        width: 1200,
+                        height: 1800,
+                      },
+                      enlargedImagePosition: "over",
+                    }}
+                  />
+                </div>
+                {/* <img
                   className="product_carousel_images"
                   src={index.image}
-                ></img>
+                ></img> */}
               </div>
             </div>
           ))}

@@ -3,7 +3,7 @@ import NavBar from "../Common_Components/NavBar";
 import Carousel from "../Components/Home/Carousel/Carousel";
 import CategoryCards from "../Components/Home/Category_cards/CategoryCards";
 import TrendingProducts from "../Common_Components/TrendingProducts";
-import Gallery from "../Components/Home/Gallery";
+import GallerySlider from "../Components/Home/GallerySlider";
 import Testimonials from "../Components/Home/Testimonials";
 import Footer from "../Common_Components/Footer";
 import Footer_02 from "../Common_Components/Footer_02";
@@ -93,7 +93,7 @@ export default function Home() {
           <TrendingProducts />
         </div>
         <div style={{padding:"0px 20px"}}>
-          <Gallery />
+          <GallerySlider />
         </div>
         <div style={{padding:"0px 30px"}}>
           <Testimonials reviews={reviews} />

@@ -1,13 +1,16 @@
 :root {
   --black-color: black;
   --grey-color: grey;
+  --future-medium: "Futura medium Italic", sans-serif;
+  --future-light: "Futura Light Italic", sans-serif;
+  --future-bold: "Futura bold Italic", sans-serif;
+
 }
 
 .main_grid {
   display: flex;
   justify-content: center;
 }
-
 .grid_container02 {
   margin-top: 3%;
 }
@@ -29,9 +32,16 @@
 .expend_icon.open {
   transform: rotate(180deg);
 }
-
 #reset_button {
   color: var(--grey-color);
+  font-family: var(--future-light);
+}
+#demo-select-small-label{
+  font-family: var(--future-light);
+
+}
+#menuItem{
+  font-family: var(--future-light);
 }
 
 .expend_icon {

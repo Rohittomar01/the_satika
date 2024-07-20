@@ -1,0 +1,80 @@
+/* .signup-dialog{
+  padding: 3%;
+
+} */
+.signup-dialog-title {
+  justify-content: center;
+  gap: 5%;
+  text-align: center;
+  font-size: 1.5rem;
+  position: relative;
+}
+
+.signup-dialog-close-button {
+margin-left: 4%;
+ 
+}
+
+.signup-dialog-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  text-align: center;
+}
+
+.signup-dialog-image {
+  width: 100%;
+  height: 34.5vh;
+  border-radius: 10px;
+}
+
+.signup-dialog-offer-text {
+  margin: 15px 0;
+  font-size: 1rem;
+}
+
+.signup-dialog-input-group {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+.signup-dialog-country-code {
+  flex: 1;
+  margin-right: 5px;
+}
+
+.signup-dialog-mobile-input {
+  flex: 3;
+}
+
+.signup-dialog-button {
+  background-color: #f8a5c2;
+  color: white;
+  padding: 0 0 0 10px;
+  border: none;
+  border-radius: 5px;
+  width: 100%;
+  cursor: pointer;
+}
+
+.signup-dialog-guest {
+  justify-content: center;
+}
+
+.signup-dialog-guest-button {
+  color: #f8a5c2;
+  cursor: pointer;
+}
+
+@media (min-width: 768px) {
+  .signup-dialog-title {
+    font-size: 2rem;
+  }
+
+  .signup-dialog-offer-text {
+    font-size: 1.2rem;
+  }
+}

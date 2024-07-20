@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Grid } from "@mui/material";
 import ProductCarousel from "../Components/ProductDetailsPage/ProductCarousel/ProductCarousel";
 import NavBar from "../Common_Components/NavBar";
@@ -13,6 +13,10 @@ export default function ProductDetailsPage() {
     event.preventDefault();
     console.info("You clicked a breadcrumb.");
   };
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <Grid container>
       <Grid item xs={12} sm={12} lg={12}>
@@ -48,10 +52,10 @@ export default function ProductDetailsPage() {
         <Grid item xs={6} sm={6} lg={6}>
           <ProductDetail />
         </Grid>
-        <Grid item xs={12} sm={12} lg={12}>
+        <Grid id="others_componentsContainer" item xs={12} sm={12} lg={12}>
           <TrendingProducts />
         </Grid>
-        <Grid>
+        <Grid id="others_componentsContainer">
           <Reviews />
         </Grid>
         <Grid>

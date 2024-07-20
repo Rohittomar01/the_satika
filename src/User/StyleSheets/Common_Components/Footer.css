@@ -22,11 +22,14 @@
   margin: 5px 0;
   color: #000;
   text-decoration: none;
+  font-family: "Futura Light Italic", sans-serif; /* Subtitle font */
+
 }
 
 .footer-section p {
   margin: 5px 0;
   color: #000;
+  font-family: "Futura Light Italic", sans-serif; /* Subtitle font */
 }
 
 .signup-section {

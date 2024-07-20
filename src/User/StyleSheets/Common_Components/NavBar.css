@@ -1,13 +1,114 @@
+@font-face {
+  font-family: "Futura";
+  src: url("../../../Fonts/futur.ttf") format("truetype");
+}
+@font-face {
+  font-family: "Futura Bold";
+  src: url("../../../Fonts/Futura Bold font.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Futura Bold Italic";
+  src: url("../../../Fonts/Futura Bold Italic font.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Futura Book";
+  src: url("../../../Fonts/Futura Book font.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Futura Book Italic";
+  src: url("../../../Fonts/Futura Book Italic font.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Futura Extra Black";
+  src: url("../../../Fonts/Futura Extra Black font.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Futura Heavy";
+  src: url("../../../Fonts/Futura Heavy font.ttf") format("truetype");
+}
+
+/* @font-face {
+  font-family: "Futura Heavy Italic";
+  src: url("../../../Fonts/Futura Heavy Italic font - Copy.ttf") format("truetype");
+} */
+
+@font-face {
+  font-family: "Futura Light";
+  src: url("../../../Fonts/futura light bt.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Futura Light";
+  src: url("../../../Fonts/Futura Light font.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Futura Light Italic";
+  src: url("../../../Fonts/Futura Light Italic font.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Futura Medium";
+  src: url("../../../Fonts/futura medium bt.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Futura Medium Condensed";
+  src: url("../../../Fonts/futura medium condensed bt.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Futura Medium Italic";
+  src: url("../../../Fonts/Futura Medium Italic font.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Futura XBlk BT";
+  src: url("../../../Fonts/Futura XBlk BT.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Futura Condensed Light";
+  src: url("../../../Fonts/Futura-CondensedLight.otf") format("opentype");
+}
+
 
 .companyName {
-  font-family: "Futura", sans-serif;
+  font-family: "Futura";
   flex-grow: 1;
   letter-spacing: 0.8vw;
   color: black;
   font-size: 1.875rem; /* Base font size for larger screens */
   line-height: 1.875rem;
   text-transform: uppercase;
-  font-weight: 700;
+}
+.actions_buttons {
+  display: flex;
+  gap: 2%;
+  padding: 1%;
+}
+#companyName_container {
+  margin-left: 10%;
+}
+.menuIcon_grid {
+  display: flex;
+  padding-left: 1%;
+  align-items: center;
+}
+.company_name_grid {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.actions_buttons_grids {
+  display: flex;
+  justify-content: end;
+  align-items: center;
 }
 
 /* Responsive adjustments */
