@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -13,14 +13,22 @@ import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
+import OTPDialog from "../Components/OTPDialog/OTPDialog";
 import "../StyleSheets/SignUpDialog.css";
 
 export default function SignUpDialog(props) {
+  const [otpOpen, setOtpOpen] = useState(false);
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
 
   const handleClose = () => {
     props.setOpen(false);
+    setOtpOpen(true);
+  };
+
+  const handleOtpOpen = () => {
+    props.setOpen(false);
+    setOtpOpen(true);
   };
 
   return (
@@ -73,7 +81,7 @@ export default function SignUpDialog(props) {
           <Button
             variant="contained"
             className="signup-dialog-button"
-            onClick={handleClose}
+            onClick={() => handleOtpOpen()}
           >
             SIGNUP / LOGIN
           </Button>
@@ -88,6 +96,7 @@ export default function SignUpDialog(props) {
             Checkout As Guest
           </Button>
         </DialogActions>
+        <OTPDialog otpOpen={otpOpen} setOtpOpen={setOtpOpen} />
       </Dialog>
     </React.Fragment>
   );

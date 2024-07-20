@@ -11,8 +11,10 @@ import {
   PrevButton,
   usePrevNextButtons,
 } from "./CarouselArrowsButtons";
+import { useNavigate } from "react-router-dom";
 
 export default function CategoryCards() {
+  const navigate = useNavigate();
   const options = { axis: "x", dragFree: true };
   const [isGrabbing, setIsGrabbing] = useState(false);
 
@@ -37,7 +39,8 @@ export default function CategoryCards() {
       image:
         "https://cdn.pixabay.com/photo/2024/03/07/20/31/ai-generated-8619240_1280.jpg",
       category_name: "Rajisthani",
-      category_description: "This is best saree for rajisthan trends or this is bets h hsajuas ",
+      category_description:
+        "This is best saree for rajisthan trends or this is bets h hsajuas ",
     },
     {
       id: 2,
@@ -72,20 +75,28 @@ export default function CategoryCards() {
       image:
         "https://cdn.pixabay.com/photo/2024/03/07/20/31/ai-generated-8619240_1280.jpg",
       category_name: "Rajisthani",
-      category_description: "This is best saree for rajisthan trends sdbasiehfihewirheiwurhfiuerhui",
+      category_description: "This is best saree for rajisthan trends",
     },
   ];
   const renderCard = () => {
     return cards.map((cards) => {
       return (
-        <div className="content-container" key={cards.id}>
+        <div
+          onClick={() => navigate("/filter")}
+          className="content-container"
+          key={cards.id}
+        >
           <div className="image-container">
             <img alt="Remy Sharp" src={cards.image} />
           </div>
           <h3 id="card-heading">{cards.category_name}</h3>
           <div className="card-content">
             <p className="card-detail">{cards.category_description}</p>
-            <Button variant="outlined" id="Explore_Button">
+            <Button
+              onClick={() => navigate("/filter")}
+              variant="outlined"
+              id="Explore_Button"
+            >
               Explore
             </Button>
           </div>

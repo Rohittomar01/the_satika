@@ -17,8 +17,10 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShareIcon from "@mui/icons-material/Share";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { Box, Button } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 export default function TrendingProducts() {
+  const navigate = useNavigate();
   const options = { axis: "x", loop: true, dragFree: true };
 
   const [emblaRef, emblaApi] = useEmblaCarousel(options);
@@ -114,7 +116,9 @@ export default function TrendingProducts() {
                 </IconButton>
               </Box>
               <Box>
-                <Button id="buy_now_button" variant="outlined">Buy Now</Button>
+                <Button onClick={()=>navigate("/productdetails")} id="buy_now_button" variant="outlined">
+                  Buy Now
+                </Button>
               </Box>
             </CardActions>
           </Card>
@@ -136,7 +140,9 @@ export default function TrendingProducts() {
         <div className="product-subContainer">{renderProductCard()}</div>
       </div>
       <div className="view_moreButton">
-        <Button  variant="outlined">View More</Button>
+        <Button variant="outlined" onClick={() => navigate("/filter")}>
+          View More
+        </Button>
       </div>
     </div>
   );

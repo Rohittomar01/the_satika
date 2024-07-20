@@ -1,5 +1,5 @@
 import { Button, Grid } from "@mui/material";
-import React, { useState } from "react";
+import React, { useState ,useEffect} from "react";
 import { Breadcrumbs, Link, Typography, IconButton } from "@mui/material";
 import RotateLeftIcon from "@mui/icons-material/RotateLeft";
 import ExpandCircleDownIcon from "@mui/icons-material/ExpandCircleDown";
@@ -28,6 +28,9 @@ export default function FilterPage() {
   const handleOpen = () => {
     setOpen(!open);
   };
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <div>

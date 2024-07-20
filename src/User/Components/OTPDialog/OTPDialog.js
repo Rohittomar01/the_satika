@@ -14,29 +14,21 @@ import CloseIcon from "@mui/icons-material/Close";
 import OtpInput from "react-otp-input";
 import "../../StyleSheets/OTPDialog.css";
 
-export default function OTPDialog() {
-  const [open, setOpen] = useState(false);
+export default function OTPDialog(props) {
   const [otp, setOtp] = useState("");
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
   const handleClose = () => {
-    setOpen(false);
+    props.setOtpOpen(false);
   };
+  console.log("otp dialog", props.otpOpen);
 
   return (
     <React.Fragment>
-      <Button variant="outlined" onClick={handleClickOpen}>
-        Open OTP Dialog
-      </Button>
       <Dialog
         fullScreen={fullScreen}
-        open={open}
-        onClose={handleClose}
+        open={props.otpOpen}
         aria-labelledby="otp-dialog-title"
         disableBackdropClick
         className="otp-dialog"
@@ -44,7 +36,7 @@ export default function OTPDialog() {
         <DialogTitle className="dialog_title">
           <IconButton
             aria-label="close"
-            onClick={handleClose}
+            onClick={() => handleClose()}
             className="otp-dialog-close-button"
           >
             <CloseIcon />
@@ -67,10 +59,14 @@ export default function OTPDialog() {
               value={otp}
               onChange={setOtp}
               numInputs={6}
-              renderSeparator={<span style={{padding:"0 10px"}}> - </span>}
+              renderSeparator={<span style={{ padding: "0 10px" }}> - </span>}
               renderInput={(props) => <input {...props} />}
-              inputStyle={{height:"6vh",width:"3vw"}}
-             containerStyle={{ display:"flex",justifyContent:"center",width:"30vw"}}
+              inputStyle={{ height: "6vh", width: "3vw" }}
+              containerStyle={{
+                display: "flex",
+                justifyContent: "center",
+                width: "30vw",
+              }}
               shouldAutoFocus={true}
             />
           </div>

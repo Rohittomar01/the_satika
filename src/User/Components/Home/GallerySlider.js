@@ -1,4 +1,4 @@
-import React,{useState} from "react";
+import React, { useState } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
 import Fade from "embla-carousel-fade";
@@ -12,7 +12,10 @@ import {
   usePrevNextButtons,
 } from "./Category_cards/CarouselArrowsButtons"; // Import your custom navigation buttons if needed
 import "../../StyleSheets/GallerySlider.css";
+import { useNavigate } from "react-router-dom";
+import QuickView from "../../Pages/QuickView";
 const GallerySlider = ({ images }) => {
+  const navigate = useNavigate();
   const options = { axis: "x", dragFree: true, loop: true };
   const [isGrabbing, setIsGrabbing] = useState(false);
 
@@ -37,6 +40,15 @@ const GallerySlider = ({ images }) => {
 
   const handleMouseUp = () => {
     setIsGrabbing(false);
+  };
+  const [dialogOpen, setDialogOpen] = useState(false);
+
+  const product = {
+    image:
+      "https://i.pinimg.com/originals/99/0a/3b/990a3b1680be2127f5b7b88c4badde05.jpg",
+    subtitle: "Tussar and Combination",
+    title: "Blue Woven Design Pure Tussar",
+    price: "10999",
   };
 
   const ProductsData = [
@@ -106,7 +118,7 @@ const GallerySlider = ({ images }) => {
     },
     {
       product_image:
-        "https://images.pexels.com/photos/8751524/pexels-photo-8751524.jpeg?auto=compress&cs=tinysrgb&w=600",
+        "https://i.pinimg.com/originals/99/0a/3b/990a3b1680be2127f5b7b88c4badde05.jpg",
       title: "Rajisthani basil",
       author: "@shelleypauls",
     },
@@ -115,19 +127,39 @@ const GallerySlider = ({ images }) => {
     return ProductsData.map((item, index) => (
       <div className="image-slide" key={index}>
         <ImageListItem key={item.img}>
-          <img id="gallery-image" src={item.product_image} alt={item.title} />
+          <img
+            id="gallery-image"
+            src={item.product_image}
+            alt={item.title}
+            onClick={() => setDialogOpen(true)}
+          />
           <ImageListItemBar
-          id="gallerySlider_imageTitle"
+            id="gallerySlider_imageTitle"
             title={item.title}
             subtitle={item.author}
             actionIcon={
-              <Button id="gallery_button" size="small" variant="outlined">
+              <Button
+                onClick={() => navigate("/productdetails")}
+                id="gallery_button"
+                size="small"
+                variant="outlined"
+              >
                 Buy Now
               </Button>
             }
           />
+          <Button
+            id="quick-view-button"
+            onClick={() => setDialogOpen(true)}
+          >
+            Quick View
+          </Button>
         </ImageListItem>
-        
+          {/* <QuickView
+            open={dialogOpen}
+            onClose={() => setDialogOpen(false)}
+            product={item}
+          /> */}
       </div>
     ));
   };
@@ -148,11 +180,20 @@ const GallerySlider = ({ images }) => {
         onMouseLeave={handleMouseUp}
         ref={emblaRef}
       >
-        <div className={isGrabbing?"grabbing":"gallery-sub-container"}>{renderImages()}</div>
+        <div className={isGrabbing ? "grabbing" : "gallery-sub-container"}>
+          {renderImages()}
+        </div>
       </div>
       <div className="view_more">
-        <Button variant="outlined">View More</Button>
+        <Button onClick={() => navigate("/gallery")} variant="outlined">
+          View More
+        </Button>
       </div>
+      <QuickView
+        open={dialogOpen}
+        onClose={() => setDialogOpen(false)}
+        product={product}
+      />
     </div>
   );
 };

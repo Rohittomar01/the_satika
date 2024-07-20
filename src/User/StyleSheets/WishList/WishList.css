@@ -1,10 +1,21 @@
 .showCollection_container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  .showCollection_container_Box {
-      margin-top: 4%;
-    width: 60vw;
-  }
-  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.showCollection_container_Box {
+  margin-top: 4%;
+  width: 60vw;
+}
+#card-price {
+  font-weight: 700;
+  font-family: "Futura Light Italic", sans-serif;
+}
+#card-description {
+  font-family: "Futura Light Italic", sans-serif;
+  font-size: medium;
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}

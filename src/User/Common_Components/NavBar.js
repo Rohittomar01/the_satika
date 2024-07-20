@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useEffect } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import { Grid } from "@mui/material";
@@ -15,8 +16,10 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import NavBar_Drawer from "./NavBar_Drawer";
 import "../StyleSheets/Common_Components/NavBar.css";
+import { useNavigate } from "react-router-dom";
 
 export default function NavBar() {
+  const navigate = useNavigate();
   const [auth, setAuth] = React.useState(true);
   const [open, setOpen] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -32,6 +35,9 @@ export default function NavBar() {
   const handleClose = () => {
     setAnchorEl(null);
   };
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <Box component={"div"} sx={{ flexGrow: 1 }}>
@@ -89,10 +95,10 @@ export default function NavBar() {
             </Grid>
             <Grid className="actions_buttons_grids" item xs={2} sm={2} lg={2}>
               <div className="actions_buttons">
-                <IconButton>
+                <IconButton  onClick={() => navigate("/wishlist")}>
                   <FavoriteBorderIcon />{" "}
                 </IconButton>
-                <IconButton>
+                <IconButton onClick={() => navigate("/addtocart")}>
                   <ShoppingCartIcon />{" "}
                 </IconButton>
                 {auth && (

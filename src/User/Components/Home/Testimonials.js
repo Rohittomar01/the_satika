@@ -135,9 +135,9 @@ export default function Testimonials() {
       <div className="review-mainContainer" ref={emblaRef}>
         <div className="review-subContainer">{renderReview()}</div>
       </div>
-      <div className="view_more">
+      {/* <div className="view_more">
         <Button  variant="outlined">View More</Button>
-      </div>
+      </div> */}
     </div>
   );
 }

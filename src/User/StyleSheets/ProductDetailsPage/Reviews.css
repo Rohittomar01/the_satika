@@ -6,7 +6,7 @@
 
 #review-title {
   font-family: var(--future-medium);
-  font-size: 1.8rem;
+  /* font-size: 1.8rem; */
   font-weight: 600;
 }
 

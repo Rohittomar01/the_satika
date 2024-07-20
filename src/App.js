@@ -11,6 +11,7 @@ import OTPDialog from "./User/Components/OTPDialog/OTPDialog";
 import WishList from "./User/Pages/WishList";
 import AddressFormDialog from "./User/Pages/AddressFormDialog";
 import SignUpDialog from "./User/Pages/SignUpDialog";
+import QuickView from "./User/Pages/QuickView";
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
         <Route path="/address" element={<AddressFormDialog />} />
         <Route path="/SignUpDialog" element={<SignUpDialog />} />
         <Route path="/OTPDialog" element={<OTPDialog />} />
+        <Route path="/quickview" element={<QuickView />} />
       </Routes>
     </Router>
   );

@@ -1,40 +1,74 @@
 import * as React from "react";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
 import ImageListItemBar from "@mui/material/ImageListItemBar";
 import { Button } from "@mui/material";
-import back from "../Vidoes/back.mp4";
+import QuickView from "./QuickView"
 import "../StyleSheets/Gallery.css";
 
 export default function Gallery() {
+  const navigate = useNavigate();
+
+  const [dialogOpen, setDialogOpen] = useState(false);
+
+  const product = {
+    image:
+      "https://i.pinimg.com/originals/99/0a/3b/990a3b1680be2127f5b7b88c4badde05.jpg",
+    subtitle: "Tussar and Combination",
+    title: "Blue Woven Design Pure Tussar",
+    price: "10999",
+  };
+
   return (
-    <ImageList
-      sx={{ display: "flex", flexWrap: "wrap", justifyContent: "center" }}
-    >
-      {/* <ImageListItem key="Subheader" cols={2}>
-        <ListSubheader component="div">December</ListSubheader>
-      </ImageListItem> */}
-      {itemData.map((item) => (
-        <ImageListItem key={item.img}>
-          <img
-            srcSet={`${item.img}?w=300&height=450&fit=crop&auto=format&dpr=2 2x`}
-            src={`${item.img}?w=300&height=450&fit=crop&auto=format`}
-            alt={item.title}
-            loading="lazy"
-          />
-          {/* <video  height={100} width={100} src={back}></video> */}
-          <ImageListItemBar
-            title={item.title}
-            subtitle={item.author}
-            actionIcon={
-              <Button id="buyNow_button" size="small" variant="outlined">
-                Buy Now
+    <>
+      <ImageList
+        sx={{ display: "flex", flexWrap: "wrap", justifyContent: "center" }}
+      >
+        {itemData.map((item) => (
+          <ImageListItem key={item.img} className="imageListItem">
+            <img
+              onClick={() => setDialogOpen(true)}
+              srcSet={`${item.img}?w=300&height=450&fit=crop&auto=format&dpr=2 2x`}
+              src={`${item.img}?w=300&height=450&fit=crop&auto=format`}
+              alt={item.title}
+              loading="lazy"
+            />
+            <div className="overlay">
+              <Button
+                onClick={() => setDialogOpen(true)}
+                id="quickViewButton"
+                size="small"
+                variant="outlined"
+              >
+                Quick View
               </Button>
-            }
-          />
-        </ImageListItem>
-      ))}
-    </ImageList>
+            </div>
+            <ImageListItemBar
+              id="galleryImage_title"
+              title={item.title}
+              subtitle={item.author}
+              actionIcon={
+                <Button
+                  onClick={() => navigate("/productdetails")}
+                  id="buyNow_button"
+                  size="small"
+                  variant="outlined"
+                >
+                  Buy Now
+                </Button>
+              }
+            />
+          </ImageListItem>
+        ))}
+      </ImageList>
+      <QuickView
+        open={dialogOpen}
+        onClose={() => setDialogOpen(false)}
+        product={product}
+      />
+    </>
   );
 }
 

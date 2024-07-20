@@ -15,6 +15,7 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import "../../StyleSheets/ProductDetailsPage/ProductDetails.css";
 
 const ProductDetail = () => {
+  
   return (
     <Box id="product-detail-container">
       <Typography variant="subtitle2" id="product-category">

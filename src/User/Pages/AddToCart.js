@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useEffect} from "react";
 import { Grid, Box } from "@mui/material";
 import "../StyleSheets/AddToCart/AddToCart.css";
 import NavBar from "../Common_Components/NavBar";
@@ -7,6 +7,10 @@ import ProductCards from "../Components/AddToCart/ProductCards";
 import CalculationComponent from "../Components/AddToCart/CalculationComponent";
 
 export default function AddToCart() {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <Grid container>
       <Grid item xs={12} sm={12} lg={12}>
