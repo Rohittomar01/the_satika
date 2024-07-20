@@ -10,6 +10,8 @@ import Gallery from "./User/Pages/Gallery";
 import OTPDialog from "./User/Components/OTPDialog/OTPDialog";
 import WishList from "./User/Pages/WishList";
 import AddressFormDialog from "./User/Pages/AddressFormDialog";
+import SignUpDialog from "./User/Pages/SignUpDialog";
+import OTPDialog from "./User/Pages/OTPDialog";
 
 function App() {
   return (
@@ -26,6 +28,8 @@ function App() {
         <Route path="/wishlist" element={<WishList />} />
         <Route path="/otp" element={<OTPDialog />} />
         <Route path="/address" element={<AddressFormDialog />} />
+        <Route path="/SignUpDialog" element={<SignUpDialog />} />
+        <Route path="/OTPDialog" element={<OTPDialog />} />
       </Routes>
     </Router>
   );

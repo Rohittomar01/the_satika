@@ -17,7 +17,7 @@ export default function AddToCart() {
           <StepperComponent />
         </Box>
       </Grid>
-      <Grid item xs={8} sm={8} lg={8} >
+      <Grid item xs={8} sm={8} lg={8}>
         <ProductCards />
       </Grid>
       <Grid item xs={4} sm={4} lg={4}>
