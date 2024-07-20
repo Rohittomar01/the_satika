@@ -2,46 +2,76 @@
   --black-color: black;
   --grey-color: grey;
 }
+
 .main_grid {
   display: flex;
   justify-content: center;
 }
-.grid_container02{
-    margin-top: 3%;
+
+.grid_container02 {
+  margin-top: 3%;
 }
 
 .filter_actions {
   display: flex;
-  flex-direction: row;
-  align-items: center;
+  flex-direction: column; /* Change to column on mobile */
+  align-items: center; /* Center items vertically on mobile */
   gap: 1rem;
   margin-top: 1rem;
   margin-bottom: 1rem;
   font-size: 1.2rem;
 }
+
 .expend_icon {
-    transition: transform 0.3s ease;
-  }
-  
-  .expend_icon.open {
-    transform: rotate(180deg);
-  }
-  
+  transition: transform 0.3s ease;
+}
+
+.expend_icon.open {
+  transform: rotate(180deg);
+}
+
 #reset_button {
   color: var(--grey-color);
 }
+
 .expend_icon {
   color: var(--black-color);
 }
+
 .filterBy_dropdown {
   display: flex;
-  justify-content: end;
-}
-.filterBy_dropdown {
-  display: flex;
-  justify-content: end;
+  justify-content: flex-end; /* Adjust for end alignment */
   align-items: center;
 }
-#footer{
+
+#footer {
   margin-top: 5%;
+}
+
+/* Media Query for Tablets and larger screens */
+@media (min-width: 768px) {
+  .filter_actions {
+    flex-direction: row;
+    justify-content: center; 
+  }
+}
+@media (max-width: 430px) {
+  .filter_actions {
+    display: flex;
+    width: 100%;
+    /* background-color: bisque; */
+    flex-direction: row;
+    
+  }
+}
+
+/* Media Query for Large Screens (Laptops/Desktops) */
+@media (min-width: 1024px) {
+  .main_grid {
+    justify-content: space-around; /* Adjust spacing for larger screens */
+  }
+
+  .filterBy_dropdown {
+    justify-content: flex-end; /* Ensure end alignment for larger screens */
+  }
 }
