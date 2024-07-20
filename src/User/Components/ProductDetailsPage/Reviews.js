@@ -23,7 +23,7 @@ const reviews = [
 const Reviews = () => {
   return (
     <Box className="review-container">
-      <Typography variant="h6" className="review-title">Customer Reviews</Typography>
+      <Typography variant="h6" id="review-title">Customer Reviews</Typography>
       {reviews.map((review, index) => (
         <Box key={index} className="review-paper">
           <Grid container spacing={2}>
@@ -32,11 +32,11 @@ const Reviews = () => {
             </Grid>
             <Grid item xs>
               <Box className="review-header">
-                <Typography variant="subtitle1" className="review-name">{review.name}</Typography>
-                <Typography variant="body2" className="review-date">{review.date}</Typography>
+                <Typography variant="subtitle1" id="review-name">{review.name}</Typography>
+                <Typography variant="body2" id="review-date">{review.date}</Typography>
               </Box>
               <Rating value={review.rating} readOnly />
-              <Typography variant="body2" className="review-text">{review.review}</Typography>
+              <Typography variant="body2" id="review-text">{review.review}</Typography>
             </Grid>
           </Grid>
         </Box>

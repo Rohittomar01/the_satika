@@ -6,7 +6,7 @@ import Collapse from "@mui/material/Collapse";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import { Divider } from "@mui/material";
-import "../../StyleSheets/FilterPage/FilterBar.css"
+import "../../StyleSheets/FilterPage/FilterBar.css";
 
 export default function FilterBar() {
   const [openSections, setOpenSections] = React.useState({
@@ -26,7 +26,7 @@ export default function FilterBar() {
 
   return (
     <List
-    className="filterBar_list"
+      className="filterBar_list"
       component="nav"
       aria-labelledby="nested-list-subheader"
     >
@@ -34,7 +34,11 @@ export default function FilterBar() {
       <ListItemButton onClick={() => handleClick("color")}>
         <ListItemText
           primaryTypographyProps={{
-            sx: { fontWeight: openSections.color ? "bolder" : "normal" },
+            sx: {
+              fontFamily: openSections.color
+                ? "'Futura bold Italic',sans-serif"
+                : "'Futura medium Italic',sans-serif",
+            },
           }}
           primary="Color"
         />
@@ -43,10 +47,20 @@ export default function FilterBar() {
       <Collapse in={openSections.color} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
           <ListItemButton sx={{ pl: 6 }}>
-            <ListItemText primary="Option 1" />
+            <ListItemText
+              primaryTypographyProps={{
+                sx: { fontFamily: "'Futura medium Italic',sans-serif" },
+              }}
+              primary="Option 1"
+            />
           </ListItemButton>
           <ListItemButton sx={{ pl: 6 }}>
-            <ListItemText primary="Option 2" />
+            <ListItemText
+              primaryTypographyProps={{
+                sx: { fontFamily: "'Futura medium Italic',sans-serif" },
+              }}
+              primary="Option 2"
+            />
           </ListItemButton>
           {/* Add more items as needed */}
         </List>
@@ -57,7 +71,11 @@ export default function FilterBar() {
       <ListItemButton onClick={() => handleClick("range")}>
         <ListItemText
           primaryTypographyProps={{
-            sx: { fontWeight: openSections.range ? "bolder" : "normal" },
+            sx: {
+              fontFamily: openSections.range
+                ? "'Futura bold Italic',sans-serif"
+                : "'Futura medium Italic',sans-serif",
+            },
           }}
           primary="Range"
         />
@@ -66,9 +84,19 @@ export default function FilterBar() {
       <Collapse in={openSections.range} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
           <ListItemButton sx={{ pl: 6 }}>
-            <ListItemText primary="Option 1" />
+            <ListItemText
+              primaryTypographyProps={{
+                sx: { fontFamily: "'Futura medium Italic',sans-serif" },
+              }}
+              primary="Option 1"
+            />
           </ListItemButton>
-          <ListItemButton sx={{ pl: 6 }}>
+          <ListItemButton
+            primaryTypographyProps={{
+              sx: { fontFamily: "'Futura medium Italic',sans-serif" },
+            }}
+            sx={{ pl: 6 }}
+          >
             <ListItemText primary="Option 2" />
           </ListItemButton>
           {/* Add more items as needed */}
@@ -80,7 +108,11 @@ export default function FilterBar() {
       <ListItemButton onClick={() => handleClick("craft")}>
         <ListItemText
           primaryTypographyProps={{
-            sx: { fontWeight: openSections.craft ? "bolder" : "normal" },
+            sx: {
+              fontFamily: openSections.craft
+                ? "Futura bold Italic"
+                : "Futura medium Italic",
+            },
           }}
           primary="Craft"
         />
@@ -88,11 +120,21 @@ export default function FilterBar() {
       </ListItemButton>
       <Collapse in={openSections.craft} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
-          <ListItemButton sx={{ pl: 6 }}>
+          <ListItemButton
+            primaryTypographyProps={{
+              sx: { fontFamily: "'Futura medium Italic',sans-serif" },
+            }}
+            sx={{ pl: 6 }}
+          >
             <ListItemText primary="Option 1" />
           </ListItemButton>
           <ListItemButton sx={{ pl: 6 }}>
-            <ListItemText primary="Option 2" />
+            <ListItemText
+              primaryTypographyProps={{
+                sx: { fontFamily: "'Futura medium Italic',sans-serif" },
+              }}
+              primary="Option 2"
+            />
           </ListItemButton>
           {/* Add more items as needed */}
         </List>
@@ -103,7 +145,11 @@ export default function FilterBar() {
       <ListItemButton onClick={() => handleClick("fiber")}>
         <ListItemText
           primaryTypographyProps={{
-            sx: { fontWeight: openSections.fiber ? "bolder" : "normal" },
+            sx: {
+              fontFamily: openSections.fiber
+                ? "'Futura bold Italic',sans-serif"
+                : "'Futura medium Italic',sans-serif",
+            },
           }}
           primary="Fiber"
         />
@@ -112,9 +158,19 @@ export default function FilterBar() {
       <Collapse in={openSections.fiber} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
           <ListItemButton sx={{ pl: 6 }}>
-            <ListItemText primary="Option 1" />
+            <ListItemText
+              primaryTypographyProps={{
+                sx: { fontFamily: "'Futura medium Italic',sans-serif" },
+              }}
+              primary="Option 1"
+            />
           </ListItemButton>
-          <ListItemButton sx={{ pl: 6 }}>
+          <ListItemButton
+            primaryTypographyProps={{
+              sx: { fontFamily: "'Futura medium Italic',sans-serif" },
+            }}
+            sx={{ pl: 6 }}
+          >
             <ListItemText primary="Option 2" />
           </ListItemButton>
           {/* Add more items as needed */}
@@ -126,7 +182,11 @@ export default function FilterBar() {
       <ListItemButton onClick={() => handleClick("origin")}>
         <ListItemText
           primaryTypographyProps={{
-            sx: { fontWeight: openSections.origin ? "bolder" : "normal" },
+            sx: {
+              fontFamily: openSections.origin
+                ? "'Futura bold Italic',sans-serif"
+                : "'Futura medium Italic',sans-serif",
+            },
           }}
           primary="Origin"
         />
@@ -135,9 +195,19 @@ export default function FilterBar() {
       <Collapse in={openSections.origin} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
           <ListItemButton sx={{ pl: 6 }}>
-            <ListItemText primary="Option 1" />
+            <ListItemText
+              primaryTypographyProps={{
+                sx: { fontFamily: "'Futura medium Italic',sans-serif" },
+              }}
+              primary="Option 1"
+            />
           </ListItemButton>
-          <ListItemButton sx={{ pl: 6 }}>
+          <ListItemButton
+            primaryTypographyProps={{
+              sx: { fontFamily: "'Futura medium Italic',sans-serif" },
+            }}
+            sx={{ pl: 6 }}
+          >
             <ListItemText primary="Option 2" />
           </ListItemButton>
           {/* Add more items as needed */}

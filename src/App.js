@@ -11,7 +11,6 @@ import OTPDialog from "./User/Components/OTPDialog/OTPDialog";
 import WishList from "./User/Pages/WishList";
 import AddressFormDialog from "./User/Pages/AddressFormDialog";
 import SignUpDialog from "./User/Pages/SignUpDialog";
-import OTPDialog from "./User/Pages/OTPDialog";
 
 function App() {
   return (

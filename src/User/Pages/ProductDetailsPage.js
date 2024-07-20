@@ -45,13 +45,13 @@ export default function ProductDetailsPage() {
         <Grid className="Productcarousel_container" item xs={6} sm={6} lg={6}>
           <ProductCarousel />
         </Grid>
-        <Grid item xs={6} sm={6} lg={6}>
+        <Grid  item xs={6} sm={6} lg={6}>
           <ProductDetail />
         </Grid>
-        <Grid item xs={12} sm={12} lg={12}>
+        <Grid id="others_componentsContainer" item xs={12} sm={12} lg={12}>
           <TrendingProducts />
         </Grid>
-        <Grid>
+        <Grid id="others_componentsContainer">
           <Reviews />
         </Grid>
         <Grid>

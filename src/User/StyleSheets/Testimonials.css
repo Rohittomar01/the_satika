@@ -11,8 +11,19 @@
 }
 
 .reviewHeading {
-  font-size: 24px;
-  font-weight: bold;
+  font-family: "Futura medium Italic";
+}
+.review-heading{
+  font-family: "Futura medium Italic";
+}
+#review-title{
+  font-family: "Futura medium Italic";
+}
+#review-description{
+  font-family: "Futura light Italic";
+}
+#review-reviewer{
+  font-family: "Futura bold Italic";
 }
 
 .control__buttonsContainer {

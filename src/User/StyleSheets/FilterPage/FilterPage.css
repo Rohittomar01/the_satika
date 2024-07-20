@@ -1,13 +1,17 @@
 :root {
   --black-color: black;
   --grey-color: grey;
+  --future-medium: "Futura medium Italic", sans-serif;
+  --future-light: "Futura Light Italic", sans-serif;
+  --future-bold: "Futura bold Italic", sans-serif;
+
 }
 .main_grid {
   display: flex;
   justify-content: center;
 }
-.grid_container02{
-    margin-top: 3%;
+.grid_container02 {
+  margin-top: 3%;
 }
 
 .filter_actions {
@@ -20,15 +24,25 @@
   font-size: 1.2rem;
 }
 .expend_icon {
-    transition: transform 0.3s ease;
-  }
-  
-  .expend_icon.open {
-    transform: rotate(180deg);
-  }
-  
+  transition: transform 0.3s ease;
+}
+
+.expend_icon.open {
+  transform: rotate(180deg);
+}
+#filter_by {
+  font-family: var(--future-medium);
+}
 #reset_button {
   color: var(--grey-color);
+  font-family: var(--future-light);
+}
+#demo-select-small-label{
+  font-family: var(--future-light);
+
+}
+#menuItem{
+  font-family: var(--future-light);
 }
 .expend_icon {
   color: var(--black-color);
@@ -42,6 +56,6 @@
   justify-content: end;
   align-items: center;
 }
-#footer{
+#footer {
   margin-top: 5%;
 }

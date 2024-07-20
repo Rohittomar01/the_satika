@@ -8,10 +8,11 @@
   align-items: center;
   justify-content: space-between;
 }
-
+#gallerySlider_imageTitle {
+  font-family: "Futura Light Italic";
+}
 .gallery-heading {
-  /* font-family: sans-serif; */
-  font-size: 2rem;
+  font-family: "Futura Medium Italic";
 }
 
 .control-buttons-container {
@@ -27,7 +28,6 @@
 .gallery-sub-container {
   display: flex;
   cursor: grab;
-
 }
 .grabbing {
   display: flex;
@@ -36,9 +36,9 @@
 
 .image-slide {
   flex: 0 0 auto; /* Adjust as needed */
-  margin-right: 10px; 
+  margin-right: 10px;
   border-radius: 10px;
-overflow: hidden;
+  overflow: hidden;
 }
 
 .image-slide img {
@@ -49,7 +49,6 @@ overflow: hidden;
 #gallery-image {
   height: 65vh;
   width: 25vw;
-  
 }
 #gallery_button {
   color: whitesmoke;

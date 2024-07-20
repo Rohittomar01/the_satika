@@ -4,6 +4,7 @@ import "../../../StyleSheets/CategoryCards.css";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
 import Fade from "embla-carousel-fade";
+import { Button } from "@mui/material";
 
 import {
   NextButton,
@@ -36,7 +37,7 @@ export default function CategoryCards() {
       image:
         "https://cdn.pixabay.com/photo/2024/03/07/20/31/ai-generated-8619240_1280.jpg",
       category_name: "Rajisthani",
-      category_description: "This is best saree for rajisthan trends",
+      category_description: "This is best saree for rajisthan trends or this is bets h hsajuas ",
     },
     {
       id: 2,
@@ -71,7 +72,7 @@ export default function CategoryCards() {
       image:
         "https://cdn.pixabay.com/photo/2024/03/07/20/31/ai-generated-8619240_1280.jpg",
       category_name: "Rajisthani",
-      category_description: "This is best saree for rajisthan trends",
+      category_description: "This is best saree for rajisthan trends sdbasiehfihewirheiwurhfiuerhui",
     },
   ];
   const renderCard = () => {
@@ -81,9 +82,12 @@ export default function CategoryCards() {
           <div className="image-container">
             <img alt="Remy Sharp" src={cards.image} />
           </div>
+          <h3 id="card-heading">{cards.category_name}</h3>
           <div className="card-content">
-            <h3 className="card-heading">{cards.category_name}</h3>
-            {/* <p className="card-detail">{cards.category_description}</p> */}
+            <p className="card-detail">{cards.category_description}</p>
+            <Button variant="outlined" id="Explore_Button">
+              Explore
+            </Button>
           </div>
         </div>
       );

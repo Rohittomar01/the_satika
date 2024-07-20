@@ -1,8 +1,8 @@
 import * as React from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
+import { Grid } from "@mui/material";
 import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import AccountCircle from "@mui/icons-material/AccountCircle";
@@ -13,11 +13,12 @@ import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-// import "../StyleSheets/Common_Components/NavBar.css";
+import NavBar_Drawer from "./NavBar_Drawer";
 import "../StyleSheets/Common_Components/NavBar.css";
 
 export default function NavBar() {
   const [auth, setAuth] = React.useState(true);
+  const [open, setOpen] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const handleChange = (event) => {
@@ -63,64 +64,73 @@ export default function NavBar() {
             alignItems: "center",
           }}
         >
-          <div>
-            {" "}
-            <IconButton
-              size="large"
-              edge="start"
-              color="inherit"
-              aria-label="menu"
-              sx={{ mr: 2, color: "black" }}
-            >
-              <MenuIcon />
-            </IconButton>
-          </div>
-          <div id="companyName_container">
-            <span component="div" className="companyName">
-              The Satika
-            </span>
-          </div>
-          \
-          <div className="actions_buttons">
-            <IconButton>
-              <FavoriteBorderIcon />{" "}
-            </IconButton>
-            <IconButton>
-              <ShoppingCartIcon />{" "}
-            </IconButton>
-            {auth && (
+          <Grid container>
+            <Grid className="menuIcon_grid" item xs={1} sm={1} lg={1}>
               <div>
+                {" "}
                 <IconButton
+                  onClick={() => setOpen(true)}
                   size="large"
-                  aria-label="account of current user"
-                  aria-controls="menu-appbar"
-                  aria-haspopup="true"
-                  onClick={handleMenu}
-                  color="black"
+                  edge="start"
+                  color="inherit"
+                  aria-label="menu"
+                  sx={{ mr: 2, color: "black" }}
                 >
-                  <AccountCircle sx={{ fontSize: "110%" }} />
+                  <MenuIcon />
                 </IconButton>
-                <Menu
-                  id="menu-appbar"
-                  anchorEl={anchorEl}
-                  anchorOrigin={{
-                    vertical: "top",
-                    horizontal: "right",
-                  }}
-                  keepMounted
-                  transformOrigin={{
-                    vertical: "top",
-                    horizontal: "right",
-                  }}
-                  open={Boolean(anchorEl)}
-                  onClose={handleClose}
-                >
-                  <MenuItem onClick={handleClose}>Profile</MenuItem>
-                  <MenuItem onClick={handleClose}>My account</MenuItem>
-                </Menu>
               </div>
-            )}
-          </div>
+            </Grid>
+            <Grid className="company_name_grid" item xs={9} sm={9} lg={9}>
+              <div id="companyName_container">
+                <span component="div" className="companyName">
+                  The Satika
+                </span>
+              </div>
+            </Grid>
+            <Grid className="actions_buttons_grids" item xs={2} sm={2} lg={2}>
+              <div className="actions_buttons">
+                <IconButton>
+                  <FavoriteBorderIcon />{" "}
+                </IconButton>
+                <IconButton>
+                  <ShoppingCartIcon />{" "}
+                </IconButton>
+                {auth && (
+                  <div>
+                    <IconButton
+                      size="large"
+                      aria-label="account of current user"
+                      aria-controls="menu-appbar"
+                      aria-haspopup="true"
+                      onClick={handleMenu}
+                      color="black"
+                    >
+                      <AccountCircle sx={{ fontSize: "110%" }} />
+                    </IconButton>
+                    <Menu
+                      id="menu-appbar"
+                      anchorEl={anchorEl}
+                      anchorOrigin={{
+                        vertical: "top",
+                        horizontal: "right",
+                      }}
+                      keepMounted
+                      transformOrigin={{
+                        vertical: "top",
+                        horizontal: "right",
+                      }}
+                      open={Boolean(anchorEl)}
+                      onClose={handleClose}
+                    >
+                      <MenuItem onClick={handleClose}>Profile</MenuItem>
+                      <MenuItem onClick={handleClose}>My account</MenuItem>
+                    </Menu>
+                  </div>
+                )}
+              </div>
+            </Grid>
+          </Grid>
+          <NavBar_Drawer open={open} setOpen={setOpen} />
         </Toolbar>
       </AppBar>
     </Box>

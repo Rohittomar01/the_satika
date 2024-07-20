@@ -217,13 +217,13 @@ export default function DisplayProducts() {
             />
             <CardContent>
               <Typography
-                className="card-description"
+                id="card-description"
                 variant="body2"
                 color="text.secondary"
               >
                 {product.product_description}
               </Typography>
-              <Typography className="card-price" component={"h3"}>
+              <Typography id="card-price" component={"h3"}>
                 Rs.{product.price}
               </Typography>
             </CardContent>

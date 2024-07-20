@@ -1,25 +1,27 @@
 .filterBar_list {
-    width: 100%;
-    max-width: 360px;
-    background-color: white;
-    overflow: scroll;
+  width: 100%;
+  max-width: 360px;
+  background-color: white;
+  overflow: scroll;
+}
+#listItemText {
+  padding-left: 4vw;
+  font-family: "Futura medium Italic";
+}
+@media (max-height: 600px) {
+  .filterBar_list {
+    height: 78vh;
   }
-  
-  @media (max-height: 600px) {
-    .filterBar_list {
-      height: 78vh;
-    }
+}
+
+@media (min-height: 601px) and (max-height: 800px) {
+  .filterBar_list {
+    height: 90vh;
   }
-  
-  @media (min-height: 601px) and (max-height: 800px) {
-    .filterBar_list {
-      height: 90vh;
-    }
+}
+
+@media (min-height: 801px) {
+  .filterBar_list {
+    height: 95vh;
   }
-  
-  @media (min-height: 801px) {
-    .filterBar_list {
-      height: 95vh;
-    }
-  }
-  
+}

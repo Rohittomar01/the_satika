@@ -63,7 +63,7 @@ export default function FilterPage() {
           <Grid item xs={4} xl={4} sm={4}>
             <div className="filter_actions">
               <div>
-                <Typography>Filter By:</Typography>
+                <Typography id="filter_by">Filter By:</Typography>
               </div>
               <div>
                 <Button
@@ -96,9 +96,15 @@ export default function FilterPage() {
                 <MenuItem value="">
                   <em>None</em>
                 </MenuItem>
-                <MenuItem value={10}>Ten</MenuItem>
-                <MenuItem value={20}>Twenty</MenuItem>
-                <MenuItem value={30}>Thirty</MenuItem>
+                <MenuItem id="menuItem" value={10}>
+                  Ten
+                </MenuItem>
+                <MenuItem id="menuItem" value={20}>
+                  Twenty
+                </MenuItem>
+                <MenuItem id="menuItem" value={30}>
+                  Thirty
+                </MenuItem>
               </Select>
             </FormControl>
           </Grid>

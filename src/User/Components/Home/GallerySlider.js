@@ -117,6 +117,7 @@ const GallerySlider = ({ images }) => {
         <ImageListItem key={item.img}>
           <img id="gallery-image" src={item.product_image} alt={item.title} />
           <ImageListItemBar
+          id="gallerySlider_imageTitle"
             title={item.title}
             subtitle={item.author}
             actionIcon={
