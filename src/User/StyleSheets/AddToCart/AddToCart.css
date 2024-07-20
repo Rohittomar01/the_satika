@@ -1,9 +1,17 @@
-.stepper_container {
+.showCollection_container {
   display: flex;
   justify-content: center;
   align-items: center;
 }
 .stepper_container_Box {
-    margin-top: 4%;
+  margin-top: 4%;
   width: 60vw;
+}
+.stepper_container{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 2%;
+  margin-top: 2%
 }

@@ -11,8 +11,10 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import FormGroup from "@mui/material/FormGroup";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 // import "../StyleSheets/Common_Components/NavBar.css";
-import '../StyleSheets/Common_Components/NavBar.css'
+import "../StyleSheets/Common_Components/NavBar.css";
 
 export default function NavBar() {
   const [auth, setAuth] = React.useState(true);
@@ -51,7 +53,7 @@ export default function NavBar() {
           display: "flex",
           justifyContent: "center",
           bgcolor: "white",
-          height: "15vh",
+          height: "4.8307rem",
         }}
       >
         <Toolbar
@@ -73,56 +75,52 @@ export default function NavBar() {
               <MenuIcon />
             </IconButton>
           </div>
-          <div>
-            <span
-              component="div"
-              className="companyName"
-              // sx={{
-              //   flexGrow: 1,
-              //   letterSpacing: "0.8vw",
-              //   color: "black",
-              //   fontSize: "1.875rem",
-              //   lineHeight: "1.875rem",
-              //   fontFamily: "sans-serif",
-              //   textTransform: "uppercase",
-              //   fontWeight: 700,
-              // }}
-            >
+          <div id="companyName_container">
+            <span component="div" className="companyName">
               The Satika
             </span>
           </div>
-          {auth && (
-            <div>
-              <IconButton
-                size="large"
-                aria-label="account of current user"
-                aria-controls="menu-appbar"
-                aria-haspopup="true"
-                onClick={handleMenu}
-                color="black"
-              >
-                <AccountCircle sx={{ fontSize: "110%" }} />
-              </IconButton>
-              <Menu
-                id="menu-appbar"
-                anchorEl={anchorEl}
-                anchorOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-                open={Boolean(anchorEl)}
-                onClose={handleClose}
-              >
-                <MenuItem onClick={handleClose}>Profile</MenuItem>
-                <MenuItem onClick={handleClose}>My account</MenuItem>
-              </Menu>
-            </div>
-          )}
+          \
+          <div className="actions_buttons">
+            <IconButton>
+              <FavoriteBorderIcon />{" "}
+            </IconButton>
+            <IconButton>
+              <ShoppingCartIcon />{" "}
+            </IconButton>
+            {auth && (
+              <div>
+                <IconButton
+                  size="large"
+                  aria-label="account of current user"
+                  aria-controls="menu-appbar"
+                  aria-haspopup="true"
+                  onClick={handleMenu}
+                  color="black"
+                >
+                  <AccountCircle sx={{ fontSize: "110%" }} />
+                </IconButton>
+                <Menu
+                  id="menu-appbar"
+                  anchorEl={anchorEl}
+                  anchorOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  keepMounted
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  open={Boolean(anchorEl)}
+                  onClose={handleClose}
+                >
+                  <MenuItem onClick={handleClose}>Profile</MenuItem>
+                  <MenuItem onClick={handleClose}>My account</MenuItem>
+                </Menu>
+              </div>
+            )}
+          </div>
         </Toolbar>
       </AppBar>
     </Box>

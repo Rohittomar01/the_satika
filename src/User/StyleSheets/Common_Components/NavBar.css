@@ -4,13 +4,20 @@
 }
 
 .companyName {
-  font-family:Futura,;
+  font-family: "Futura";
   flex-grow: 1;
   letter-spacing: 0.8vw;
   color: black;
   font-size: 1.875rem;
   line-height: 1.875rem;
-  /* font-family: sans-serif; */
   text-transform: uppercase;
-  font-weight: 700;
+  background: #000;
+}
+.actions_buttons {
+  display: flex;
+  gap: 2%;
+  padding: 1%;
+}
+#companyName_container {
+  background: yellow;
 }

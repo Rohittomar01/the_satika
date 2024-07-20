@@ -1,0 +1,10 @@
+.showCollection_container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .showCollection_container_Box {
+      margin-top: 4%;
+    width: 60vw;
+  }
+  

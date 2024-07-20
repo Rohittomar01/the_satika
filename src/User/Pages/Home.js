@@ -3,7 +3,7 @@ import NavBar from "../Common_Components/NavBar";
 import Carousel from "../Components/Home/Carousel/Carousel";
 import CategoryCards from "../Components/Home/Category_cards/CategoryCards";
 import TrendingProducts from "../Common_Components/TrendingProducts";
-import Gallery from "../Components/Home/Gallery";
+import GallerySlider from "../Components/Home/GallerySlider";
 import Testimonials from "../Components/Home/Testimonials";
 import Footer from "../Common_Components/Footer";
 import Footer_02 from "../Common_Components/Footer_02";
@@ -44,7 +44,8 @@ export default function Home() {
       rating: 5,
       date: "30/06/24",
       location: "Taneira T.Nagar Chennai",
-      review: "We had an excellent shopping experience in Pondy bazar Taneira showroom. Wide range of collection, excellent customer service.... ...",
+      review:
+        "We had an excellent shopping experience in Pondy bazar Taneira showroom. Wide range of collection, excellent customer service.... ...",
       reviewer: "Bharathi N.",
     },
     {
@@ -52,7 +53,8 @@ export default function Home() {
       rating: 4,
       date: "15/07/24",
       location: "Taneira Koramangala Bangalore",
-      review: "Great collection and the staff were very helpful and courteous. Highly recommend this place for traditional wear.",
+      review:
+        "Great collection and the staff were very helpful and courteous. Highly recommend this place for traditional wear.",
       reviewer: "Anitha K.",
     },
     {
@@ -60,7 +62,8 @@ export default function Home() {
       rating: 4,
       date: "15/07/24",
       location: "Taneira Koramangala Bangalore",
-      review: "Great collection and the staff were very helpful and courteous. Highly recommend this place for traditional wear.",
+      review:
+        "Great collection and the staff were very helpful and courteous. Highly recommend this place for traditional wear.",
       reviewer: "Anitha K.",
     },
     {
@@ -68,7 +71,8 @@ export default function Home() {
       rating: 4,
       date: "15/07/24",
       location: "Taneira Koramangala Bangalore",
-      review: "Great collection and the staff were very helpful and courteous. Highly recommend this place for traditional wear.",
+      review:
+        "Great collection and the staff were very helpful and courteous. Highly recommend this place for traditional wear.",
       reviewer: "Anitha K.",
     },
     // Add more reviews as needed
@@ -97,13 +101,13 @@ export default function Home() {
             <TrendingProducts />
           </div>
           <div>
-            <Gallery />
+            <GallerySlider />
           </div>
           <div>
             <Testimonials reviews={reviews} />
           </div>
           <div>
-            <Footer/>
+            <Footer />
           </div>
           {/* <div>
             <Footer_02/>
