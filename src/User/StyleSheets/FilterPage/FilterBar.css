@@ -2,12 +2,9 @@
   width: 100%;
   max-width: 360px;
   background-color: white;
-  overflow: scroll;
+  overflow-y: auto; /* Use auto instead of scroll for better compatibility */
 }
-#listItemText {
-  padding-left: 4vw;
-  font-family: "Futura medium Italic";
-}
+
 @media (max-height: 600px) {
   .filterBar_list {
     height: 78vh;
@@ -23,5 +20,13 @@
 @media (min-height: 801px) {
   .filterBar_list {
     height: 95vh;
+  }
+}
+
+/* Additional Media Queries for Width (Mobile and Desktop) */
+
+@media (max-width: 767px) {
+  .filterBar_list {
+    max-width: 100%; /* Full width on smaller screens */
   }
 }
