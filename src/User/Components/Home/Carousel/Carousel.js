@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { DotButton, useDotButton } from "./CarouselDotButtons";
 import {
   PrevButton,
@@ -8,6 +8,8 @@ import {
 import useEmblaCarousel from "embla-carousel-react";
 import "../../../StyleSheets/Carousel/Carousel.css";
 import Autoplay from "embla-carousel-autoplay";
+import { getData, ServerURL } from "../../../../Services/ServerServices";
+import { CircularProgress } from "@mui/material";
 
 const Carousel = (props) => {
   const { slides, options } = props;
@@ -23,20 +25,43 @@ const Carousel = (props) => {
     onNextButtonClick,
   } = usePrevNextButtons(emblaApi);
 
+  const [banners, setBanners] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const fetchBanners = async () => {
+    try {
+      const result = await getData("banner/get_banners");
+      setBanners(result.data);
+      console.log("banner ru", result.data);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching banners:", error);
+      setLoading(false);
+    }
+  };
+
+  console.log("banner", banners);
+
+  useEffect(() => {
+    fetchBanners();
+  }, []);
+
+  
+
   return (
     <section className="embla">
       <div className="embla__viewport" ref={emblaRef}>
         <div className="embla__container">
-          {slides.map((index) => (
-            <div className="embla__slide" key={index.id}>
+          {banners.map((data) => (
+            <div className="embla__slide" key={data.category_id}>
               <img
                 style={{
                   height: "100vh",
                   width: "100vw",
                   objectFit: "cover", // Ensures the image covers the full screen
                 }}
-                src={index.image}
-                alt={`Slide ${index.id}`}
+                src={`${ServerURL}/images/${data.image_name}`}
+                alt={`Slide ${data.category_id}`}
               />
             </div>
           ))}

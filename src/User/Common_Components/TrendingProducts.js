@@ -19,7 +19,7 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { Box, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
-export default function TrendingProducts() {
+export default function TrendingProducts({ data, heading,buttonDisplay }) {
   const navigate = useNavigate();
   const options = { axis: "x", loop: true, dragFree: true };
 
@@ -31,59 +31,8 @@ export default function TrendingProducts() {
     onNextButtonClick,
   } = usePrevNextButtons(emblaApi);
 
-  const products = [
-    {
-      id: 1,
-      image:
-        "https://cdn.pixabay.com/photo/2024/03/07/20/31/ai-generated-8619240_1280.jpg",
-      product_name: "Product 1",
-      price: 20000,
-      product_description: "This is a trending product.",
-    },
-    {
-      id: 2,
-      image:
-        "https://cdn.pixabay.com/photo/2024/04/02/13/53/ai-generated-8670949_1280.jpg",
-      product_name: "Product 2",
-      price: 20000,
-      product_description: "This is another trending product.",
-    },
-    {
-      id: 3,
-      image:
-        "https://cdn.pixabay.com/photo/2019/04/11/17/42/beauty-4120283_1280.jpg",
-      product_name: "Product 3",
-      price: 20000,
-      product_description: "This is also trending.",
-    },
-    {
-      id: 4,
-      image:
-        "https://cdn.pixabay.com/photo/2024/03/07/20/31/ai-generated-8619240_1280.jpg",
-      product_name: "Product 4",
-      price: 20000,
-      product_description: "Trending product 4 description.",
-    },
-    {
-      id: 5,
-      image:
-        "https://cdn.pixabay.com/photo/2024/03/07/20/31/ai-generated-8619240_1280.jpg",
-      product_name: "Product 5",
-      price: 20000,
-      product_description: "Trending product 5 description.",
-    },
-    {
-      id: 6,
-      image:
-        "https://cdn.pixabay.com/photo/2024/03/07/20/31/ai-generated-8619240_1280.jpg",
-      product_name: "Product 6",
-      price: 20000,
-      product_description: "Trending product 6 description.",
-    },
-  ];
-
   const renderProductCard = () => {
-    return products.map((product) => {
+    return data.map((product) => {
       return (
         <div className="product-content-container" key={product.id}>
           <Card sx={{ maxWidth: 240 }}>
@@ -116,7 +65,11 @@ export default function TrendingProducts() {
                 </IconButton>
               </Box>
               <Box>
-                <Button onClick={()=>navigate("/productdetails")} id="buy_now_button" variant="outlined">
+                <Button
+                  onClick={() => navigate("/productdetails")}
+                  id="buy_now_button"
+                  variant="outlined"
+                >
                   Buy Now
                 </Button>
               </Box>
@@ -130,7 +83,7 @@ export default function TrendingProducts() {
   return (
     <div className="product-superContainer">
       <div className="carousel-control">
-        <h1 className="productHeading">Trending Products</h1>
+        <h1 className="productHeading">{heading}</h1>
         <div className="control__buttonsContainer">
           <PrevButton onClick={onPrevButtonClick} disabled={prevBtnDisabled} />
           <NextButton onClick={onNextButtonClick} disabled={nextBtnDisabled} />
@@ -140,7 +93,7 @@ export default function TrendingProducts() {
         <div className="product-subContainer">{renderProductCard()}</div>
       </div>
       <div className="view_moreButton">
-        <Button variant="outlined" onClick={() => navigate("/filter")}>
+        <Button sx={{display:buttonDisplay}} variant="outlined" onClick={() => navigate("/filter")}>
           View More
         </Button>
       </div>

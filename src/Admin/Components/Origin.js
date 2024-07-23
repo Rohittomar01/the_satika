@@ -6,14 +6,19 @@ import {
   Typography,
   TextField,
   Button,
+  IconButton
+
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { useForm } from "react-hook-form";
 import { postData } from "../../Services/ServerServices";
-import Swal from "sweetalert2";
+import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
 import Sweet_Alert from "../../Common_Components/alerts/Sweet_Alert";
+import { useNavigate } from "react-router-dom";
+
 
 export default function Origin() {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -64,10 +69,25 @@ export default function Origin() {
     <Box component={"div"} className="origin_mainContainer">
       <Paper elevation={4} id="paper">
         <Grid container>
-          <Grid item xs={12}>
-            <Typography id="origin_mainHeading" variant="h5">
-              Origin
+        <Grid item xs={6} sm={6} md={6} lg={6}>
+            <Typography id="category_mainHeading" variant="h5">
+               Origin
             </Typography>
+          </Grid>
+          <Grid
+            style={{ display: "flex", justifyContent: "end" }}
+            item
+            xs={6}
+            sm={6}
+            md={6}
+            lg={6}
+          >
+            <IconButton
+              onClick={() => navigate("/dashboard/OriginList")}
+              aria-label="list"
+            >
+              <FormatListBulletedIcon />
+            </IconButton>
           </Grid>
           <Grid item xs={12}>
             <form onSubmit={handleSubmit(onSubmit)}>

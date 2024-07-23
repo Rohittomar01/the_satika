@@ -10,6 +10,7 @@ import {
   FormControlLabel,
   Autocomplete,
   Tooltip,
+  IconButton,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { useForm, Controller } from "react-hook-form";
@@ -19,7 +20,8 @@ import { useCallback, useEffect, useState } from "react";
 import Sweet_Alert from "../../Common_Components/alerts/Sweet_Alert";
 import UploadButton from "../../Common_Components/UploadButton";
 import { useActiveItem } from "../../Common_Components/ActiveItemContext";
-import ListIcon from "@mui/icons-material/List";
+import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
+import { useNavigate } from "react-router-dom";
 
 const sampleData = {
   categories: [
@@ -53,6 +55,7 @@ const sampleData = {
 };
 
 export default function Product() {
+  const navigate = useNavigate();
   const { setActiveItem } = useActiveItem();
   const [hover, setHover] = useState(false);
   const [file, setFile] = useState(null);
@@ -64,41 +67,40 @@ export default function Product() {
   const [Brands, setBrands] = useState([]);
 
   const fetchOccasions = useCallback(async () => {
-    var response = await getData("product/fetch-occasions")
-    setOccasions(response.data)
+    var response = await getData("product/fetch-occasions");
+    setOccasions(response.data);
   });
   const fetchCrafts = useCallback(async () => {
-    var response = await getData("product/fetch-crafts")
-    setCrafts(response.data)
+    var response = await getData("product/fetch-crafts");
+    setCrafts(response.data);
   });
   const fetchFabrics = useCallback(async () => {
-    var response = await getData("product/fetch-fabrics")
-    setFabrics(response.data)
+    var response = await getData("product/fetch-fabrics");
+    setFabrics(response.data);
   });
   const fetchColors = useCallback(async () => {
-    var response = await getData("product/fetch-colors")
-    setColors(response.data)
+    var response = await getData("product/fetch-colors");
+    setColors(response.data);
   });
   const fetchOrigins = useCallback(async () => {
-    var response = await getData("product/fetch-origins")
-    setOrigins(response.data)
+    var response = await getData("product/fetch-origins");
+    setOrigins(response.data);
   });
   const fetchBrands = useCallback(async () => {
-    var response = await getData("product/fetch-brands")
-    setBrands(response.data)
+    var response = await getData("product/fetch-brands");
+    setBrands(response.data);
   });
 
   // console.log(occasions)
 
-  useEffect(()=>{
+  useEffect(() => {
     fetchOccasions();
     fetchCrafts();
     fetchFabrics();
     fetchColors();
     fetchOrigins();
     fetchBrands();
-
-  },[])
+  }, []);
 
   const {
     register,
@@ -111,18 +113,38 @@ export default function Product() {
   const onSubmit = async (data) => {
     var body = {
       ...data,
+      created_by: "admin",
     };
 
     try {
       const response = await postData("product/add-product", body);
+      console.log("res",response.data)
       if (response && response.message) {
-        Sweet_Alert({ title: response.message, icon: "success" });
+        if (file) {
+          var fileFormData = new FormData();
+          fileFormData.append("file", file);
+          fileFormData.append("product_id", response.data.insertId);
+
+          const fileResponse = await postData(
+            "product/upload-file",
+            fileFormData
+          );
+
+          if (fileResponse && fileResponse.message) {
+            await Sweet_Alert({ title: fileResponse.message, icon: "success" });
+            // reset();
+            // setFile(null);
+          } else {
+            await Sweet_Alert({
+              title:
+                "An error occurred while uploading the file. Please try again.",
+              icon: "error",
+            });
+          }
+        }
       } else {
         Sweet_Alert({ title: response.message, icon: "error" });
       }
-
-      reset();
-      setFile(null);
     } catch (error) {
       console.error("Error submitting data:", error);
     }
@@ -149,36 +171,25 @@ export default function Product() {
     >
       <Paper elevation={4} id="paper">
         <Grid container>
-          <Grid item xs={12}>
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-              }}
+          <Grid item xs={6} sm={6} md={6} lg={6}>
+            <Typography id="category_mainHeading" variant="h5">
+              Product
+            </Typography>
+          </Grid>
+          <Grid
+            style={{ display: "flex", justifyContent: "end" }}
+            item
+            xs={6}
+            sm={6}
+            md={6}
+            lg={6}
+          >
+            <IconButton
+              onClick={() => navigate("/dashboard/ProductsList")}
+              aria-label="list"
             >
-              <Typography variant="h4" mb={3}>
-                Product Details
-              </Typography>
-              <Tooltip title={hover ? "View Product List" : ""} arrow>
-                <Button
-                  onMouseEnter={() => setHover(true)}
-                  onMouseLeave={() => setHover(false)}
-                  onClick={handleButtonClick}
-                  sx={{
-                    mb: 3,
-                    cursor: "pointer",
-                    borderRadius: "50%",
-                    width: 40,
-                    height: 40,
-                    minWidth: 0,
-                    padding: 0,
-                  }}
-                >
-                  <ListIcon sx={{ color: "black" }} />
-                </Button>
-              </Tooltip>
-            </Box>
+              <FormatListBulletedIcon />
+            </IconButton>
           </Grid>
           <Grid item xs={12}>
             <form onSubmit={handleSubmit(onSubmit)}>
@@ -367,9 +378,7 @@ export default function Product() {
                     render={({ field }) => (
                       <Autocomplete
                         {...field}
-                        options={Fabrics.map(
-                          (option) => option.fabric_name
-                        )}
+                        options={Fabrics.map((option) => option.fabric_name)}
                         renderInput={(params) => (
                           <TextField
                             {...register("fabric", {
@@ -421,9 +430,7 @@ export default function Product() {
                     render={({ field }) => (
                       <Autocomplete
                         {...field}
-                        options={Origins.map(
-                          (option) => option.region_name
-                        )}
+                        options={Origins.map((option) => option.region_name)}
                         renderInput={(params) => (
                           <TextField
                             {...register("origin", {

@@ -6,14 +6,18 @@ import {
   Typography,
   TextField,
   Button,
+  IconButton
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { useForm } from "react-hook-form";
 import { postData } from "../../Services/ServerServices";
-import Swal from "sweetalert2";
 import Sweet_Alert from "../../Common_Components/alerts/Sweet_Alert";
+import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
+import { useNavigate } from "react-router-dom";
+
 
 export default function Color() {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -63,11 +67,26 @@ export default function Color() {
     <Box component={"div"} className="color_mainContainer">
       <Paper elevation={4} id="paper">
         <Grid container>
-          <Grid item xs={12}>
-            <Typography id="color_mainHeading" variant="h5">
-              Color
-            </Typography>
-          </Grid>
+        <Grid item xs={6} sm={6} md={6} lg={6}>
+              <Typography id="category_mainHeading" variant="h5">
+                Color
+              </Typography>
+            </Grid>
+            <Grid
+              style={{ display: "flex", justifyContent: "end" }}
+              item
+              xs={6}
+              sm={6}
+              md={6}
+              lg={6}
+            >
+              <IconButton
+                onClick={() => navigate("/dashboard/ColorList")}
+                aria-label="list"
+              >
+                <FormatListBulletedIcon />
+              </IconButton>
+            </Grid>
           <Grid item xs={12}>
             <form onSubmit={handleSubmit(onSubmit)}>
               <Grid container spacing={2}>

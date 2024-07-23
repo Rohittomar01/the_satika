@@ -4,17 +4,19 @@ import {
     Paper,
     Typography,
     TextField,
-    Avatar,
     Button,
+    IconButton
+
   } from "@mui/material";
   import { styled } from "@mui/material/styles";
-  import CloudUploadIcon from "@mui/icons-material/CloudUpload";
   import { useForm } from "react-hook-form";
   import { postData } from "../../Services/ServerServices";
 //   import "../StyleSheets/Occasion.css";
   import { useState } from "react";
-  import Swal from "sweetalert2";
+  import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
   import Sweet_Alert from "../../Common_Components/alerts/Sweet_Alert";
+  import { useNavigate } from "react-router-dom";
+
 
   const StyledTextField = styled(TextField)({
     "& input::placeholder": {
@@ -23,6 +25,7 @@ import {
   });
   
   export default function Occasion() {
+    const navigate = useNavigate();
     const [file, setFile] = useState([]);
   
     const {
@@ -65,11 +68,26 @@ import {
       <Box component={"div"} className="occasion_mainContainer">
         <Paper elevation={4} id="paper">
           <Grid container>
-            <Grid item xs={12}>
-              <Typography id="occasion_mainHeading" variant="h5">
-                Occasion
-              </Typography>
-            </Grid>
+          <Grid item xs={6} sm={6} md={6} lg={6}>
+            <Typography id="category_mainHeading" variant="h5">
+             Occasion
+            </Typography>
+          </Grid>
+          <Grid
+            style={{ display: "flex", justifyContent: "end" }}
+            item
+            xs={6}
+            sm={6}
+            md={6}
+            lg={6}
+          >
+            <IconButton
+              onClick={() => navigate("/dashboard/OccasionList")}
+              aria-label="list"
+            >
+              <FormatListBulletedIcon />
+            </IconButton>
+          </Grid>
             <Grid item xs={12}>
               <form onSubmit={handleSubmit(onSubmit)}>
                 <Grid container spacing={2}>
@@ -109,6 +127,7 @@ import {
                       name="started_at"
                       type="datetime-local"
                       variant="outlined"
+                      InputLabelProps={{ shrink: true }}
                       {...register("started_at", { required: "Start date is required" })}
                       error={!!errors.started_at}
                       helperText={errors.started_at?.message}
@@ -122,6 +141,7 @@ import {
                       name="ended_at"
                       type="datetime-local"
                       variant="outlined"
+                      InputLabelProps={{ shrink: true }}
                       {...register("ended_at", { required: "End date is required" })}
                       error={!!errors.ended_at}
                       helperText={errors.ended_at?.message}

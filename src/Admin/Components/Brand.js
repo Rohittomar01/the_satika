@@ -10,7 +10,6 @@ import {
 import { styled } from "@mui/material/styles";
 import { useForm } from "react-hook-form";
 import { postData } from "../../Services/ServerServices";
-import Swal from "sweetalert2";
 import Sweet_Alert from "../../Common_Components/alerts/Sweet_Alert";
 
 export default function Brand() {

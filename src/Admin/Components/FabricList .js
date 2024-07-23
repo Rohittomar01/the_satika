@@ -12,13 +12,13 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
 import { Box, Typography, Tooltip } from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
-import { useActiveItem } from "../../Common_Components/ActiveItemContext";
+import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";
+import { useNavigate } from "react-router-dom";
 
 import moment from "moment";
 
 const FabricList = () => {
-  const { setActiveItem } = useActiveItem();
+  const navigate = useNavigate();
   const [hover, setHover] = useState(false);
   const [fabrics, setFabrics] = useState([]);
   const [editRowsModel, setEditRowsModel] = useState({});
@@ -93,9 +93,7 @@ const FabricList = () => {
     setDeleteId(null);
   };
 
-  const handleButtonClick = () => {
-    setActiveItem("fabric"); // Change this to your desired route
-  };
+  
 
   const columns = [
     { field: "fabric_id", headerName: "ID", width: 70, editable: false },
@@ -172,25 +170,14 @@ const FabricList = () => {
           Fabric List
         </Typography>
         <Tooltip title={hover ? "Add New Fabric" : ""} arrow>
-          <Button
-            onMouseEnter={() => setHover(true)}
-            onMouseLeave={() => setHover(false)}
-            onClick={handleButtonClick}
-            sx={{
-              mb: 3,
-              cursor: "pointer",
-              borderRadius: "50%",
-              width: 40,
-              height: 40,
-              minWidth: 0,
-              padding: 0,
-            }}
+        <IconButton
+            onClick={() => navigate("/dashboard/fabric")}
+            aria-label="add"
           >
-            <AddIcon />
-          </Button>
+            <PlaylistAddIcon sx={{ size: "2%" }} />
+          </IconButton>
         </Tooltip>
       </Box>
-      {fabrics.length > 0 ? (
         <>
           <DataGrid
             rows={fabrics}
@@ -234,15 +221,7 @@ const FabricList = () => {
             </DialogActions>
           </Dialog>
         </>
-      ) : (
-        <div
-          style={{ height: "80vh", display: "flex", justifyContent: "center" }}
-        >
-          <p style={{ color: "red", fontWeight: "bolder", fontSize: "1.5em" }}>
-            No fabrics available
-          </p>
-        </div>
-      )}
+    
     </div>
   );
 };

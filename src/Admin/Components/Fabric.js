@@ -6,14 +6,17 @@ import {
   Typography,
   TextField,
   Button,
+  IconButton
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { useForm } from "react-hook-form";
 import { postData } from "../../Services/ServerServices";
-import Swal from "sweetalert2";
+import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
+import { useNavigate } from "react-router-dom";
 import Sweet_Alert from "../../Common_Components/alerts/Sweet_Alert";
 
 export default function Fabric() {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -63,10 +66,25 @@ export default function Fabric() {
     <Box component={"div"} className="fabric_mainContainer">
       <Paper elevation={4} id="paper">
         <Grid container>
-          <Grid item xs={12}>
-            <Typography id="fabric_mainHeading" variant="h5">
+        <Grid item xs={6} sm={6} md={6} lg={6}>
+            <Typography id="category_mainHeading" variant="h5">
               Fabric
             </Typography>
+          </Grid>
+          <Grid
+            style={{ display: "flex", justifyContent: "end" }}
+            item
+            xs={6}
+            sm={6}
+            md={6}
+            lg={6}
+          >
+            <IconButton
+              onClick={() => navigate("/dashboard/FabricList")}
+              aria-label="list"
+            >
+              <FormatListBulletedIcon />
+            </IconButton>
           </Grid>
           <Grid item xs={12}>
             <form onSubmit={handleSubmit(onSubmit)}>

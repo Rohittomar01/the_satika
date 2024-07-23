@@ -13,12 +13,12 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Button from '@mui/material/Button';
 import { Typography, Tooltip,Box } from '@mui/material';
 import moment from 'moment'; 
-import AddIcon from "@mui/icons-material/Add";
-import { useActiveItem } from "../../Common_Components/ActiveItemContext";
+import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";
+import { useNavigate } from "react-router-dom";
 
 
 const CraftList = () => {
-  const { setActiveItem } = useActiveItem();
+  const navigate = useNavigate();
   const [hover, setHover] = useState(false);
   const [crafts, setCrafts] = useState([]);
   const [editRowsModel, setEditRowsModel] = useState({});
@@ -89,9 +89,7 @@ const CraftList = () => {
     setDeleteId(null);
   };
 
-  const handleButtonClick = () => {
-    setActiveItem("craft"); // Change this to your desired route
-   };
+ 
 
   const columns = [
     { field: 'craft_id', headerName: 'ID', width: 70, editable: false },
@@ -141,27 +139,16 @@ const CraftList = () => {
         Craft List
         </Typography>
         <Tooltip title={hover ? "Add New Craft" : ""} arrow>
-          <Button
-            onMouseEnter={() => setHover(true)}
-            onMouseLeave={() => setHover(false)}
-            onClick={handleButtonClick}
-            sx={{
-              mb: 3,
-              cursor: "pointer",
-              borderRadius: "50%",
-              width: 40,
-              height: 40,
-              minWidth: 0,
-              padding: 0,
-            }}
+        <IconButton
+            onClick={() => navigate("/dashboard/craft")}
+            aria-label="add"
           >
-            <AddIcon />
-          </Button>
+            <PlaylistAddIcon sx={{ size: "2%" }} />
+          </IconButton>
         </Tooltip>
       </Box>
      
      
-      {crafts.length > 0 ? (
         <>
           <DataGrid
             rows={crafts}
@@ -203,11 +190,7 @@ const CraftList = () => {
             </DialogActions>
           </Dialog>
         </>
-      ) : (
-        <div style={{ height: "80vh", display: "flex", justifyContent: "center" }}>
-          <p style={{ color: "red", fontWeight: "bolder", fontSize: "1.5em" }}>No crafts available</p>
-        </div>
-      )}
+
     </div>
   );
 };

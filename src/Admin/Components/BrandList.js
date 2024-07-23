@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { DataGrid,GridToolbar } from "@mui/x-data-grid";
+import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { getData, updateData, deleteData } from "../../Services/ServerServices";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -12,12 +12,12 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
 import { Box, Typography, Tooltip } from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
-import { useActiveItem } from "../../Common_Components/ActiveItemContext";
+import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";
 import moment from "moment";
+import { useNavigate } from "react-router-dom";
 
 const BrandList = () => {
-  const { setActiveItem } = useActiveItem();
+  const navigate = useNavigate();
   const [hover, setHover] = useState(false);
   const [brands, setBrands] = useState([]);
   const [editRowsModel, setEditRowsModel] = useState({});
@@ -86,10 +86,6 @@ const BrandList = () => {
   const handleClose = () => {
     setOpen(false);
     setDeleteId(null);
-  };
-
-  const handleButtonClick = () => {
-    setActiveItem("brand"); // Change this to your desired route
   };
 
   const columns = [
@@ -167,77 +163,55 @@ const BrandList = () => {
           Brand List
         </Typography>
         <Tooltip title={hover ? "Add New Brand" : ""} arrow>
-          <Button
-            onMouseEnter={() => setHover(true)}
-            onMouseLeave={() => setHover(false)}
-            onClick={handleButtonClick}
-            sx={{
-              mb: 3,
-              cursor: "pointer",
-              borderRadius: "50%",
-              width: 40,
-              height: 40,
-              minWidth: 0,
-              padding: 0,
-            }}
+          <IconButton
+            onClick={() => navigate("/dashboard/brand")}
+            aria-label="add"
           >
-            <AddIcon />
-          </Button>
+            <PlaylistAddIcon sx={{ size: "2%" }} />
+          </IconButton>
         </Tooltip>
       </Box>
-      {brands.length > 0 ? (
-        <>
-          <DataGrid
-            rows={brands}
-            columns={columns}
-            pageSize={10}
-            rowsPerPageOptions={[10, 25, 50]}
-            checkboxSelection
-            disableSelectionOnClick
-            getRowId={(row) => row.brand_id}
-            processRowUpdate={handleProcessRowUpdate}
-            editMode="row"
-            slots={{ toolbar: GridToolbar }}
-            sx={{
-              "& .MuiDataGrid-cell:hover": {
-                color: "primary.main",
-              },
-              textTransform: "capitalize",
-            }}
-          />
-          <Dialog
-            open={open}
-            onClose={handleClose}
-            aria-labelledby="alert-dialog-title"
-            aria-describedby="alert-dialog-description"
-          >
-            <DialogTitle id="alert-dialog-title">
-              {"Confirm Delete"}
-            </DialogTitle>
-            <DialogContent>
-              <DialogContentText id="alert-dialog-description">
-                Are you sure you want to delete this brand?
-              </DialogContentText>
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={handleClose} color="primary">
-                Cancel
-              </Button>
-              <Button onClick={confirmDelete} color="primary" autoFocus>
-                Delete
-              </Button>
-            </DialogActions>
-          </Dialog>
-        </>
-      ) : (
-        <div
-          style={{ height: "80vh", display: "flex", justifyContent: "center" }}
+      <>
+        <DataGrid
+          rows={brands}
+          columns={columns}
+          pageSize={10}
+          rowsPerPageOptions={[10, 25, 50]}
+          checkboxSelection
+          disableSelectionOnClick
+          getRowId={(row) => row.brand_id}
+          processRowUpdate={handleProcessRowUpdate}
+          editMode="row"
+          slots={{ toolbar: GridToolbar }}
+          sx={{
+            "& .MuiDataGrid-cell:hover": {
+              color: "primary.main",
+            },
+            textTransform: "capitalize",
+          }}
+        />
+        <Dialog
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
         >
-          <p style={{ color: "red", fontWeight: "bolder", fontSize: "1.5em" }}>
-            No brands available
-          </p>
-        </div>
-      )}
+          <DialogTitle id="alert-dialog-title">{"Confirm Delete"}</DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              Are you sure you want to delete this brand?
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose} color="primary">
+              Cancel
+            </Button>
+            <Button onClick={confirmDelete} color="primary" autoFocus>
+              Delete
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </>
     </div>
   );
 };
