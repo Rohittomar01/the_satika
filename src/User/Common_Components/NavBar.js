@@ -96,10 +96,10 @@ export default function NavBar() {
             </Grid>
             <Grid className="actions_buttons_grids" item xs={2} sm={2} lg={2}>
               <div className="actions_buttons">
-                <IconButton  onClick={() => navigate("/wishlist")}>
+                <IconButton className="nav_icons"  onClick={() => navigate("/wishlist")}>
                   <FavoriteBorderIcon />{" "}
                 </IconButton>
-                <IconButton onClick={() => navigate("/addtocart")}>
+                <IconButton className="nav_icons" onClick={() => navigate("/addtocart")}>
                   <ShoppingCartIcon />{" "}
                 </IconButton>
                 {auth && (
@@ -111,8 +111,9 @@ export default function NavBar() {
                       aria-haspopup="true"
                       onClick={handleMenu}
                       color="black"
+                      className="nav_icons"
                     >
-                      <AccountCircle sx={{ fontSize: "110%" }} />
+                      <AccountCircle sx={{ fontSize: "100%" }} />
                     </IconButton>
                     <Menu
                       id="menu-appbar"
