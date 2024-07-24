@@ -3,6 +3,8 @@
   flex-direction: row;
   flex-wrap: wrap;
   height: 78vh;
+  align-items: center;
+  justify-content: center;
   overflow: scroll;
 }
 .products-content-container {

@@ -14,11 +14,10 @@ import Button from "@mui/material/Button";
 import moment from "moment"; // Import moment.js
 import { useNavigate } from "react-router-dom";
 import { Box, Typography, Tooltip } from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
-import { useActiveItem } from "../../Common_Components/ActiveItemContext";
+import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";
 
 const OccasionList = () => {
-  const { setActiveItem } = useActiveItem();
+  const navigate = useNavigate();
   const [hover, setHover] = useState(false);
   const [occasions, setOccasions] = useState([]);
   const [editRowsModel, setEditRowsModel] = useState({});
@@ -94,10 +93,6 @@ const OccasionList = () => {
     setDeleteId(null);
   };
 
-  const handleButtonClick = () => {
-    setActiveItem("occasion"); // Change this to your desired route
-  };
-
   const columns = [
     { field: "occasion_id", headerName: "ID", width: 70, editable: false },
     {
@@ -168,77 +163,55 @@ const OccasionList = () => {
           Occasion List
         </Typography>
         <Tooltip title={hover ? "Add Record" : ""} arrow>
-          <Button
-            onMouseEnter={() => setHover(true)}
-            onMouseLeave={() => setHover(false)}
-            onClick={handleButtonClick}
-            sx={{
-              mb: 3,
-              cursor: "pointer",
-              borderRadius: "50%",
-              width: 40,
-              height: 40,
-              minWidth: 0,
-              padding: 0,
-            }}
+          <IconButton
+            onClick={() => navigate("/dashboard/occassion")}
+            aria-label="add"
           >
-            <AddIcon />
-          </Button>
+            <PlaylistAddIcon sx={{ size: "2%" }} />
+          </IconButton>
         </Tooltip>
       </Box>
-      {occasions.length > 0 ? (
-        <>
-          <DataGrid
-            rows={occasions}
-            columns={columns}
-            pageSize={10}
-            rowsPerPageOptions={[10, 25, 50]}
-            checkboxSelection
-            disableSelectionOnClick
-            getRowId={(row) => row.occasion_id}
-            processRowUpdate={handleProcessRowUpdate}
-            editMode="row"
-            slots={{ toolbar: GridToolbar }}
-            sx={{
-              "& .MuiDataGrid-cell:hover": {
-                color: "primary.main",
-              },
-              textTransform: "capitalize",
-            }}
-          />
-          <Dialog
-            open={open}
-            onClose={handleClose}
-            aria-labelledby="alert-dialog-title"
-            aria-describedby="alert-dialog-description"
-          >
-            <DialogTitle id="alert-dialog-title">
-              {"Confirm Delete"}
-            </DialogTitle>
-            <DialogContent>
-              <DialogContentText id="alert-dialog-description">
-                Are you sure you want to delete this occasion?
-              </DialogContentText>
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={handleClose} color="primary">
-                Cancel
-              </Button>
-              <Button onClick={confirmDelete} color="primary" autoFocus>
-                Delete
-              </Button>
-            </DialogActions>
-          </Dialog>
-        </>
-      ) : (
-        <div
-          style={{ height: "80vh", display: "flex", justifyContent: "center" }}
+      <>
+        <DataGrid
+          rows={occasions}
+          columns={columns}
+          pageSize={10}
+          rowsPerPageOptions={[10, 25, 50]}
+          checkboxSelection
+          disableSelectionOnClick
+          getRowId={(row) => row.occasion_id}
+          processRowUpdate={handleProcessRowUpdate}
+          editMode="row"
+          slots={{ toolbar: GridToolbar }}
+          sx={{
+            "& .MuiDataGrid-cell:hover": {
+              color: "primary.main",
+            },
+            textTransform: "capitalize",
+          }}
+        />
+        <Dialog
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
         >
-          <p style={{ color: "red", fontWeight: "bolder", fontSize: "1.5em" }}>
-            No occasions available
-          </p>
-        </div>
-      )}
+          <DialogTitle id="alert-dialog-title">{"Confirm Delete"}</DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              Are you sure you want to delete this occasion?
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose} color="primary">
+              Cancel
+            </Button>
+            <Button onClick={confirmDelete} color="primary" autoFocus>
+              Delete
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </>
     </div>
   );
 };

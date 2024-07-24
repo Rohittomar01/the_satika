@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Box, Grid, Paper, Typography, TextField, Button } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { postData } from "../../Services/ServerServices";
-import Swal from "sweetalert2";
 import Sweet_Alert from "../../Common_Components/alerts/Sweet_Alert";
 
 export default function Banner() {
@@ -23,9 +22,9 @@ export default function Banner() {
     formData.append("ended_at", data.ended_at);
     formData.append("status", data.status);
     formData.append("created_by", "admin");
-    console.log([...formData.entries()]);
+    // console.log([...formData.entries()]);
     try {
-      const response = await postData("product/add-banner", formData);
+      const response = await postData("banner/add_banner", formData);
 
       if (response) {
         Sweet_Alert({ title: response.message, icon: "success" });
@@ -64,7 +63,7 @@ export default function Banner() {
                 <Grid item xs={12} sm={6}>
                   <TextField
                     fullWidth
-                    id="title"
+                    // id="title"
                     label="Title"
                     name="title"
                     variant="outlined"

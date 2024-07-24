@@ -1,24 +1,25 @@
-import React, { useState, useEffect } from 'react';
-import { DataGrid,GridToolbar } from '@mui/x-data-grid';
+import React, { useState, useEffect } from "react";
+import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { getData, updateData, deleteData } from "../../Services/ServerServices";
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
-import SaveIcon from '@mui/icons-material/Save';
-import IconButton from '@mui/material/IconButton';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
-import Button from '@mui/material/Button';
-import { Typography } from '@mui/material';
-import { useActiveItem } from "../../Common_Components/ActiveItemContext";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+import SaveIcon from "@mui/icons-material/Save";
+import IconButton from "@mui/material/IconButton";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import Button from "@mui/material/Button";
+import { Typography } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 import { Box, Tooltip } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-import moment from 'moment';
+import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";
+import moment from "moment";
 
 const StockList = () => {
-  const { setActiveItem } = useActiveItem();
+  const navigate = useNavigate();
   const [hover, setHover] = useState(false);
   const [stocks, setStocks] = useState([]);
   const [editRowsModel, setEditRowsModel] = useState({});
@@ -32,15 +33,15 @@ const StockList = () => {
   const fetchStocks = async () => {
     try {
       const response = await getData("product/fetch-stocks");
-      const formattedStocks = response.data.map(craft => ({
+      const formattedStocks = response.data.map((craft) => ({
         ...craft,
-        created_at: moment(craft.started_at).format('DD/MM/YYYY hh:mm A'),
-        updated_at: moment(craft.ended_at).format('DD/MM/YYYY hh:mm A'),
+        created_at: moment(craft.started_at).format("DD/MM/YYYY hh:mm A"),
+        updated_at: moment(craft.ended_at).format("DD/MM/YYYY hh:mm A"),
       }));
       setStocks(formattedStocks);
       console.log("Fetched stocks:", response.data);
     } catch (error) {
-      console.error('Error fetching stocks:', error);
+      console.error("Error fetching stocks:", error);
     }
   };
 
@@ -89,21 +90,42 @@ const StockList = () => {
     setDeleteId(null);
   };
 
-  const handleButtonClick = () => {
-    setActiveItem("stock"); // Change this to your desired route
-   };
-
   const columns = [
-    { field: 'stock_id', headerName: 'ID', width: 70, editable: false },
-    { field: 'product_name', headerName: 'Product Name', width: 150, editable: true },
-    { field: 'stock_quantity', headerName: 'Stock Quantity', width: 150, editable: true },
-    { field: 'created_at', headerName: 'Created At', width: 180, editable: false },
-    { field: 'updated_at', headerName: 'Updated At', width: 180, editable: false },
-    { field: 'created_by', headerName: 'Created By', width: 150, editable: false },
+    { field: "stock_id", headerName: "ID", width: 70, editable: false },
     {
-      field: 'actions',
+      field: "product_name",
+      headerName: "Product Name",
+      width: 150,
+      editable: true,
+    },
+    {
+      field: "stock_quantity",
+      headerName: "Stock Quantity",
+      width: 150,
+      editable: true,
+    },
+    {
+      field: "created_at",
+      headerName: "Created At",
+      width: 180,
+      editable: false,
+    },
+    {
+      field: "updated_at",
+      headerName: "Updated At",
+      width: 180,
+      editable: false,
+    },
+    {
+      field: "created_by",
+      headerName: "Created By",
+      width: 150,
+      editable: false,
+    },
+    {
+      field: "actions",
       disableExport: true,
-      headerName: 'Actions',
+      headerName: "Actions",
       width: 150,
       renderCell: (params) => {
         const id = params.row.stock_id;
@@ -116,7 +138,9 @@ const StockList = () => {
         }
         return (
           <>
-            <IconButton onClick={() => setEditRowsModel({ ...editRowsModel, [id]: true })}>
+            <IconButton
+              onClick={() => setEditRowsModel({ ...editRowsModel, [id]: true })}
+            >
               <EditIcon />
             </IconButton>
             <IconButton onClick={() => handleDeleteRow(id)}>
@@ -129,8 +153,8 @@ const StockList = () => {
   ];
 
   return (
-    <div style={{ height: 600, width: '90%', marginTop: "10%" }}>
-        <Box
+    <div style={{ height: 600, width: "90%", marginTop: "10%" }}>
+      <Box
         sx={{
           display: "flex",
           justifyContent: "space-between",
@@ -138,74 +162,58 @@ const StockList = () => {
         }}
       >
         <Typography variant="h4" mb={3}>
-        Stock List
+          Stock List
         </Typography>
         <Tooltip title={hover ? "Add New Stock" : ""} arrow>
-          <Button
-            onMouseEnter={() => setHover(true)}
-            onMouseLeave={() => setHover(false)}
-            onClick={handleButtonClick}
-            sx={{
-              mb: 3,
-              cursor: "pointer",
-              borderRadius: "50%",
-              width: 40,
-              height: 40,
-              minWidth: 0,
-              padding: 0,
-            }}
+          <IconButton
+            onClick={() => navigate("/dashboard/stock")}
+            aria-label="add"
           >
-            <AddIcon />
-          </Button>
+            <PlaylistAddIcon sx={{ size: "2%" }} />
+          </IconButton>
         </Tooltip>
       </Box>
-      
-      {stocks.length > 0 ? (
-        <>
-          <DataGrid
-            rows={stocks}
-            columns={columns}
-            pageSize={10}
-            rowsPerPageOptions={[10, 25, 50]}
-            checkboxSelection
-            disableSelectionOnClick
-            getRowId={(row) => row.stock_id}
-            processRowUpdate={handleProcessRowUpdate}
-            editMode="row"
-            slots={{ toolbar: GridToolbar }}
-            sx={{
-              '& .MuiDataGrid-cell:hover': {
-                color: 'primary.main',
-              },
-            }}
-          />
-          <Dialog
-            open={open}
-            onClose={handleClose}
-            aria-labelledby="alert-dialog-title"
-            aria-describedby="alert-dialog-description"
-          >
-            <DialogTitle id="alert-dialog-title">{"Confirm Delete"}</DialogTitle>
-            <DialogContent>
-              <DialogContentText id="alert-dialog-description">
-                Are you sure you want to delete this stock?
-              </DialogContentText>
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={handleClose} color="primary">
-                Cancel
-              </Button>
-              <Button onClick={confirmDelete} color="primary" autoFocus>
-                Delete
-              </Button>
-            </DialogActions>
-          </Dialog>
-        </>
-      ) : (
-        <div style={{ height: "80vh", display: "flex", justifyContent: "center" }}>
-          <p style={{ color: "red", fontWeight: "bolder", fontSize: "1.5em" }}>No stocks available</p>
-        </div>
-      )}
+
+      <>
+        <DataGrid
+          rows={stocks}
+          columns={columns}
+          pageSize={10}
+          rowsPerPageOptions={[10, 25, 50]}
+          checkboxSelection
+          disableSelectionOnClick
+          getRowId={(row) => row.stock_id}
+          processRowUpdate={handleProcessRowUpdate}
+          editMode="row"
+          slots={{ toolbar: GridToolbar }}
+          sx={{
+            "& .MuiDataGrid-cell:hover": {
+              color: "primary.main",
+            },
+          }}
+        />
+        <Dialog
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">{"Confirm Delete"}</DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              Are you sure you want to delete this stock?
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose} color="primary">
+              Cancel
+            </Button>
+            <Button onClick={confirmDelete} color="primary" autoFocus>
+              Delete
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </>
     </div>
   );
 };

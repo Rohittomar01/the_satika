@@ -5,16 +5,37 @@ import ListItemText from "@mui/material/ListItemText";
 import Collapse from "@mui/material/Collapse";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
-import { Divider } from "@mui/material";
-import "../../StyleSheets/FilterPage/FilterBar.css";
+import { Divider, Checkbox, FormControlLabel, Typography, Slider } from "@mui/material";
+import { getData } from "../../../Services/ServerServices";
+import { useForm, Controller } from "react-hook-form";
 
 export default function FilterBar() {
+  const [colors, setColors] = React.useState([]);
+  const [brands, setBrands] = React.useState([]);
+  const [crafts, setCrafts] = React.useState([]);
+  const [fabrics, setFabrics] = React.useState([]);
+  const [origins, setOrigins] = React.useState([]);
+  const [priceRanges, setPriceRanges] = React.useState([]);
+
+  const [selectedFilters, setSelectedFilters] = React.useState({
+    colors: [],
+    brands: [],
+    crafts: [],
+    fabrics: [],
+    origins: [],
+  });
+
+  const [priceRange, setPriceRange] = React.useState([0, 1000]); // Default range [min, max]
+
+  const { control } = useForm();
+
   const [openSections, setOpenSections] = React.useState({
     color: false,
-    range: false,
+    brand: false,
     craft: false,
-    fiber: false,
+    fabric: false,
     origin: false,
+    price: false,
   });
 
   const handleClick = (section) => {
@@ -22,6 +43,53 @@ export default function FilterBar() {
       ...prevOpenSections,
       [section]: !prevOpenSections[section],
     }));
+  };
+
+  const fetchOptions = async () => {
+    try {
+      const colorResult = await getData("product/fetch-colors");
+      setColors(colorResult.data);
+
+      const brandResult = await getData("product/fetch-brands");
+      setBrands(brandResult.data);
+
+      const craftResult = await getData("product/fetch-crafts");
+      setCrafts(craftResult.data);
+
+      const fabricResult = await getData("product/fetch-fabrics");
+      setFabrics(fabricResult.data);
+
+      const originResult = await getData("product/fetch-origins");
+      setOrigins(originResult.data);
+
+      const priceResult = await getData("product/fetch-price-ranges");
+      setPriceRanges(priceResult.data);
+    } catch (error) {
+      console.error("Error fetching options:", error);
+    }
+  };
+
+  React.useEffect(() => {
+    fetchOptions();
+  }, []);
+
+  const handleCheckboxChange = (category, value, isChecked) => {
+    setSelectedFilters((prevFilters) => {
+      const updatedCategory = isChecked
+        ? [...prevFilters[category], value]
+        : prevFilters[category].filter((item) => item !== value);
+
+      return {
+        ...prevFilters,
+        [category]: updatedCategory,
+      };
+    });
+  };
+
+  const handlePriceRangeChange = (event, newValue) => {
+    setPriceRange(newValue);
+    // Fetch or filter data based on selected price range here
+    console.log("Selected price range:", newValue);
   };
 
   return (
@@ -46,60 +114,52 @@ export default function FilterBar() {
       </ListItemButton>
       <Collapse in={openSections.color} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
-          <ListItemButton sx={{ pl: 6 }}>
-            <ListItemText
-              primaryTypographyProps={{
-                sx: { fontFamily: "'Futura medium Italic',sans-serif" },
-              }}
-              primary="Option 1"
-            />
-          </ListItemButton>
-          <ListItemButton sx={{ pl: 6 }}>
-            <ListItemText
-              primaryTypographyProps={{
-                sx: { fontFamily: "'Futura medium Italic',sans-serif" },
-              }}
-              primary="Option 2"
-            />
-          </ListItemButton>
-          {/* Add more items as needed */}
+          {colors.map((color) => (
+            <ListItemButton key={color.color_id} sx={{ pl: 6 }}>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={selectedFilters.colors.includes(color.color_id)}
+                    onChange={(e) => handleCheckboxChange('colors', color.color_id, e.target.checked)}
+                  />
+                }
+                label={color.color_name}
+              />
+            </ListItemButton>
+          ))}
         </List>
       </Collapse>
       <Divider />
 
-      {/* Range Section */}
-      <ListItemButton onClick={() => handleClick("range")}>
+      {/* Brand Section */}
+      <ListItemButton onClick={() => handleClick("brand")}>
         <ListItemText
           primaryTypographyProps={{
             sx: {
-              fontFamily: openSections.range
+              fontFamily: openSections.brand
                 ? "'Futura bold Italic',sans-serif"
                 : "'Futura medium Italic',sans-serif",
             },
           }}
-          primary="Range"
+          primary="Brand"
         />
-        {openSections.range ? <ExpandLess /> : <ExpandMore />}
+        {openSections.brand ? <ExpandLess /> : <ExpandMore />}
       </ListItemButton>
-      <Collapse in={openSections.range} timeout="auto" unmountOnExit>
+      <Collapse in={openSections.brand} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
-          <ListItemButton sx={{ pl: 6 }}>
-            <ListItemText
-              primaryTypographyProps={{
-                sx: { fontFamily: "'Futura medium Italic',sans-serif" },
-              }}
-              primary="Option 1"
-            />
-          </ListItemButton>
-          <ListItemButton
-            primaryTypographyProps={{
-              sx: { fontFamily: "'Futura medium Italic',sans-serif" },
-            }}
-            sx={{ pl: 6 }}
-          >
-            <ListItemText primary="Option 2" />
-          </ListItemButton>
-          {/* Add more items as needed */}
+          {brands.map((brand) => (
+            <ListItemButton key={brand.brand_id} sx={{ pl: 6 }}>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={selectedFilters.brands.includes(brand.brand_id)}
+                    onChange={(e) => handleCheckboxChange('brands', brand.brand_id, e.target.checked)}
+                  />
+                }
+                label={brand.brand_name}
+              />
+            </ListItemButton>
+          ))}
         </List>
       </Collapse>
       <Divider />
@@ -110,8 +170,8 @@ export default function FilterBar() {
           primaryTypographyProps={{
             sx: {
               fontFamily: openSections.craft
-                ? "Futura bold Italic"
-                : "Futura medium Italic",
+                ? "'Futura bold Italic',sans-serif"
+                : "'Futura medium Italic',sans-serif",
             },
           }}
           primary="Craft"
@@ -120,60 +180,52 @@ export default function FilterBar() {
       </ListItemButton>
       <Collapse in={openSections.craft} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
-          <ListItemButton
-            primaryTypographyProps={{
-              sx: { fontFamily: "'Futura medium Italic',sans-serif" },
-            }}
-            sx={{ pl: 6 }}
-          >
-            <ListItemText primary="Option 1" />
-          </ListItemButton>
-          <ListItemButton sx={{ pl: 6 }}>
-            <ListItemText
-              primaryTypographyProps={{
-                sx: { fontFamily: "'Futura medium Italic',sans-serif" },
-              }}
-              primary="Option 2"
-            />
-          </ListItemButton>
-          {/* Add more items as needed */}
+          {crafts.map((craft) => (
+            <ListItemButton key={craft.craft_id} sx={{ pl: 6 }}>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={selectedFilters.crafts.includes(craft.craft_id)}
+                    onChange={(e) => handleCheckboxChange('crafts', craft.craft_id, e.target.checked)}
+                  />
+                }
+                label={craft.craft_name}
+              />
+            </ListItemButton>
+          ))}
         </List>
       </Collapse>
       <Divider />
 
-      {/* Fiber Section */}
-      <ListItemButton onClick={() => handleClick("fiber")}>
+      {/* Fabric Section */}
+      <ListItemButton onClick={() => handleClick("fabric")}>
         <ListItemText
           primaryTypographyProps={{
             sx: {
-              fontFamily: openSections.fiber
+              fontFamily: openSections.fabric
                 ? "'Futura bold Italic',sans-serif"
                 : "'Futura medium Italic',sans-serif",
             },
           }}
-          primary="Fiber"
+          primary="Fabric"
         />
-        {openSections.fiber ? <ExpandLess /> : <ExpandMore />}
+        {openSections.fabric ? <ExpandLess /> : <ExpandMore />}
       </ListItemButton>
-      <Collapse in={openSections.fiber} timeout="auto" unmountOnExit>
+      <Collapse in={openSections.fabric} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
-          <ListItemButton sx={{ pl: 6 }}>
-            <ListItemText
-              primaryTypographyProps={{
-                sx: { fontFamily: "'Futura medium Italic',sans-serif" },
-              }}
-              primary="Option 1"
-            />
-          </ListItemButton>
-          <ListItemButton
-            primaryTypographyProps={{
-              sx: { fontFamily: "'Futura medium Italic',sans-serif" },
-            }}
-            sx={{ pl: 6 }}
-          >
-            <ListItemText primary="Option 2" />
-          </ListItemButton>
-          {/* Add more items as needed */}
+          {fabrics.map((fabric) => (
+            <ListItemButton key={fabric.fabric_id} sx={{ pl: 6 }}>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={selectedFilters.fabrics.includes(fabric.fabric_id)}
+                    onChange={(e) => handleCheckboxChange('fabrics', fabric.fabric_id, e.target.checked)}
+                  />
+                }
+                label={fabric.fabric_name}
+              />
+            </ListItemButton>
+          ))}
         </List>
       </Collapse>
       <Divider />
@@ -194,26 +246,50 @@ export default function FilterBar() {
       </ListItemButton>
       <Collapse in={openSections.origin} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
-          <ListItemButton sx={{ pl: 6 }}>
-            <ListItemText
-              primaryTypographyProps={{
-                sx: { fontFamily: "'Futura medium Italic',sans-serif" },
-              }}
-              primary="Option 1"
-            />
-          </ListItemButton>
-          <ListItemButton
-            primaryTypographyProps={{
-              sx: { fontFamily: "'Futura medium Italic',sans-serif" },
-            }}
-            sx={{ pl: 6 }}
-          >
-            <ListItemText primary="Option 2" />
-          </ListItemButton>
-          {/* Add more items as needed */}
+          {origins.map((origin) => (
+            <ListItemButton key={origin.origin_id} sx={{ pl: 6 }}>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={selectedFilters.origins.includes(origin.origin_id)}
+                    onChange={(e) => handleCheckboxChange('origins', origin.origin_id, e.target.checked)}
+                  />
+                }
+                label={origin.origin_name}
+              />
+            </ListItemButton>
+          ))}
         </List>
       </Collapse>
       <Divider />
+
+      {/* Price Range Section */}
+      <ListItemButton onClick={() => handleClick("price")}>
+        <ListItemText
+          primaryTypographyProps={{
+            sx: {
+              fontFamily: openSections.price
+                ? "'Futura bold Italic',sans-serif"
+                : "'Futura medium Italic',sans-serif",
+            },
+          }}
+          primary="Price Range"
+        />
+        {openSections.price ? <ExpandLess /> : <ExpandMore />}
+      </ListItemButton>
+      <Collapse in={openSections.price} timeout="auto" unmountOnExit>
+        <List component="div" disablePadding sx={{ pl: 2 }}>
+          <Typography gutterBottom>Price Range: ${priceRange[0]} - ${priceRange[1]}</Typography>
+          <Slider
+            value={priceRange}
+            onChange={handlePriceRangeChange}
+            valueLabelDisplay="auto"
+            min={0}
+            max={1000} // Adjust max value as needed
+            step={10} // Adjust step value as needed
+          />
+        </List>
+      </Collapse>
     </List>
   );
 }

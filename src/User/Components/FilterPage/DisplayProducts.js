@@ -258,7 +258,7 @@ export default function DisplayProducts() {
   };
 
   return (
-    <div>
+    <div style={{display:"flex",justifyContent:"center",alignItems:"center"}}>
       <div className="sub_container">{renderProductCard()}</div>
     </div>
   );

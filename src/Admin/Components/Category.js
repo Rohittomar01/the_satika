@@ -38,33 +38,14 @@ export default function Category() {
       formData.append("updated_at", refineDate);
       formData.append("file", file);
       formData.append("created_by", "admin");
-      let base64File = null;
-      // if (file) {
-      //   base64File = await convertToBase64(file);
-      // }
 
-
-      const body = {
-        name: data.name,
-        description: data.description,
-        created_at: refineDate,
-        updated_at: refineDate,
-        file: base64File, // You might need to handle file differently as JSON does not support File objects.
-        created_by: "admin",
-        data: formData,
-      };
-
-     
-
-      const response = await postData(
-        "category/submitCategory_Data",body, {
-          method: 'POST',
-          
-        }
-      );
+      const response = await postData("category/submitCategory_Data", formData, {
+        method: "POST",
+      });
 
       console.log("responce", response);
       if (response) {
+        setFile(null)
         Sweet_Alert({ title: response.message, icon: "success" });
       } else {
         Sweet_Alert({ title: response.message, icon: "error" });
@@ -76,15 +57,7 @@ export default function Category() {
     }
   };
 
-
-  const convertToBase64 = (file) => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = (error) => reject(error);
-    });
-  };
+ 
   const VisuallyHiddenInput = styled("input")({
     clip: "rect(0 0 0 0)",
     clipPath: "inset(50%)",
@@ -97,7 +70,6 @@ export default function Category() {
     width: 1,
   });
   const handleFile = (event) => {
-    console.log("file", event.target.files[0]);
     setFile(event.target.files[0]);
   };
   const handleReset = () => {

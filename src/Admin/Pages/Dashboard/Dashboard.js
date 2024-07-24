@@ -1,5 +1,10 @@
 import React, { useState } from "react";
-import { BrowserRouter as Router, Route, Routes, useNavigate } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  useNavigate,
+} from "react-router-dom";
 import { styled, createTheme, ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import MuiDrawer from "@mui/material/Drawer";
@@ -28,8 +33,8 @@ import ColorLensIcon from "@mui/icons-material/ColorLens";
 import FlagCircleIcon from "@mui/icons-material/FlagCircle";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import BrandingWatermarkIcon from "@mui/icons-material/BrandingWatermark";
-import CelebrationIcon from '@mui/icons-material/Celebration';
-import CastConnectedIcon from '@mui/icons-material/CastConnected';
+import CelebrationIcon from "@mui/icons-material/Celebration";
+import CastConnectedIcon from "@mui/icons-material/CastConnected";
 import {
   ListItem,
   ListItemIcon,
@@ -62,9 +67,8 @@ import CraftList from "../../Components/CraftList";
 import FabricList from "../../Components/FabricList ";
 import ColorList from "../../Components/ColorList";
 import OriginList from "../../Components/OriginList";
-import { useActiveItem } from "../../../Common_Components/ActiveItemContext";
 import BrandList from "../../Components/BrandList";
-import DashboardSidebar from "./DashboardSidebar";
+// import DashboardSidebar from "./DashboardSidebar";
 import StockList from "../../Components/StockList";
 import Stock from "../../Components/Stock";
 import Banner from "../../Components/Banner";
@@ -137,58 +141,14 @@ const Drawer = styled(MuiDrawer, {
 const defaultTheme = createTheme();
 
 export default function Dashboard() {
-
-  const navigate=useNavigate();
+  const navigate = useNavigate();
+  const [activeItem, setActiveItem] = useState(null);
   const [open, setOpen] = React.useState(true);
   const toggleDrawer = () => {
     setOpen(!open);
   };
 
- 
-  // const renderComponents = () => {
-  //   // const itemToRender = activeItem || Item;
-  //   console.log("active ITEMS", activeItem);
-  //   switch (activeItem) {
-  //     case "category":
-  //       return <Category />;
-  //     case "product":
-  //       return <Product />;
-  //     case "productlist":
-  //       return <ProductsList />;
-  //     case "occasion":
-  //       return <Occasion />;
-  //     case "occasionlist":
-  //       return <OccasionList />;
-  //     case "craft":
-  //       return <Craft />;
-  //     case "craftlist":
-  //       return <CraftList />;
-  //     case "fabric":
-  //       return <Fabric />;
-  //     case "fabriclist":
-  //       return <FabricList />;
-  //     case "color":
-  //       return <Color />;
-  //     case "colorlist":
-  //       return <ColorList />;
-  //     case "origin":
-  //       return <Origin />;
-  //     case "originlist":
-  //       return <OriginList />;
-  //     case "brand":
-  //       return <Brand />;
-  //     case "brandlist":
-  //       return <BrandList />;
-  //     case "stock":
-  //       return <Stock />;
-  //     case "stocklist":
-  //       return <StockList />;
-  //     case "banner":
-  //       return <Banner />;
-  //     default:
-  //       return null;
-  //   }
-  // };
+  const fontFamilyLight = "Futura light Italic";
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -224,7 +184,7 @@ export default function Dashboard() {
               variant="h6"
               color="inherit"
               noWrap
-              sx={{ flexGrow: 1 ,fontFamily:"sans-serif"}}
+              sx={{ flexGrow: 1, fontFamily: fontFamilyLight }}
             >
               The Satika
             </Typography>
@@ -249,151 +209,267 @@ export default function Dashboard() {
             </IconButton>
           </Toolbar>
           <Divider />
-          <List component="nav">
+          <List component="nav" style={{ height: "89vh", overflow: "scroll" }}>
             {/******************* category list **********************/}
             <ListItem disablePadding>
               <ListItemButton
-                onClick={() => navigate("/dashboard/Category")}
-                // selected={activeItem === "category"}
+                onClick={() => [
+                  navigate("/dashboard/Category"),
+                  setActiveItem("category"),
+                ]}
+                selected={activeItem === "category"}
               >
                 <ListItemIcon>
                   <CategoryIcon />
                 </ListItemIcon>
-                <ListItemText primary="Category" />
+                <ListItemText
+                  primaryTypographyProps={{
+                    sx: { fontFamily: fontFamilyLight },
+                  }}
+                  primary="Category"
+                />
               </ListItemButton>
             </ListItem>
             {/******************* product list **********************/}
             <ListItem disablePadding>
               <ListItemButton
-                onClick={() => navigate("/dashboard/product")}
-                // selected={activeItem === "product"}
+                onClick={() => [
+                  navigate("/dashboard/ProductsList"),
+                  setActiveItem("ProductList"),
+                ]}
+                selected={activeItem === "ProductList"}
               >
                 <ListItemIcon>
                   <AddShoppingCartIcon />
                 </ListItemIcon>
-                <ListItemText primary="Products" />
-              </ListItemButton>
-            </ListItem>
-            {/******************* productlist list **********************/}
-            <ListItem disablePadding>
-              <ListItemButton
-                onClick={() => navigate("/dashboard/productlist")}
-                // selected={activeItem === "product"}
-              >
-                <ListItemIcon>
-                  <ListIcon />
-                </ListItemIcon>
-                <ListItemText primary="Products List" />
+                <ListItemText
+                  primaryTypographyProps={{
+                    sx: { fontFamily: fontFamilyLight },
+                  }}
+                  primary="Products"
+                />
               </ListItemButton>
             </ListItem>
 
             {/******************* occasion list **********************/}
             <ListItem disablePadding>
               <ListItemButton
-                onClick={() => navigate("/dashboard/occasion")}
-                // selected={activeItem === "product"}
+                onClick={() => [
+                  navigate("/dashboard/OccasionList"),
+                  setActiveItem("occasion"),
+                ]}
+                selected={activeItem === "occasion"}
               >
                 <ListItemIcon>
                   <LiquorIcon />
                 </ListItemIcon>
-                <ListItemText primary="Occasion" />
+                <ListItemText
+                  primaryTypographyProps={{
+                    sx: { fontFamily: fontFamilyLight },
+                  }}
+                  primary="Occasion"
+                />
               </ListItemButton>
             </ListItem>
             {/******************* craft list **********************/}
             <ListItem disablePadding>
               <ListItemButton
-                onClick={() => navigate("/dashboard/craft")}
-                // selected={activeItem === "product"}
+                onClick={() => [
+                  navigate("/dashboard/CraftList"),
+                  setActiveItem("craft"),
+                ]}
+                selected={activeItem === "craft"}
               >
                 <ListItemIcon>
                   <AutoFixHighIcon />
                 </ListItemIcon>
-                <ListItemText primary="Craft" />
+                <ListItemText
+                  primaryTypographyProps={{
+                    sx: { fontFamily: fontFamilyLight },
+                  }}
+                  primary="Craft"
+                />
               </ListItemButton>
             </ListItem>
             {/******************* fabric list **********************/}
             <ListItem disablePadding>
               <ListItemButton
-                onClick={() => navigate("/dashboard/fabric")}
-                // selected={activeItem === "product"}
+                onClick={() => [
+                  navigate("/dashboard/FabricList"),
+                  setActiveItem("fabric"),
+                ]}
+                selected={activeItem === "fabric"}
               >
                 <ListItemIcon>
                   <CheckroomIcon />
                 </ListItemIcon>
-                <ListItemText primary="Fabric" />
+                <ListItemText
+                  primaryTypographyProps={{
+                    sx: { fontFamily: fontFamilyLight },
+                  }}
+                  primary="Fabric"
+                />
               </ListItemButton>
             </ListItem>
             {/******************* color list **********************/}
             <ListItem disablePadding>
               <ListItemButton
-                onClick={() => navigate("/dashboard/color")}
-                // selected={activeItem === "product"}
+                onClick={() => [
+                  navigate("/dashboard/ColorList"),
+                  setActiveItem("color"),
+                ]}
+                selected={activeItem === "color"}
               >
                 <ListItemIcon>
                   <ColorLensIcon />
                 </ListItemIcon>
-                <ListItemText primary="Color" />
+                <ListItemText
+                  primaryTypographyProps={{
+                    sx: { fontFamily: fontFamilyLight },
+                  }}
+                  primary="Color"
+                />
               </ListItemButton>
             </ListItem>
             {/******************* origin list **********************/}
             <ListItem disablePadding>
               <ListItemButton
-                onClick={() => navigate("/dashboard/origin")}
-                // selected={activeItem === "product"}
+                onClick={() => [
+                  navigate("/dashboard/OriginList"),
+                  setActiveItem("origin"),
+                ]}
+                selected={activeItem === "origin"}
               >
                 <ListItemIcon>
                   <FlagCircleIcon />
                 </ListItemIcon>
-                <ListItemText primary="Origin" />
+                <ListItemText
+                  primaryTypographyProps={{
+                    sx: { fontFamily: fontFamilyLight },
+                  }}
+                  primary="Origin"
+                />
               </ListItemButton>
             </ListItem>
             {/******************* brand list **********************/}
             <ListItem disablePadding>
               <ListItemButton
-                onClick={() => navigate("/dashboard/brand")}
-                // selected={activeItem === "product"}
+                onClick={() => [
+                  navigate("/dashboard/BrandList"),
+                  setActiveItem("brand"),
+                ]}
+                selected={activeItem === "brand"}
               >
                 <ListItemIcon>
                   <BrandingWatermarkIcon />
                 </ListItemIcon>
-                <ListItemText primary="Brand" />
+                <ListItemText
+                  primaryTypographyProps={{
+                    sx: { fontFamily: fontFamilyLight },
+                  }}
+                  primary="Brand"
+                />
               </ListItemButton>
             </ListItem>
-           
+
             <ListItem disablePadding>
               <ListItemButton
-                onClick={() => navigate("/dashboard/OffersList")}
-                // selected={activeItem === "product"}
+                onClick={() => [
+                  navigate("/dashboard/OffersList"),
+                  setActiveItem("OfferList"),
+                ]}
+                selected={activeItem === "OfferList"}
               >
                 <ListItemIcon>
                   <LocalOfferIcon />
                 </ListItemIcon>
-                <ListItemText primary="Offers" />
+                <ListItemText
+                  primaryTypographyProps={{
+                    sx: { fontFamily: fontFamilyLight },
+                  }}
+                  primary="Offers"
+                />
               </ListItemButton>
             </ListItem>
             <ListItem disablePadding>
               <ListItemButton
-                onClick={() => navigate("/dashboard/DiscountList")}
-                // selected={activeItem === "product"}
+                onClick={() => [
+                  navigate("/dashboard/DiscountList"),
+                  setActiveItem("DiscountList"),
+                ]}
+                selected={activeItem === "DiscountList"}
               >
                 <ListItemIcon>
                   <CelebrationIcon />
                 </ListItemIcon>
-                <ListItemText primary="Discounts" />
+                <ListItemText
+                  primaryTypographyProps={{
+                    sx: { fontFamily: fontFamilyLight },
+                  }}
+                  primary="Discounts"
+                />
               </ListItemButton>
             </ListItem>
             <ListItem disablePadding>
               <ListItemButton
-                onClick={() => navigate("/dashboard/PromotionsList")}
-                // selected={activeItem === "product"}
+                onClick={() => [
+                  navigate("/dashboard/PromotionsList"),
+                  setActiveItem("PromotionsList"),
+                ]}
+                selected={activeItem === "PromotionsList"}
               >
                 <ListItemIcon>
                   <CastConnectedIcon />
                 </ListItemIcon>
-                <ListItemText primary="Promotions" />
+                <ListItemText
+                  primaryTypographyProps={{
+                    sx: { fontFamily: fontFamilyLight },
+                  }}
+                  primary="Promotions"
+                />
               </ListItemButton>
             </ListItem>
 
+            <ListItem disablePadding>
+              <ListItemButton
+                onClick={() => [
+                  navigate("/dashboard/StockList"),
+                  setActiveItem("StockList"),
+                ]}
+                selected={activeItem === "StockList"}
+              >
+                <ListItemIcon>
+                  <CastConnectedIcon />
+                </ListItemIcon>
+                <ListItemText
+                  primaryTypographyProps={{
+                    sx: { fontFamily: fontFamilyLight },
+                  }}
+                  primary="Stock"
+                />
+              </ListItemButton>
+            </ListItem>
+            <ListItem disablePadding>
+              <ListItemButton
+                onClick={() => [
+                  navigate("/dashboard/Banner"),
+                  setActiveItem("Banner"),
+                ]}
+                selected={activeItem === "Banner"}
+              >
+                <ListItemIcon>
+                  <CastConnectedIcon />
+                </ListItemIcon>
+                <ListItemText
+                  primaryTypographyProps={{
+                    sx: { fontFamily: fontFamilyLight },
+                  }}
+                  primary="Banner"
+                />
+              </ListItemButton>
+            </ListItem>
+
+            {/* <Divider sx={{ my: 1 }} /> */}
             <Divider sx={{ my: 1 }} />
           </List>
         </Drawer>
@@ -411,29 +487,39 @@ export default function Dashboard() {
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
+            paddingTop: "10%",
           }}
         >
           <Toolbar />
           {/* {renderComponents()} */}
-          <Routes>
+          <Routes style={{ PaddingTop: "20vh" }}>
             <Route element={<Offers />} path={"/Offers"}></Route>
             <Route element={<OffersList />} path={"/OffersList"}></Route>
             <Route element={<Category />} path={"/Category"}></Route>
             <Route element={<Product />} path={"/Product"}></Route>
             <Route element={<ProductsList />} path={"/ProductsList"}></Route>
-            <Route element={<Occasion />} path={"/Occasion"}></Route>
-            <Route element={<Craft />} path={"/Craft"}></Route>
-            <Route element={<Fabric />} path={"/Fabric"}></Route>
-            <Route element={<Color />} path={"/Color"}></Route>
-            <Route element={<Origin />} path={"/Origin"}></Route>
-            <Route element={<Brand />} path={"/Brand"}></Route>
-            <Route element={<Offers />} path={"/Offers"}></Route>
-            <Route element={<OffersList />} path={"/OffersList"}></Route>
+            <Route element={<Occasion />} path={"/occassion"}></Route>
+            <Route element={<OccasionList />} path={"/OccasionList"}></Route>
+            <Route element={<Craft />} path={"/craft"}></Route>
+            <Route element={<CraftList />} path={"/CraftList"}></Route>
+            <Route element={<Fabric />} path={"/fabric"}></Route>
+            <Route element={<FabricList />} path={"/FabricList"}></Route>
+            <Route element={<Color />} path={"/color"}></Route>
+            <Route element={<ColorList />} path={"/ColorList"}></Route>
+            <Route element={<Origin />} path={"/origin"}></Route>
+            <Route element={<OriginList />} path={"/OriginList"}></Route>
+            <Route element={<Brand />} path={"/brand"}></Route>
+            <Route element={<BrandList />} path={"/BrandList"}></Route>
             <Route element={<Discounts />} path={"/Discounts"}></Route>
             <Route element={<DiscountList />} path={"/DiscountList"}></Route>
             <Route element={<Promotions />} path={"/Promotions"}></Route>
-            <Route element={<PromotionsList />} path={"/PromotionsList"}></Route>
-
+            <Route element={<Stock />} path={"/Stock"}></Route>
+            <Route element={<StockList />} path={"/StockList"}></Route>
+            <Route element={<Banner />} path={"/Banner"}></Route>
+            <Route
+              element={<PromotionsList />}
+              path={"/PromotionsList"}
+            ></Route>
           </Routes>
         </Box>
       </Box>
