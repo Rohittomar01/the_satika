@@ -53,8 +53,8 @@ export default function CategoryCards() {
     return category.map((cards) => {
       return (
         <div
-          onClick={() => navigate("/filter")}
-          className="content-container"
+        onClick={() => navigate("/filter", { state: { category_name: cards.category_name } })}
+        className="content-container"
           key={cards.id}
         >
           <div className="image-container">

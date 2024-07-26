@@ -16,11 +16,16 @@ import Typography from "@mui/material/Typography";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShareIcon from "@mui/icons-material/Share";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import { Box, Button } from "@mui/material";
+import { Box, Button, Snackbar } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setWishListProduct } from "../../Store/Slices/Products";
+import { postData } from "../../Services/ServerServices";
 
-export default function TrendingProducts({ data, heading,buttonDisplay }) {
+export default function TrendingProducts({ data, heading, buttonDisplay }) {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const options = { axis: "x", loop: true, dragFree: true };
 
   const [emblaRef, emblaApi] = useEmblaCarousel(options);
@@ -30,6 +35,29 @@ export default function TrendingProducts({ data, heading,buttonDisplay }) {
     onPrevButtonClick,
     onNextButtonClick,
   } = usePrevNextButtons(emblaApi);
+
+  const handleSubmit = async (data) => {
+    const body = {
+      user_id: 1,
+      product_id: data.product_id,
+      added_at: new Date(),
+    };
+    try {
+      const response = await postData("wishlist/submitWishlist_Data", body);
+      if (!response.ok) {
+        throw new Error(`Error: ${response.statusText}`);
+      }
+      const result = await response.json();
+      dispatch(setWishListProduct(data));
+      console.log("Data submitted successfully:", result);
+    } catch (error) {
+      console.error("Failed to submit data:", error);
+      <Snackbar
+        autoHideDuration={5000}
+        message="failed to added in favourate"
+      />;
+    }
+  };
 
   const renderProductCard = () => {
     return data.map((product) => {
@@ -57,7 +85,10 @@ export default function TrendingProducts({ data, heading,buttonDisplay }) {
             </CardContent>
             <CardActions className="card-action-container" disableSpacing>
               <Box component={"div"}>
-                <IconButton aria-label="add to favorites">
+                <IconButton
+                  onClick={() => handleSubmit(product)}
+                  aria-label="add to favorites"
+                >
                   <FavoriteBorderIcon />
                 </IconButton>
                 <IconButton aria-label="share">
@@ -66,7 +97,9 @@ export default function TrendingProducts({ data, heading,buttonDisplay }) {
               </Box>
               <Box>
                 <Button
-                  onClick={() => navigate("/productdetails")}
+                  onClick={() =>
+                    navigate("/productdetails", { state: { product: product } })
+                  }
                   id="buy_now_button"
                   variant="outlined"
                 >
@@ -93,7 +126,11 @@ export default function TrendingProducts({ data, heading,buttonDisplay }) {
         <div className="product-subContainer">{renderProductCard()}</div>
       </div>
       <div className="view_moreButton">
-        <Button sx={{display:buttonDisplay}} variant="outlined" onClick={() => navigate("/filter")}>
+        <Button
+          sx={{ display: buttonDisplay }}
+          variant="outlined"
+          onClick={() => navigate("/filter")}
+        >
           View More
         </Button>
       </div>

@@ -9,41 +9,69 @@ import {
   MenuItem,
   FormControl,
   InputLabel,
-  IconButton
+  IconButton,
+  Snackbar,
 } from "@mui/material";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import { useDispatch } from "react-redux";
+import { setWishListProduct } from "../../../Store/Slices/Products";
+import { postData } from "../../../Services/ServerServices"; // Ensure this is correctly implemented
 import "../../StyleSheets/ProductDetailsPage/ProductDetails.css";
 
-const ProductDetail = () => {
-  
+const ProductDetail = ({ product }) => {
+  const dispatch = useDispatch();
+  const [snackbarOpen, setSnackbarOpen] = React.useState(false);
+  const [snackbarMessage, setSnackbarMessage] = React.useState("");
+
+  const handleAddToCart = async () => {
+    const body = {
+      user_id: 1, // Replace with actual user ID
+      product_id: product.product_id,
+      added_at: new Date(),
+    };
+    try {
+      const response = await postData("addtocart/submitCart_Data", body);
+      if (response.status === "success") {
+        setSnackbarMessage(response.message);
+        setSnackbarOpen(true);
+        console.log("Product added to cart successfully:", response);
+      }
+    } catch (error) {
+      console.error("Failed to add product to cart:", error);
+      setSnackbarMessage("Failed to add product to cart.");
+      setSnackbarOpen(true);
+    }
+  };
+
+  const handleCloseSnackbar = () => {
+    setSnackbarOpen(false);
+  };
+
   return (
     <Box id="product-detail-container">
       <Typography variant="subtitle2" id="product-category">
-        SILK
+        {product.category}{" "}
       </Typography>
       <Typography variant="h5" id="product-title">
-        Dark Red Pure Silk South Saree
+        {product.product_name}
       </Typography>
       <Typography variant="subtitle2" id="product-sku">
-        SKU: SPH07E00069
+        {product.product_description}
       </Typography>
-
       <Box id="price-box">
         <Typography variant="h4" id="current-price">
-          ₹ 899.00
+          ₹ {product.price - product.discount}
         </Typography>
         <Typography variant="h6" id="old-price">
-          ₹ 10,999.00
+          ₹ {product.price}
         </Typography>
         <Typography variant="h6" id="discount">
-          10% OFF
+          {product.discount} OFF
         </Typography>
       </Box>
-
       <Typography variant="body2" id="inclusive-tax">
         Inclusive of all taxes
       </Typography>
-
       <Box id="emi-box">
         <Typography variant="body2" id="emi-link01">
           EMI Starts At ₹ 476. No Cost EMI Available
@@ -53,10 +81,18 @@ const ProductDetail = () => {
         </Typography>
       </Box>
       <Box id="favorite_Button_container">
-        <IconButton id="favorite_iconContainer" aria-label="add to favorites">
-          <FavoriteBorderIcon id="favourite_Icon"  />
+        <IconButton
+          onClick={() => dispatch(setWishListProduct(product))}
+          id="favorite_iconContainer"
+          aria-label="add to favorites"
+        >
+          <FavoriteBorderIcon id="favourite_Icon" />
         </IconButton>
-        <Button variant="contained" id="add-to-bag-button">
+        <Button
+          variant="contained"
+          id="add-to-bag-button"
+          onClick={handleAddToCart}
+        >
           ADD TO BAG
         </Button>
       </Box>
@@ -95,6 +131,13 @@ const ProductDetail = () => {
       <Typography variant="body2" id="return-policy-info">
         Easy 7 day return
       </Typography>
+
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={5000}
+        onClose={handleCloseSnackbar}
+        message={snackbarMessage}
+      />
     </Box>
   );
 };

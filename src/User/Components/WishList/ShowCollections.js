@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
 import {
@@ -17,8 +17,31 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShareIcon from "@mui/icons-material/Share";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { Box, Button } from "@mui/material";
+import { useSelector } from "react-redux";
+import { getData } from "../../../Services/ServerServices";
 
 export default function ShowCollections() {
+  const wishlist_Store = useSelector(
+    (state) => state.products.wishListProducts
+  );
+  const [products, setProducts] = useState([]);
+  const userId = 1;
+
+  const fetchProducts = async () => {
+    console.log("haleoo")
+    try {
+      const response = await getData(
+        `wishlist/fetchWishlist_Data?user_id=${userId}`
+      );
+      setProducts(response.data);
+    } catch (error) {
+      console.error("Failed to fetch products:", error);
+    }
+  };
+  useEffect(() => {
+    fetchProducts();
+  }, [wishlist_Store]);
+
   const options = { axis: "x", loop: true, dragFree: true };
 
   const [emblaRef, emblaApi] = useEmblaCarousel(options);
@@ -29,67 +52,15 @@ export default function ShowCollections() {
     onNextButtonClick,
   } = usePrevNextButtons(emblaApi);
 
-  const products = [
-    {
-      id: 1,
-      image:
-        "https://cdn.pixabay.com/photo/2024/03/07/20/31/ai-generated-8619240_1280.jpg",
-      product_name: "Product 1",
-      price: 20000,
-      product_description: "This is a trending product.",
-    },
-    {
-      id: 2,
-      image:
-        "https://cdn.pixabay.com/photo/2024/04/02/13/53/ai-generated-8670949_1280.jpg",
-      product_name: "Product 2",
-      price: 20000,
-      product_description: "This is another trending product.",
-    },
-    {
-      id: 3,
-      image:
-        "https://cdn.pixabay.com/photo/2019/04/11/17/42/beauty-4120283_1280.jpg",
-      product_name: "Product 3",
-      price: 20000,
-      product_description: "This is also trending.",
-    },
-    {
-      id: 4,
-      image:
-        "https://cdn.pixabay.com/photo/2024/03/07/20/31/ai-generated-8619240_1280.jpg",
-      product_name: "Product 4",
-      price: 20000,
-      product_description: "Trending product 4 description.",
-    },
-    {
-      id: 5,
-      image:
-        "https://cdn.pixabay.com/photo/2024/03/07/20/31/ai-generated-8619240_1280.jpg",
-      product_name: "Product 5",
-      price: 20000,
-      product_description: "Trending product 5 description.",
-    },
-    {
-      id: 6,
-      image:
-        "https://cdn.pixabay.com/photo/2024/03/07/20/31/ai-generated-8619240_1280.jpg",
-      product_name: "Product 6",
-      price: 20000,
-      product_description: "Trending product 6 description.",
-    },
-  ];
-
   const renderProductCard = () => {
     return products.map((product) => {
       return (
-        <div className="product-content-container" key={product.id}>
+        <div className="product-content-container" key={product.product_id}>
           <Card sx={{ maxWidth: 240 }}>
             <CardMedia
               className="card-media"
               component="img"
-              // height="194"
-              image={product.image}
+              image={`/path/to/images/${product.image_name}`} // Adjust the image path as needed
               alt={product.product_name}
             />
             <CardContent>
@@ -113,8 +84,8 @@ export default function ShowCollections() {
                   <ShareIcon />
                 </IconButton>
               </Box>
-              <Box component={"div"} >
-                <Button  id="addtocart_now_button" variant="outlined">
+              <Box component={"div"}>
+                <Button id="addtocart_now_button" variant="outlined">
                   Add To Cart
                 </Button>
               </Box>

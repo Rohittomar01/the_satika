@@ -8,7 +8,11 @@ import ProductDetail from "../Components/ProductDetailsPage/ProductDetails";
 import TrendingProducts from "../Common_Components/TrendingProducts";
 import Footer from "../Common_Components/Footer";
 import Reviews from "../Components/ProductDetailsPage/Reviews";
+import { useLocation } from "react-router-dom";
 export default function ProductDetailsPage() {
+  const location = useLocation();
+  const { product } = location.state;
+
   const handleClick = (event) => {
     event.preventDefault();
     console.info("You clicked a breadcrumb.");
@@ -50,10 +54,10 @@ export default function ProductDetailsPage() {
           <ProductCarousel />
         </Grid>
         <Grid item xs={6} sm={6} lg={6}>
-          <ProductDetail />
+          <ProductDetail product={product} />
         </Grid>
         <Grid id="others_componentsContainer" item xs={12} sm={12} lg={12}>
-          <TrendingProducts />
+          {/* <TrendingProducts /> */}
         </Grid>
         <Grid id="others_componentsContainer">
           <Reviews />

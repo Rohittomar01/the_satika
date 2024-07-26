@@ -1,10 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Card,
   CardContent,
   CardMedia,
   Typography,
-  IconButton,
   Button,
   Box,
   Divider,
@@ -12,66 +11,85 @@ import {
 import DeleteIcon from "@mui/icons-material/Delete";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import "../../StyleSheets/AddToCart/ProductCards.css";
-import { Delete } from "@mui/icons-material";
-const cardData = [
-  {
-    id: 1,
-    title: "Dark Red Pure Silk South Saree",
-    price: 9899,
-    originalPrice: 10999,
-    discount: "10% OFF",
-    image: "https://wallpapers.com/images/hd/saree-pictures-2d8qt1hau3xlfjdp.jpg",
-    quantity: 1,
-    description: "Inclusive of all taxes",
-  },
-  {
-    id: 2,
-    title: "Dark Red Pure Silk South Saree",
-    price: 9899,
-    originalPrice: 10999,
-    discount: "10% OFF",
-    image: "https://e1.pxfuel.com/desktop-wallpaper/748/960/desktop-wallpaper-beautiful-model-saree-saree-models.jpg",
-    quantity: 1,
-    description: "Inclusive of all taxes",
-  },
-];
+import { deleteData, ServerURL } from "../../../Services/ServerServices";
+import Swal from 'sweetalert2';
 
-const ProductCards = () => {
-  const [data, setData] = useState(cardData);
+const ProductCards = ({ cartData,userId }) => {
+
+  const handleDelete = async (productId) => {
+    const result = await Swal.fire({
+      title: 'Are you sure?',
+      text: "Do you want to remove this item from the cart?",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'No, keep it'
+    });
+
+    if (result.isConfirmed) {
+      try {
+        const response = await deleteData(`addtocart/cartDelete?product_id=${productId}&user_id=${userId}`, {
+          method: "DELETE",
+        });
+
+        if (response) {
+          Swal.fire(
+            'Deleted!',
+            'Your item has been removed from the cart.',
+            'success'
+          );
+        } else {
+          const errorData = await response.json();
+          console.error("Failed to delete data:", errorData.error);
+          Swal.fire(
+            'Error!',
+            'Failed to delete item from the cart.',
+            'error'
+          );
+        }
+      } catch (error) {
+        console.error("Error deleting data:", error);
+        Swal.fire(
+          'Error!',
+          'An error occurred while deleting the item.',
+          'error'
+        );
+      }
+    }
+  };
 
   return (
     <Box className="card-container">
-      {data.map((item) => (
-        <Card className="card" key={item.id}>
+      {cartData.map((item) => (
+        <Card className="card" key={item.product_id}>
           <Box className="content_container">
             <Box className="media-container">
               <CardMedia
                 className="CardMedia"
                 component="img"
-                alt={item.title}
-                image={item.image}
-                title={item.title}
+                alt={item.product_name}
+                image={`${ServerURL}/images/${item.image_name}`}
+                title={item.product_name}
               />
-              {/* <Box className="discount-tag">{item.discount}</Box> */}
             </Box>
             <CardContent>
               <Typography id="title" gutterBottom variant="h5" component="div">
-                {item.title}
+                {item.product_name}
               </Typography>
               <Typography variant="body2" color="text.secondary">
                 ₹ {item.price}{" "}
                 <span className="original-price">₹ {item.originalPrice}</span> (
-                {item.discount})
+                {item.discount ? item.discount + " OFF" : "No Discount"})
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                {item.description}
+                {item.description || "Inclusive of all taxes"}
               </Typography>
               <Box className="quantity-control">
                 <Button variant="outlined" size="small">
                   -
                 </Button>
                 <Typography variant="body2" color="text.secondary">
-                  {item.quantity}
+                  {item.quantity || 1}
                 </Typography>
                 <Button variant="outlined" size="small">
                   +
@@ -79,15 +97,16 @@ const ProductCards = () => {
               </Box>
             </CardContent>
           </Box>
-          <Divider/>
+          <Divider />
           <Box className="action-buttons">
-           <Box className="delete_icon">
-           <Button
-              className="wishlist-button"
-              startIcon={<DeleteIcon />}
-            >
-              Delete
-            </Button>
+            <Box className="delete_icon">
+              <Button
+                className="wishlist-button"
+                startIcon={<DeleteIcon />}
+                onClick={() => handleDelete(item.product_id)}
+              >
+                Delete
+              </Button>
             </Box>
             <Button
               className="wishlist-button"

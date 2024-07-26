@@ -1,5 +1,5 @@
 import { Button, Grid } from "@mui/material";
-import React, { useState ,useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { Breadcrumbs, Link, Typography, IconButton } from "@mui/material";
 import RotateLeftIcon from "@mui/icons-material/RotateLeft";
 import ExpandCircleDownIcon from "@mui/icons-material/ExpandCircleDown";
@@ -12,10 +12,19 @@ import FilterBar from "../Components/FilterPage/FilterBar";
 import NavBar from "../Common_Components/NavBar";
 import DisplayProducts from "../Components/FilterPage/DisplayProducts";
 import Footer from "../Common_Components/Footer";
+import { useLocation } from "react-router-dom";
 
 export default function FilterPage() {
+  const location = useLocation();
+  const { category_name } = location.state;
+
   const [filter, setFilter] = React.useState("");
   const [open, setOpen] = useState(false);
+  const [reset, setReset] = useState(false);
+
+  const handleReset = () => {
+    setReset(true);
+  };
 
   const handleChange = (event) => {
     setFilter(event.target.value);
@@ -70,6 +79,7 @@ export default function FilterPage() {
               </div>
               <div>
                 <Button
+                  onClick={() => handleReset()}
                   id="reset_button"
                   variant="text"
                   endIcon={<RotateLeftIcon />}
@@ -114,7 +124,7 @@ export default function FilterPage() {
         </Grid>
         {open ? null : (
           <Grid item xs={3} xl={3} sm={3}>
-            <FilterBar />
+            <FilterBar resetState={reset} setResetState={setReset} categoryName={category_name} />
           </Grid>
         )}
         <Grid item xs={open ? 12 : 9} xl={open ? 12 : 9} sm={open ? 12 : 9}>
