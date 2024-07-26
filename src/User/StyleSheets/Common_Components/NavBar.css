@@ -77,7 +77,6 @@
   src: url("../../../Fonts/Futura-CondensedLight.otf") format("opentype");
 }
 
-
 .companyName {
   font-family: "Futura";
   flex-grow: 1;
@@ -107,14 +106,14 @@
 }
 .actions_buttons_grids {
   display: flex;
-  justify-content: end;
+  justify-content: flex-end;
   align-items: center;
 }
 
 /* Responsive adjustments */
 @media (max-width: 1200px) {
   .companyName {
-    font-size: 1.5rem; 
+    font-size: 1.5rem;
     line-height: 1.5rem;
     letter-spacing: 0.6vw;
   }
@@ -122,16 +121,50 @@
 
 @media (max-width: 768px) {
   .companyName {
-    font-size: 1.25rem; 
+    font-size: 1.25rem;
     line-height: 1.25rem;
     letter-spacing: 0.5vw;
+  }
+  
+  .actions_buttons {
+    gap: 1%;
+    padding: 0.5%;
+  }
+
+  #companyName_container {
+    margin-left: 5%;
+  }
+
+  .actions_buttons_grids {
+    justify-content: center;
   }
 }
 
 @media (max-width: 480px) {
   .companyName {
-    font-size: 1rem; 
+    font-size: 1rem;
     line-height: 1rem;
     letter-spacing: 0.4vw;
+  }
+
+  .actions_buttons .nav_icons{
+    /* background-color: red; */
+    margin: 4px;
+    padding: 0px;
+
+  }
+  
+  .actions_buttons {
+    flex-direction: row;
+    /* background-color: rgb(44, 132, 209); */
+    margin-right: 18px;
+  }
+
+  #companyName_container {
+    margin-left: 2%;
+  }
+
+  .actions_buttons_grids {
+    justify-content: center;
   }
 }

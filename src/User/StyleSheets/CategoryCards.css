@@ -1,3 +1,4 @@
+/* General Styles */
 .category-superContainer {
   margin-top: 12vh;
   overflow: hidden;
@@ -6,9 +7,11 @@
 .categoryAvatar {
   width: 10px;
 }
+
 .categoryHeading {
   font-family: "Futura Medium Italic";
 }
+
 #card-heading {
   font-family: "Futura Light Italic";
   font-size: 1.8rem;
@@ -22,13 +25,13 @@
   position: relative;
 }
 
-.category_mainContainer {
+.category_mainContainer,
+.category_mainContainer_grabbing {
   display: flex;
   cursor: grab;
 }
 
 .category_mainContainer_grabbing {
-  display: flex;
   cursor: grabbing;
 }
 
@@ -102,6 +105,7 @@
   height: 100%;
   object-fit: cover;
 }
+
 .card-detail {
   font-family: "Futura Light Italic", sans-serif;
   font-size: large;
@@ -109,7 +113,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
-  line-clamp: 3; /* Adjust the number of lines to show */
+  line-clamp: 3;
   -webkit-box-orient: vertical;
   white-space: normal;
 }
@@ -119,6 +123,7 @@
   border-color: #fff;
   font-family: sans-serif;
 }
+
 .card-content {
   position: absolute;
   bottom: 21%;
@@ -145,4 +150,90 @@
 .content-container:hover .card-content {
   transform: translateY(0);
   opacity: 1;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 1200px) {
+  #card-heading {
+    font-size: 1.5rem;
+  }
+
+  .card-heading {
+    font-size: 1.25rem;
+  }
+
+  .image-container {
+    width: 12rem;
+    height: 18rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .category-superContainer {
+    margin-top: 10vh;
+  }
+  .control__button {
+    display: none;
+  }
+
+  #card-heading {
+    margin-top: 15px;
+  }
+  .image-container {
+    width: 10rem;
+    height: 14rem;
+  }
+  #card-price {
+    font-size: 0.8em;
+  }
+  #card-description {
+    font-size: 0.8em;
+  }
+
+  .control__buttonsContainer {
+    gap: 0.5rem;
+  }
+
+  .control__button {
+    width: 3rem;
+    height: 2.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .category-superContainer {
+    margin-top: 5vh;
+  }
+  .control__button {
+    display: none;
+  }
+
+  .categoryHeading {
+    font-size: 1.2em;
+  }
+  #card-heading {
+    font-size: 1rem;
+    margin-top: 15px;
+  }
+  #buy_now_button {
+    font-size: 0.7em;
+  }
+
+  .image-container {
+    width: 8rem;
+    height: 12rem;
+  }
+
+  .carousel-control {
+    display: none; /* Hide buttons in mobile view */
+  }
+
+  .content-container:hover .image-container {
+    filter: none; /* Disable hover effect on mobile */
+  }
+
+  .content-container:hover .card-content {
+    transform: none;
+    opacity: 1;
+  }
 }

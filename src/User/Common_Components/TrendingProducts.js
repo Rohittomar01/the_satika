@@ -63,7 +63,7 @@ export default function TrendingProducts({ data, heading, buttonDisplay }) {
     return data.map((product) => {
       return (
         <div className="product-content-container" key={product.id}>
-          <Card sx={{ maxWidth: 240 }}>
+          <Card className="card-body" sx={{ maxWidth: 240 }}>
             <CardMedia
               className="card-media"
               component="img"
