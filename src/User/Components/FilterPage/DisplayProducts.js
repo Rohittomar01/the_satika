@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Card from "@mui/material/Card";
 import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
@@ -7,20 +7,21 @@ import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import ShareIcon from "@mui/icons-material/Share";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import { Box, Button } from "@mui/material";
+import { Box, Button, Snackbar } from "@mui/material";
 import "../../StyleSheets/FilterPage/DisplayProducts.css";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setWishListProduct } from "../../../Store/Slices/Products";
-import { postData } from "../../../Services/ServerServices";
-import {Snackbar} from "@mui/material";
+import { postData, ServerURL } from "../../../Services/ServerServices";
 
 export default function DisplayProducts() {
-
   const navigate = useNavigate();
   const products = useSelector((state) => state.products.products);
   const dispatch = useDispatch();
+
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
 
   const handleNavigate = (product) => {
     navigate("/productdetails", { state: { product: product } });
@@ -34,21 +35,24 @@ export default function DisplayProducts() {
     };
     try {
       const response = await postData("wishlist/submitWishlist_Data", body);
-      if (!response.ok) {
-        throw new Error(`Error: ${response.statusText}`);
+      if (response.status === "success") {
+        dispatch(setWishListProduct(data));
+        setSnackbarMessage("Added to wishlist");
+        setSnackbarOpen(true);
+      } else {
+        setSnackbarMessage("Removed this item from wishlist");
+        setSnackbarOpen(true);
       }
-      const result = await response.json();
-      dispatch(setWishListProduct(data));
-      console.log("Data submitted successfully:", result);
     } catch (error) {
       console.error("Failed to submit data:", error);
-      <Snackbar
-        autoHideDuration={5000}
-        message="failed to added in favourate"
-      />;
+      setSnackbarMessage("Failed to add to favorites");
+      setSnackbarOpen(true);
     }
   };
 
+  const handleCloseSnackbar = () => {
+    setSnackbarOpen(false);
+  };
 
   const renderProductCard = () => {
     return products.map((product) => {
@@ -58,8 +62,7 @@ export default function DisplayProducts() {
             <CardMedia
               className="product-media"
               component="img"
-              // height="194"
-              image={product.product_image}
+              image={`${ServerURL}/images/${product.images[0].image_name}`}
               alt={product.product_name}
             />
             <CardContent>
@@ -111,6 +114,12 @@ export default function DisplayProducts() {
       }}
     >
       <div className="sub_container">{renderProductCard()}</div>
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={5000}
+        onClose={handleCloseSnackbar}
+        message={snackbarMessage}
+      />
     </div>
   );
 }

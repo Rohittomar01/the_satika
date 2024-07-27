@@ -4,8 +4,9 @@ import { Thumb } from "./CarouselThumbsButton";
 import $ from "jquery";
 import ReactImageMagnify from "react-image-magnify";
 import "../../../StyleSheets/ProductDetailsPage/ProductCarousel.css";
+import { ServerURL } from "../../../../Services/ServerServices";
 
-const ProductCarousel = (props) => {
+const ProductCarousel = ({products}) => {
   const options = { axis: "x" };
   const SLIDE_COUNT = 10;
   const slides = [
@@ -61,20 +62,13 @@ const ProductCarousel = (props) => {
     emblaMainApi.on("select", onSelect).on("reInit", onSelect);
   }, [emblaMainApi, onSelect]);
 
-  // $(function () {
-  //   $(".product_carousel_images").xzoom({
-  //     zoomWidth: 500,
-  //     title: false,
-  //     tint: "#333",
-  //     Xoffset: 15,
-  //   });
-  // });
+
   return (
     <div className="carousel">
       <div className="carousel__viewport" ref={emblaMainRef}>
         <div className="carousel__container">
-          {slides.map((index) => (
-            <div className="carousel__slide" key={index.id}>
+          {/* {products.map(({data,index}) => ( */}
+            <div className="carousel__slide" key={products.product_id}>
               <div className="carousel__slide__number">
                 <div className="product_carousel_images">
                   <ReactImageMagnify
@@ -82,10 +76,10 @@ const ProductCarousel = (props) => {
                       smallImage: {
                         alt: "Wristwatch by Ted Baker London",
                         isFluidWidth: true,
-                        src: index.image,
+                        src:`${ServerURL}/images/${products.images[0].image_name}` ,
                       },
                       largeImage: {
-                        src: index.image,
+                        src:`${ServerURL}/images/${products.images[0].image_name}`,
                         width: 1200,
                         height: 1800,
                       },
@@ -99,7 +93,7 @@ const ProductCarousel = (props) => {
                 ></img> */}
               </div>
             </div>
-          ))}
+          {/* ))} */}
         </div>
       </div>
 

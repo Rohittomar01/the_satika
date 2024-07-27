@@ -19,7 +19,6 @@ import "../StyleSheets/Category.css";
 import { useCallback, useEffect, useState } from "react";
 import Sweet_Alert from "../../Common_Components/alerts/Sweet_Alert";
 import UploadButton from "../../Common_Components/UploadButton";
-import { useActiveItem } from "../../Common_Components/ActiveItemContext";
 import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
 import { useNavigate } from "react-router-dom";
 
@@ -56,7 +55,6 @@ const sampleData = {
 
 export default function Product() {
   const navigate = useNavigate();
-  const { setActiveItem } = useActiveItem();
   const [hover, setHover] = useState(false);
   const [file, setFile] = useState(null);
   const [occasions, setOccasions] = useState([]);
@@ -118,12 +116,12 @@ export default function Product() {
 
     try {
       const response = await postData("product/add-product", body);
-      console.log("res",response.data)
       if (response && response.message) {
         if (file) {
           var fileFormData = new FormData();
           fileFormData.append("file", file);
           fileFormData.append("product_id", response.data.insertId);
+          fileFormData.append("created_by", new Date());
 
           const fileResponse = await postData(
             "product/upload-file",
@@ -157,10 +155,6 @@ export default function Product() {
   const handleReset = () => {
     reset();
     setFile(null);
-  };
-
-  const handleButtonClick = () => {
-    setActiveItem("productlist");
   };
 
   return (

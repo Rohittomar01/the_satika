@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Card,
   CardContent,
@@ -7,55 +7,88 @@ import {
   Button,
   Box,
   Divider,
+  Snackbar,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import "../../StyleSheets/AddToCart/ProductCards.css";
 import { deleteData, ServerURL } from "../../../Services/ServerServices";
-import Swal from 'sweetalert2';
+import Swal from "sweetalert2";
+import { useDispatch } from "react-redux";
+import { setWishListProduct } from "../../../Store/Slices/Products";
+import { postData } from "../../../Services/ServerServices";
 
-const ProductCards = ({ cartData,userId }) => {
+const ProductCards = ({ cartData, userId }) => {
+  const dispatch = useDispatch();
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
 
   const handleDelete = async (productId) => {
     const result = await Swal.fire({
-      title: 'Are you sure?',
+      title: "Are you sure?",
       text: "Do you want to remove this item from the cart?",
-      icon: 'warning',
+      icon: "warning",
       showCancelButton: true,
-      confirmButtonText: 'Yes, delete it!',
-      cancelButtonText: 'No, keep it'
+      confirmButtonText: "Yes, delete it!",
+      cancelButtonText: "No, keep it",
     });
 
     if (result.isConfirmed) {
       try {
-        const response = await deleteData(`addtocart/cartDelete?product_id=${productId}&user_id=${userId}`, {
-          method: "DELETE",
-        });
+        const response = await deleteData(
+          `addtocart/cartDelete?product_id=${productId}&user_id=${userId}`,
+          {
+            method: "DELETE",
+          }
+        );
 
         if (response) {
           Swal.fire(
-            'Deleted!',
-            'Your item has been removed from the cart.',
-            'success'
+            "Deleted!",
+            "Your item has been removed from the cart.",
+            "success"
           );
         } else {
           const errorData = await response.json();
           console.error("Failed to delete data:", errorData.error);
-          Swal.fire(
-            'Error!',
-            'Failed to delete item from the cart.',
-            'error'
-          );
+          Swal.fire("Error!", "Failed to delete item from the cart.", "error");
         }
       } catch (error) {
         console.error("Error deleting data:", error);
         Swal.fire(
-          'Error!',
-          'An error occurred while deleting the item.',
-          'error'
+          "Error!",
+          "An error occurred while deleting the item.",
+          "error"
         );
       }
     }
+  };
+
+  const handleSubmit = async (data) => {
+    const body = {
+      user_id: 1,
+      product_id: data.product_id,
+      added_at: new Date(),
+    };
+    try {
+      const response = await postData("wishlist/submitWishlist_Data", body);
+      if (response.status === "success") {
+        dispatch(setWishListProduct(data));
+        setSnackbarMessage("Added this item to wishlist");
+        setSnackbarOpen(true);
+      } else {
+        setSnackbarMessage("Removed this item from wishlist");
+        setSnackbarOpen(true);
+      }
+    } catch (error) {
+      console.error("Failed to submit data:", error);
+      setSnackbarMessage("Failed to add to favorites");
+      setSnackbarOpen(true);
+    }
+  };
+
+  const handleCloseSnackbar = () => {
+    setSnackbarOpen(false);
   };
 
   return (
@@ -109,6 +142,7 @@ const ProductCards = ({ cartData,userId }) => {
               </Button>
             </Box>
             <Button
+              onClick={() => handleSubmit(item)}
               className="wishlist-button"
               startIcon={<FavoriteBorderIcon />}
             >
@@ -117,6 +151,12 @@ const ProductCards = ({ cartData,userId }) => {
           </Box>
         </Card>
       ))}
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={5000}
+        onClose={handleCloseSnackbar}
+        message={snackbarMessage}
+      />
     </Box>
   );
 };

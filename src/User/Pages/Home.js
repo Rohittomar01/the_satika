@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { getData } from "../../Services/ServerServices";
 import NavBar from "../Common_Components/NavBar";
 import Carousel from "../Components/Home/Carousel/Carousel";
@@ -10,8 +10,7 @@ import Footer from "../Common_Components/Footer";
 import Footer_02 from "../Common_Components/Footer_02";
 
 export default function Home() {
-
-  const [trendingProducts,setTrendingProducts]=useState([]);
+  const [trendingProducts, setTrendingProducts] = useState([]);
   const OPTIONS = { axis: "y", loop: true };
   const SLIDES = [
     {
@@ -85,12 +84,11 @@ export default function Home() {
     try {
       const result = await getData(`product/fetch-Trendingproducts`);
       setTrendingProducts(result.data);
-      console.log("banner ru", result.data);
+      console.log("trenidng product", result.data);
     } catch (error) {
       console.error("Error fetching banners:", error);
     }
   };
-
 
   useEffect(() => {
     fetchTrendingProducts();
@@ -109,7 +107,11 @@ export default function Home() {
           <CategoryCards />
         </div>
         <div style={{ padding: "0px 20px" }}>
-          <TrendingProducts data={trendingProducts} heading="Trending Products" buttonDisplay="block" />
+          <TrendingProducts
+            data={trendingProducts}
+            heading="Trending Products"
+            buttonDisplay="block"
+          />
         </div>
         <div style={{ padding: "0px 20px" }}>
           <GallerySlider />

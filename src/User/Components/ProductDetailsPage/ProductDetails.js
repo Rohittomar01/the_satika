@@ -43,6 +43,29 @@ const ProductDetail = ({ product }) => {
     }
   };
 
+  const handleSubmit = async (data) => {
+    const body = {
+      user_id: 1,
+      product_id: data.product_id,
+      added_at: new Date(),
+    };
+    try {
+      const response = await postData("wishlist/submitWishlist_Data", body);
+      if (response.status === "success") {
+        dispatch(setWishListProduct(data));
+        setSnackbarMessage("Added this item to wishlist");
+        setSnackbarOpen(true);
+      } else {
+        setSnackbarMessage("Removed this item from wishlist");
+        setSnackbarOpen(true);
+      }
+    } catch (error) {
+      console.error("Failed to submit data:", error);
+      setSnackbarMessage("Failed to add to favorites");
+      setSnackbarOpen(true);
+    }
+  };
+
   const handleCloseSnackbar = () => {
     setSnackbarOpen(false);
   };
@@ -82,7 +105,7 @@ const ProductDetail = ({ product }) => {
       </Box>
       <Box id="favorite_Button_container">
         <IconButton
-          onClick={() => dispatch(setWishListProduct(product))}
+          onClick={() => handleSubmit(product)}
           id="favorite_iconContainer"
           aria-label="add to favorites"
         >

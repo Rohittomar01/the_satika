@@ -20,11 +20,14 @@ import { Box, Button, Snackbar } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setWishListProduct } from "../../Store/Slices/Products";
-import { postData } from "../../Services/ServerServices";
+import { postData, ServerURL } from "../../Services/ServerServices";
 
 export default function TrendingProducts({ data, heading, buttonDisplay }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  const [snackbarOpen, setSnackbarOpen] = React.useState(false);
+  const [snackbarMessage, setSnackbarMessage] = React.useState("");
 
   const options = { axis: "x", loop: true, dragFree: true };
 
@@ -44,31 +47,35 @@ export default function TrendingProducts({ data, heading, buttonDisplay }) {
     };
     try {
       const response = await postData("wishlist/submitWishlist_Data", body);
-      if (!response.ok) {
-        throw new Error(`Error: ${response.statusText}`);
+      if (response.status === "success") {
+        dispatch(setWishListProduct(data));
+        setSnackbarMessage("Added to wishlist");
+        setSnackbarOpen(true);
+      }  else{
+        setSnackbarMessage("Removed this item from wishlist");
+        setSnackbarOpen(true);
       }
-      const result = await response.json();
-      dispatch(setWishListProduct(data));
-      console.log("Data submitted successfully:", result);
     } catch (error) {
       console.error("Failed to submit data:", error);
-      <Snackbar
-        autoHideDuration={5000}
-        message="failed to added in favourate"
-      />;
+      setSnackbarMessage("Failed to add to favorites");
+      setSnackbarOpen(true);
     }
+  };
+
+  const handleCloseSnackbar = () => {
+    setSnackbarOpen(false);
   };
 
   const renderProductCard = () => {
     return data.map((product) => {
+      const image_name = product.images[0].image_name;
       return (
         <div className="product-content-container" key={product.id}>
           <Card className="card-body" sx={{ maxWidth: 240 }}>
             <CardMedia
               className="card-media"
               component="img"
-              // height="194"
-              image={product.image}
+              image={`${ServerURL}/images/${image_name}`}
               alt={product.product_name}
             />
             <CardContent>
@@ -134,6 +141,12 @@ export default function TrendingProducts({ data, heading, buttonDisplay }) {
           View More
         </Button>
       </div>
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={5000}
+        onClose={handleCloseSnackbar}
+        message={snackbarMessage}
+      />
     </div>
   );
 }

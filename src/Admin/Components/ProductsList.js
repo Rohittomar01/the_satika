@@ -32,7 +32,7 @@ const ProductsList = () => {
 
   const fetchProducts = async () => {
     try {
-      const response = await getData("product/fetch-products");
+      const response = await getData("product/fetch_All_Products");
       setProducts(response.data);
       console.log("Fetched products:", response.data);
     } catch (error) {

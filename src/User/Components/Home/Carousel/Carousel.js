@@ -58,7 +58,7 @@ const Carousel = (props) => {
                 style={{
                   height: "100vh",
                   width: "100vw",
-                  objectFit: "cover", // Ensures the image covers the full screen
+                  objectFit: "cover", 
                 }}
                 src={`${ServerURL}/images/${data.image_name}`}
                 alt={`Slide ${data.category_id}`}

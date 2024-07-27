@@ -51,7 +51,7 @@ export default function ProductDetailsPage() {
         lg={12}
       >
         <Grid className="Productcarousel_container" item xs={6} sm={6} lg={6}>
-          <ProductCarousel />
+          <ProductCarousel products={product} />
         </Grid>
         <Grid item xs={6} sm={6} lg={6}>
           <ProductDetail product={product} />
