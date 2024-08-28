@@ -58,11 +58,11 @@ export default function DisplayProducts() {
     return products.map((product) => {
       return (
         <div className="products-content-container" key={product.id}>
-          <Card sx={{ maxWidth: 240 }}>
+          <Card sx={{ maxWidth: 240,objectFit: "fit" }}>
             <CardMedia
               className="product-media"
               component="img"
-              image={`${ServerURL}/images/${product.images[0].image_name}`}
+              image={`${ServerURL}/images/${product.image_name}`}
               alt={product.product_name}
             />
             <CardContent>
@@ -107,19 +107,30 @@ export default function DisplayProducts() {
 
   return (
     <div
+    style={{
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+    }}
+  >
+    <div
+      className="sub_container"
       style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
+        maxHeight: "400px", // Adjust this height based on your layout needs
+        overflowY: "scroll", // Enable vertical scrolling
+        scrollbarWidth: "none", // For Firefox to hide scrollbars
+        msOverflowStyle: "none", // For Internet Explorer and Edge
       }}
     >
-      <div className="sub_container">{renderProductCard()}</div>
-      <Snackbar
-        open={snackbarOpen}
-        autoHideDuration={5000}
-        onClose={handleCloseSnackbar}
-        message={snackbarMessage}
-      />
+      {renderProductCard()}
     </div>
+    <Snackbar
+      open={snackbarOpen}
+      autoHideDuration={5000}
+      onClose={handleCloseSnackbar}
+      message={snackbarMessage}
+    />
+  </div>
+  
   );
 }

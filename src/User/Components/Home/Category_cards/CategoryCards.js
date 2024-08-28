@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from "react";
-// import { Avatar } from "@mui/material";
 import "../../../StyleSheets/CategoryCards.css";
 import useEmblaCarousel from "embla-carousel-react";
-import Autoplay from "embla-carousel-autoplay";
-import Fade from "embla-carousel-fade";
 import { Button } from "@mui/material";
 import { getData, ServerURL } from "../../../../Services/ServerServices";
 import {
@@ -40,7 +37,7 @@ export default function CategoryCards() {
       const result = await getData("category/fetch_Categories");
       setCategory(result.data);
     } catch (error) {
-      console.error("Error fetching banners:", error);
+      console.error("Error fetching categories:", error);
     }
   };
 
@@ -48,36 +45,37 @@ export default function CategoryCards() {
     fetchCategories();
   }, []);
 
-  
   const renderCard = () => {
-    return category.map((cards) => {
-      return (
-        <div
-        onClick={() => navigate("/filter", { state: { category_name: cards.category_name } })}
+    const reversedCategories = [...category].reverse();
+    return reversedCategories.map((cards) => (
+      <div
+        onClick={() =>
+          navigate("/filter", { state: { category_name: cards.category_name } })
+        }
         className="content-container"
-          key={cards.id}
-        >
-          <div className="image-container">
-            <img
-              alt="Remy Sharp"
-              src={`${ServerURL}/images/${cards.category_pic}`}
-            />
-          </div>
-          <h3 id="card-heading">{cards.category_name}</h3>
-          <div className="card-content">
-            <p className="card-detail">{cards.category_description}</p>
-            <Button
-              onClick={() => navigate("/filter")}
-              variant="outlined"
-              id="Explore_Button"
-            >
-              Explore
-            </Button>
-          </div>
+        key={cards.id}
+      >
+        <div className="image-container">
+          <img
+            alt="Category"
+            src={`${ServerURL}/images/${cards.category_pic}`}
+          />
         </div>
-      );
-    });
+        <h3 id="card-heading">{cards.category_name}</h3>
+        <div className="card-content">
+          <p className="card-detail">{cards.category_description}</p>
+          <Button
+            onClick={() => navigate("/filter")}
+            variant="outlined"
+            id="Explore_Button"
+          >
+            Explore
+          </Button>
+        </div>
+      </div>
+    ));
   };
+
   return (
     <div className="category-superContainer">
       <div className="carousel-control">
@@ -87,19 +85,21 @@ export default function CategoryCards() {
           <NextButton onClick={onNextButtonClick} disabled={nextBtnDisabled} />
         </div>
       </div>
-      <div
-        onMouseDown={handleMouseDown}
-        // className={
-        //   isGrabbing
-        //     ? "category_mainContainer_grabbing"
-        //     : "category_mainContainer"
-        // }
-        onMouseUp={handleMouseUp}
-        onMouseLeave={handleMouseUp}
-        ref={emblaRef}
-      >
-        <div className="category-subContainer">{renderCard()}</div>
-      </div>
+
+      {category.length > 0 ? (
+        <div
+          onMouseDown={handleMouseDown}
+          onMouseUp={handleMouseUp}
+          onMouseLeave={handleMouseUp}
+          ref={emblaRef}
+        >
+          <div className="category-subContainer">{renderCard()}</div>
+        </div>
+      ) : (
+        <div className="no-categories">
+          <p>No categories available at the moment.</p>
+        </div>
+      )}
     </div>
   );
 }

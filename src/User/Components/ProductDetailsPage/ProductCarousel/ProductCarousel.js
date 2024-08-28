@@ -7,6 +7,7 @@ import "../../../StyleSheets/ProductDetailsPage/ProductCarousel.css";
 import { ServerURL } from "../../../../Services/ServerServices";
 
 const ProductCarousel = ({products}) => {
+  console.log("bbbbbbbb",products)
   const options = { axis: "x" };
   const SLIDE_COUNT = 10;
   const slides = [

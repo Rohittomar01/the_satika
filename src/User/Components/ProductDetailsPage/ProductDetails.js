@@ -136,7 +136,7 @@ const ProductDetail = ({ product }) => {
         </FormControl>
 
         <TextField
-          label="Enter Pincode here"
+          label="Mobile Number"
           variant="outlined"
           className="pincode-input"
         />

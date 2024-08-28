@@ -29,6 +29,9 @@ export default function TrendingProducts({ data, heading, buttonDisplay }) {
   const [snackbarOpen, setSnackbarOpen] = React.useState(false);
   const [snackbarMessage, setSnackbarMessage] = React.useState("");
 
+  // Track wishlist status for each product
+  const [wishlist, setWishlist] = React.useState({});
+
   const options = { axis: "x", loop: true, dragFree: true };
 
   const [emblaRef, emblaApi] = useEmblaCarousel(options);
@@ -48,10 +51,19 @@ export default function TrendingProducts({ data, heading, buttonDisplay }) {
     try {
       const response = await postData("wishlist/submitWishlist_Data", body);
       if (response.status === "success") {
+        // Toggle wishlist status
+        setWishlist((prevState) => ({
+          ...prevState,
+          [data.product_id]: !prevState[data.product_id],
+        }));
         dispatch(setWishListProduct(data));
-        setSnackbarMessage("Added to wishlist");
+        setSnackbarMessage(
+          wishlist[data.product_id]
+            ? "Removed from wishlist"
+            : "Added to wishlist"
+        );
         setSnackbarOpen(true);
-      }  else{
+      } else {
         setSnackbarMessage("Removed this item from wishlist");
         setSnackbarOpen(true);
       }
@@ -67,8 +79,16 @@ export default function TrendingProducts({ data, heading, buttonDisplay }) {
   };
 
   const renderProductCard = () => {
+    if (!Array.isArray(data)) {
+      console.error("Expected 'data' to be an array.");
+      return null;
+    }
+  
     return data.map((product) => {
-      const image_name = product.images[0].image_name;
+      const image_name = (product.images && product.images.length > 0)
+        ? product.images[0].image_name
+        : "default-image.jpg";
+  
       return (
         <div className="product-content-container" key={product.id}>
           <Card className="card-body" sx={{ maxWidth: 240 }}>
@@ -76,7 +96,7 @@ export default function TrendingProducts({ data, heading, buttonDisplay }) {
               className="card-media"
               component="img"
               image={`${ServerURL}/images/${image_name}`}
-              alt={product.product_name}
+              alt={product.product_name || "No product name available"} // Fallback alt text
             />
             <CardContent>
               <Typography
@@ -84,10 +104,10 @@ export default function TrendingProducts({ data, heading, buttonDisplay }) {
                 variant="body2"
                 color="text.secondary"
               >
-                {product.product_description}
+                {product.product_description || "No description available"}
               </Typography>
               <Typography id="card-price" component={"h3"}>
-                Rs.{product.price}
+                Rs.{product.price || "N/A"}
               </Typography>
             </CardContent>
             <CardActions className="card-action-container" disableSpacing>
@@ -96,7 +116,11 @@ export default function TrendingProducts({ data, heading, buttonDisplay }) {
                   onClick={() => handleSubmit(product)}
                   aria-label="add to favorites"
                 >
-                  <FavoriteBorderIcon />
+                  {wishlist[product.product_id] ? (
+                    <FavoriteIcon sx={{ color: "red" }} />
+                  ) : (
+                    <FavoriteBorderIcon />
+                  )}
                 </IconButton>
                 <IconButton aria-label="share">
                   <ShareIcon />
@@ -105,7 +129,7 @@ export default function TrendingProducts({ data, heading, buttonDisplay }) {
               <Box>
                 <Button
                   onClick={() =>
-                    navigate("/productdetails", { state: { product: product } })
+                    navigate("/productdetails", { state: { product } })
                   }
                   id="buy_now_button"
                   variant="outlined"
@@ -119,6 +143,7 @@ export default function TrendingProducts({ data, heading, buttonDisplay }) {
       );
     });
   };
+  
 
   return (
     <div className="product-superContainer">
@@ -136,7 +161,7 @@ export default function TrendingProducts({ data, heading, buttonDisplay }) {
         <Button
           sx={{ display: buttonDisplay }}
           variant="outlined"
-          onClick={() => navigate("/filter")}
+          onClick={() => navigate("/filter", { category_name: "category" })}
         >
           View More
         </Button>

@@ -107,7 +107,8 @@ export default function FilterBar({ resetState, setResetState, categoryName }) {
         maxPrice: priceRange[1],
       };
 
-      const response = await postData("product/fetch-products", params);
+      const response = await getData("product/fetch-products");
+      console.log(response);
       dispatch(setProducts(response.data));
       setResetState(false);
     } catch (error) {

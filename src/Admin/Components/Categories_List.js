@@ -1,20 +1,21 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
-import { Button } from "@mui/material";
+import { Button, Typography, Tooltip, IconButton } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { useState, useEffect } from "react";
 import { getData } from "../../Services/ServerServices";
 import Sweet_Alert from "../../Common_Components/alerts/Sweet_Alert";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
+import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";
 import DeleteIcon from "@mui/icons-material/Delete";
-
-
+import { useNavigate } from "react-router-dom";
 
 export default function DataGridDemo() {
+  const navigate = useNavigate();
   const [data, setData] = useState([]);
+  const [hover, setHover] = useState(false);
 
   const columns = [
-  
     { field: "category_id", headerName: "ID", width: 90 },
     {
       field: "category_name",
@@ -22,7 +23,7 @@ export default function DataGridDemo() {
       width: 150,
       editable: true,
     },
-  
+
     {
       field: "category_description",
       headerName: "Description",
@@ -38,7 +39,8 @@ export default function DataGridDemo() {
     },
     {
       headerName: "Updated",
-      description: "This column has a custom cell renderer and is not sortable.",
+      description:
+        "This column has a custom cell renderer and is not sortable.",
       sortable: false,
       width: 160,
       renderCell: (params) => (
@@ -56,10 +58,10 @@ export default function DataGridDemo() {
       renderCell: (params) => (
         <>
           <Button onClick={() => handleEdit(params.id)}>
-            <ModeEditIcon sx={{color:"black"}} />
+            <ModeEditIcon sx={{ color: "black" }} />
           </Button>
           <Button onClick={() => handleDelete(params.id)}>
-            <DeleteIcon sx={{color:"black"}} />
+            <DeleteIcon sx={{ color: "black" }} />
           </Button>
         </>
       ),
@@ -82,8 +84,10 @@ export default function DataGridDemo() {
     try {
       const response = await (id, updatedData);
       if (response.success) {
-        setData((prevData) => 
-          prevData.map((row) => (row.category_id === id ? { ...row, ...updatedData } : row))
+        setData((prevData) =>
+          prevData.map((row) =>
+            row.category_id === id ? { ...row, ...updatedData } : row
+          )
         );
         Sweet_Alert({ title: response.message, icon: "success" });
       }
@@ -94,9 +98,9 @@ export default function DataGridDemo() {
 
   const handleDelete = async (id) => {
     try {
-      const response = await (id);
+      const response = await id;
       if (response.success) {
-        setData((prevData) => prevData.filter(row => row.category_id !== id));
+        setData((prevData) => prevData.filter((row) => row.category_id !== id));
         Sweet_Alert({ title: response.message, icon: "success" });
       }
     } catch (error) {
@@ -110,7 +114,32 @@ export default function DataGridDemo() {
   }, []);
 
   return (
-    <Box sx={{ height: 400, width: "100%" }}>
+    <Box sx={{ height: 400,}}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          fontFamily: "Futura Bold Italic",
+        }}
+      >
+        <Typography
+          sx={{ fontFamily: "Futura medium Italic" }}
+          variant="h4"
+          mb={3}
+        >
+          Categories List
+        </Typography>
+        <Tooltip title={hover ? "Add New Category" : ""} arrow>
+          <IconButton
+            onMouseEnter={() => setHover(true)}
+            onClick={() => navigate("/dashboard/category")}
+            aria-label="add"
+          >
+            <PlaylistAddIcon sx={{ size: "2%" }} />
+          </IconButton>
+        </Tooltip>
+      </Box>
       <DataGrid
         rows={data}
         columns={columns}

@@ -156,8 +156,8 @@ import {
                       error={!!errors.status}
                       helperText={errors.status?.message}
                     >
-                      <MenuItem value="true">True</MenuItem>
-                      <MenuItem value="false">False</MenuItem>
+                      <MenuItem value="1">True</MenuItem>
+                      <MenuItem value="0">False</MenuItem>
                     </TextField>
                   </Grid>
                  

@@ -9,9 +9,13 @@ import TrendingProducts from "../Common_Components/TrendingProducts";
 import Footer from "../Common_Components/Footer";
 import Reviews from "../Components/ProductDetailsPage/Reviews";
 import { useLocation } from "react-router-dom";
+
+
+
+
 export default function ProductDetailsPage() {
   const location = useLocation();
-  const { product } = location.state;
+  const { product } = location?.state || {};
 
   const handleClick = (event) => {
     event.preventDefault();

@@ -5,39 +5,45 @@ import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
 import ImageListItemBar from "@mui/material/ImageListItemBar";
 import { Button } from "@mui/material";
-import QuickView from "./QuickView"
+import QuickView from "./QuickView";
 import "../StyleSheets/Gallery.css";
 
 export default function Gallery() {
   const navigate = useNavigate();
-
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
 
-  const product = {
-    image:
-      "https://i.pinimg.com/originals/99/0a/3b/990a3b1680be2127f5b7b88c4badde05.jpg",
-    subtitle: "Tussar and Combination",
-    title: "Blue Woven Design Pure Tussar",
-    price: "10999",
+  const imageStyle = {
+    height: "500px",
+    width: "100%",
+    objectFit: "cover",
+  };
+
+  const handleImageClick = (product) => {
+    setSelectedProduct(product);
+    setDialogOpen(true);
   };
 
   return (
     <>
       <ImageList
-        sx={{ display: "flex", flexWrap: "wrap", justifyContent: "center" }}
+        sx={{ display: "flex", flexWrap: "wrap", width: "100%" }}
+        cols={4}
+        gap={6}
       >
         {itemData.map((item) => (
-          <ImageListItem key={item.img} className="imageListItem">
+          <ImageListItem key={item.images} className="imageListItem">
             <img
-              onClick={() => setDialogOpen(true)}
-              srcSet={`${item.img}?w=300&height=450&fit=crop&auto=format&dpr=2 2x`}
-              src={`${item.img}?w=300&height=450&fit=crop&auto=format`}
+              onClick={() => handleImageClick(item)}
+              srcSet={`${item.images}?w=300&height=450&fit=crop&auto=format&dpr=2 2x`}
+              src={`${item.images}?w=300&height=450&fit=crop&auto=format`}
               alt={item.title}
               loading="lazy"
+              style={imageStyle}
             />
             <div className="overlay">
               <Button
-                onClick={() => setDialogOpen(true)}
+                onClick={() => handleImageClick(item)}
                 id="quickViewButton"
                 size="small"
                 variant="outlined"
@@ -51,7 +57,7 @@ export default function Gallery() {
               subtitle={item.author}
               actionIcon={
                 <Button
-                  onClick={() => navigate("/productdetails")}
+                  onClick={() => navigate("/productdetails", { state: { item } })}
                   id="buyNow_button"
                   size="small"
                   variant="outlined"
@@ -63,85 +69,80 @@ export default function Gallery() {
           </ImageListItem>
         ))}
       </ImageList>
-      <QuickView
-        open={dialogOpen}
-        onClose={() => setDialogOpen(false)}
-        product={product}
-      />
+      {selectedProduct && (
+        <QuickView
+          open={dialogOpen}
+          onClose={() => setDialogOpen(false)}
+          product={selectedProduct} // Pass the entire product object to QuickView
+        />
+      )}
     </>
   );
 }
 
 const itemData = [
   {
-    img: "https://images.unsplash.com/photo-1551963831-b3b1ca40c98e",
-    title: "Breakfast",
-    author: "@bkristastucchio",
-    rows: 2,
-    cols: 2,
-    featured: true,
+    images: "https://assets.myntassets.com/dpr_1.5,q_60,w_400,c_limit,fl_progressive/assets/images/27989168/2024/3/2/5ef86fa4-73e3-4266-8d81-d9921dded8751709348581018SidhidataWomensPrintedReadyToWearSareeWithUnstitchedBlousePi1.jpg",
+    title: "Royal Blue Silk Saree",
+    subtitle: "Traditional Elegance",
+    price: "7999",
+  },
+
+  {
+    images: "https://cdn.shopify.com/s/files/1/0049/3649/9315/files/koskii-ranipink-zariwork-artsilk-designer-saree-saus0021014_ranipink_3_large.jpg?v=1695981170",
+    title: "Rani Pink Zari Saree",
+    subtitle: "Elegant Weaves",
+    price: "11999",
   },
   {
-    img: "https://images.unsplash.com/photo-1551782450-a2132b4ba21d",
-    title: "Burger",
-    author: "@rollelflex_graphy726",
+    images: "https://cdn.shopify.com/s/files/1/0049/3649/9315/files/koskii-ranipink-zariwork-net-designer-saree-saus0029319_ranipink_1_large.jpg?v=1685354836",
+    title: "Maharani Pink Net Saree",
+    subtitle: "Luxury Collection",
+    price: "12999",
+  },
+
+  {
+    images: "https://images.wholesalesalwar.com/2024y/July/51351/Cream-Silk-Wedding%20Wear-Weaving-Saree-MADHUBALA-T-1173%20(2).jpg",
+    title: "Cream Silk Wedding Saree",
+    subtitle: "Wedding Special",
+    price: "14999",
   },
   {
-    img: "https://images.unsplash.com/photo-1522770179533-24471fcdba45",
-    title: "Camera",
-    author: "@helloimnik",
+    images: "https://assets.ajio.com/medias/sys_master/root/20230923/eWgZ/650ee5f9ddf7791519f7c61f/-1117Wx1400H-466621422-maroon-MODEL.jpg",
+    title: "Maroon Bridal Saree",
+    subtitle: "Festive Glam",
+    price: "9999",
   },
   {
-    img: "https://images.unsplash.com/photo-1444418776041-9c7e33cc5a9c",
-    title: "Coffee",
-    author: "@nolanissac",
-    cols: 2,
+    images: "https://assets2.andaazfashion.com/media/catalog/product/cache/1/image/800x1200/a12781a7f2ccb3d663f7fd01e1bd2e4e/d/a/dark-green-mehndi-silk-wedding-wear-woven-zari-saree-sarv154007-1.jpg",
+    title: "Dark Green Mehndi Saree",
+    subtitle: "Traditional Charm",
+    price: "10999",
+  },
+ 
+  {
+    images: "https://images.shaadisaga.com/shaadisaga_production/photos/pictures/000/780/265/new_medium/sahibbakanand.jpg?1553586872",
+    title: "Golden Kanjivaram Saree",
+    subtitle: "Luxury Collection",
+    price: "14999",
   },
   {
-    img: "https://images.unsplash.com/photo-1533827432537-70133748f5c8",
-    title: "Hats",
-    author: "@hjrc33",
-    cols: 2,
+    images: "https://studiovirupa.com/cdn/shop/products/image_27871d37-84b5-4105-a720-590c40ea1767_600x.jpg?v=1664007959",
+    title: "Sea Green Chiffon Saree",
+    subtitle: "Light and Breezy",
+    price: "8999",
   },
   {
-    img: "https://images.unsplash.com/photo-1558642452-9d2a7deb7f62",
-    title: "Honey",
-    author: "@arwinneil",
-    rows: 2,
-    cols: 2,
-    featured: true,
+    images: "https://www.kankatala.com/blog/wp-content/uploads/2023/03/327150798_3339527379709007_3598049178706899645_n-819x1024.jpg",
+    title: "Peach Satin Saree",
+    subtitle: "Evening Wear",
+    price: "7999",
   },
+
   {
-    img: "https://images.unsplash.com/photo-1516802273409-68526ee1bdd6",
-    title: "Basketball",
-    author: "@tjdragotta",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1518756131217-31eb79b20e8f",
-    title: "Fern",
-    author: "@katie_wasserman",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1597645587822-e99fa5d45d25",
-    title: "Mushrooms",
-    author: "@silverdalex",
-    rows: 2,
-    cols: 2,
-  },
-  {
-    img: "https://images.unsplash.com/photo-1567306301408-9b74779a11af",
-    title: "Tomato basil",
-    author: "@shelleypauls",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1471357674240-e1a485acb3e1",
-    title: "Sea star",
-    author: "@peterlaster",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1589118949245-7d38baf380d6",
-    title: "Bike",
-    author: "@southside_customs",
-    cols: 2,
+    images: "https://static.wixstatic.com/media/c70d98_80d553d3bd894427a2adb6d7aa269861~mv2.jpg/v1/fit/w_500,h_500,q_90/file.jpg",
+    title: "Ivory Silk Saree",
+    subtitle: "Graceful Attire",
+    price: "10999",
   },
 ];

@@ -496,6 +496,7 @@ export default function Dashboard() {
             <Route element={<Offers />} path={"/Offers"}></Route>
             <Route element={<OffersList />} path={"/OffersList"}></Route>
             <Route element={<Category />} path={"/Category"}></Route>
+            <Route element={<Categories_List />} path={"/Categories_List"}></Route>
             <Route element={<Product />} path={"/Product"}></Route>
             <Route element={<ProductsList />} path={"/ProductsList"}></Route>
             <Route element={<Occasion />} path={"/occassion"}></Route>
