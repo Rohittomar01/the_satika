@@ -32,4 +32,10 @@
 }
 #card-price {
   font-weight: 700;
-  font-family: "Futura Light Italic",sans-serif;}
+  font-family: "Futura Light Italic",sans-serif;
+}
+#buy_now_button{
+  width:7vw;
+  height: 30px;
+  font-size:10px;
+}

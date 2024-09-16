@@ -7,18 +7,19 @@ import ProductCards from "../Components/AddToCart/ProductCards";
 import CalculationComponent from "../Components/AddToCart/CalculationComponent";
 import { getData } from "../../Services/ServerServices";
 import Swal from "sweetalert2";
-import {  useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 export default function AddToCart() {
+  const product = useSelector((state) => state.products.addToCartProducts);
   const navigate = useNavigate();
   const [cartData, setCartData] = useState([]);
   const userId = 1;
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    // Fetch cart data
     fetchCartData();
-  }, []);
+  }, [product]);
 
   const fetchCartData = async () => {
     const user_id = 1;
@@ -56,7 +57,7 @@ export default function AddToCart() {
         </Box>
       </Grid>
       <Grid item xs={8} sm={8} lg={8}>
-        <ProductCards cartData={cartData} userId={userId} />
+        <ProductCards cartData={cartData} fetchCartData={fetchCartData} userId={userId} />
       </Grid>
       <Grid item xs={4} sm={4} lg={4}>
         <CalculationComponent cartData={cartData} />

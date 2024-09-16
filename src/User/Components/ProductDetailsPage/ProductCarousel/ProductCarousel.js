@@ -6,9 +6,13 @@ import ReactImageMagnify from "react-image-magnify";
 import "../../../StyleSheets/ProductDetailsPage/ProductCarousel.css";
 import { ServerURL } from "../../../../Services/ServerServices";
 
-const ProductCarousel = ({products}) => {
+const ProductCarousel = ({ products }) => {
   const options = { axis: "x" };
+
+  console.log("product caroousel data", products);
   const SLIDE_COUNT = 10;
+
+  const [data, setData] = useState([products]);
   const slides = [
     {
       id: 1,
@@ -62,37 +66,36 @@ const ProductCarousel = ({products}) => {
     emblaMainApi.on("select", onSelect).on("reInit", onSelect);
   }, [emblaMainApi, onSelect]);
 
-
   return (
     <div className="carousel">
       <div className="carousel__viewport" ref={emblaMainRef}>
         <div className="carousel__container">
           {/* {products.map(({data,index}) => ( */}
-            <div className="carousel__slide" key={products.product_id}>
-              <div className="carousel__slide__number">
-                <div className="product_carousel_images">
-                  <ReactImageMagnify
-                    {...{
-                      smallImage: {
-                        alt: "Wristwatch by Ted Baker London",
-                        isFluidWidth: true,
-                        src:`${ServerURL}/images/${products.images[0].image_name}` ,
-                      },
-                      largeImage: {
-                        src:`${ServerURL}/images/${products.images[0].image_name}`,
-                        width: 1200,
-                        height: 1800,
-                      },
-                      enlargedImagePosition: "over",
-                    }}
-                  />
-                </div>
-                {/* <img
+          <div className="carousel__slide" key={products.product_id}>
+            <div className="carousel__slide__number">
+              <div className="product_carousel_images">
+                <ReactImageMagnify
+                  {...{
+                    smallImage: {
+                      alt: "Wristwatch by Ted Baker London",
+                      isFluidWidth: true,
+                      src: `${ServerURL}/images/${products.images[0].image_name}`,
+                    },
+                    largeImage: {
+                      src: `${ServerURL}/images/${products.images[0].image_name}`,
+                      width: 1200,
+                      height: 1800,
+                    },
+                    enlargedImagePosition: "over",
+                  }}
+                />
+              </div>
+              {/* <img
                   className="product_carousel_images"
                   src={index.image}
                 ></img> */}
-              </div>
             </div>
+          </div>
           {/* ))} */}
         </div>
       </div>
@@ -100,7 +103,7 @@ const ProductCarousel = ({products}) => {
       <div className="carousel-thumbs">
         <div className="carousel-thumbs__viewport" ref={emblaThumbsRef}>
           <div className="carousel-thumbs__container">
-            {slides.map((index) => (
+            {data.map((index) => (
               <Thumb
                 key={index}
                 onClick={() => onThumbClick(index.id - 1)}

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import { Grid } from "@mui/material";
@@ -17,13 +17,42 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import NavBar_Drawer from "./NavBar_Drawer";
 import "../StyleSheets/Common_Components/NavBar.css";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { addToCart } from "../../Store/Slices/Products";
+import { Badge } from "@mui/material";
+import { styled } from "@mui/material/styles";
+import "../StyleSheets/Common_Components/NavBar.css";
+import { getData } from "../../Services/ServerServices";
 
-import "../StyleSheets/Common_Components/NavBar.css"
+const StyledBadge = styled(Badge)(({ theme }) => ({
+  "& .MuiBadge-badge": {
+    right: -3,
+    top: 13,
+    border: `2px solid ${theme.palette.background.paper}`,
+    padding: "0 4px",
+  },
+}));
+
 export default function NavBar() {
+  const product = useSelector((state) => state.products.addToCartProducts);
+  // console.log("navv p", product);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [auth, setAuth] = React.useState(true);
   const [open, setOpen] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const fetchCartData = async () => {
+    const user_id = 1;
+    try {
+      const response = await getData(
+        `addtocart/fetchCart_Data?user_id=${user_id}`
+      );
+      dispatch(addToCart(response.data));
+    } catch (error) {
+      console.error("Error fetching cart data:", error);
+    }
+  };
 
   const handleChange = (event) => {
     setAuth(event.target.checked);
@@ -38,6 +67,7 @@ export default function NavBar() {
   };
   useEffect(() => {
     window.scrollTo(0, 0);
+    fetchCartData();
   }, []);
 
   return (
@@ -96,11 +126,20 @@ export default function NavBar() {
             </Grid>
             <Grid className="actions_buttons_grids" item xs={2} sm={2} lg={2}>
               <div className="actions_buttons">
-                <IconButton className="nav_icons"  onClick={() => navigate("/wishlist")}>
+                <IconButton
+                  className="nav_icons"
+                  onClick={() => navigate("/wishlist")}
+                >
                   <FavoriteBorderIcon />{" "}
                 </IconButton>
-                <IconButton className="nav_icons" onClick={() => navigate("/addtocart")}>
-                  <ShoppingCartIcon />{" "}
+                <IconButton
+                  className="nav_icons"
+                  onClick={() => navigate("/addtocart")}
+                  aria-label="cart"
+                >
+                  <StyledBadge badgeContent={product.length} color="secondary">
+                    <ShoppingCartIcon />
+                  </StyledBadge>
                 </IconButton>
                 {auth && (
                   <div>

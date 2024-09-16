@@ -2,7 +2,7 @@ import React from "react";
 import { Grid, Box } from "@mui/material";
 import NavBar from "../Common_Components/NavBar";
 import Footer from "../Common_Components/Footer";
-import ShowCollections from "../Components/WishList/ShowCollections";
+import ShowWishlist from "../Components/WishList/ShowWishlist";
 import "../StyleSheets/WishList/WishList.css";
 
 export default function WishList() {
@@ -13,7 +13,7 @@ export default function WishList() {
       </Grid>
       <Grid className="stepper_container" item xs={12} sm={12} lg={12}>
         <Box className="showCollection_container" component={"div"}>
-          <ShowCollections />
+          <ShowWishlist />
         </Box>
       </Grid>
       <Grid item xs={12} sm={12} lg={12}>

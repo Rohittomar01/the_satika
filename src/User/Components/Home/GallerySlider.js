@@ -1,11 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
-import Fade from "embla-carousel-fade";
-import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
 import ImageListItemBar from "@mui/material/ImageListItemBar";
-import { Box, Button } from "@mui/material";
+import { Button } from "@mui/material";
 import {
   NextButton,
   PrevButton,
@@ -14,7 +12,11 @@ import {
 import "../../StyleSheets/GallerySlider.css";
 import { useNavigate } from "react-router-dom";
 import QuickView from "../../Pages/QuickView";
-const GallerySlider = ({ images }) => {
+import { getData, ServerURL } from "../../../Services/ServerServices";
+const GallerySlider = () => {
+  const [imagesData, setImagesData] = useState([]);
+  const [dialogProduct, setDialogProduct] = useState([]);
+  const [dialogOpen, setDialogOpen] = useState(false);
   const navigate = useNavigate();
   const options = { axis: "x", dragFree: true, loop: true };
   const [isGrabbing, setIsGrabbing] = useState(false);
@@ -41,105 +43,44 @@ const GallerySlider = ({ images }) => {
   const handleMouseUp = () => {
     setIsGrabbing(false);
   };
-  const [dialogOpen, setDialogOpen] = useState(false);
 
-  const product = {
-    image:
-      "https://i.pinimg.com/originals/99/0a/3b/990a3b1680be2127f5b7b88c4badde05.jpg",
-    subtitle: "Tussar and Combination",
-    title: "Blue Woven Design Pure Tussar",
-    price: "10999",
+  const fetchAllImages = async () => {
+    try {
+      const result = await getData(`product/fetch_all_Images`);
+      setImagesData(result.data);
+    } catch (error) {
+      console.error("Error fetching trending products:", error);
+    }
   };
 
-  const ProductsData = [
-    {
-      product_image:
-        "https://images.pexels.com/photos/2531734/pexels-photo-2531734.jpeg?auto=compress&cs=tinysrgb&w=600",
-      title: "Royal",
-      author: "@bkristastucchio",
-      rows: 2,
-      cols: 2,
-      featured: true,
-    },
-    {
-      product_image:
-        "https://images.pexels.com/photos/2747267/pexels-photo-2747267.jpeg?auto=compress&cs=tinysrgb&w=600",
-      title: "Rajisthani",
-      author: "@rollelflex_graphy726",
-    },
-    {
-      product_image:
-        "https://images.pexels.com/photos/1999895/pexels-photo-1999895.jpeg?auto=compress&cs=tinysrgb&w=600",
-      title: "Rajisthani",
-      author: "@helloimnik",
-    },
-    {
-      product_image:
-        "https://images.pexels.com/photos/9419149/pexels-photo-9419149.jpeg?auto=compress&cs=tinysrgb&w=600",
-      title: "Rajisthani",
-      author: "@nolanissac",
-      cols: 2,
-    },
-    {
-      product_image:
-        "https://images.pexels.com/photos/15181110/pexels-photo-15181110/free-photo-of-woman-in-traditional-bridal-saree-dress.jpeg?auto=compress&cs=tinysrgb&w=600",
-      title: "Rajisthani",
-      author: "@hjrc33",
-      cols: 2,
-    },
-    {
-      product_image:
-        "https://images.pexels.com/photos/7176696/pexels-photo-7176696.jpeg?auto=compress&cs=tinysrgb&w=600",
-      title: "Rajisthani",
-      author: "@arwinneil",
-      rows: 2,
-      cols: 2,
-      featured: true,
-    },
-    {
-      product_image:
-        "https://images.unsplash.com/photo-1516802273409-68526ee1bdd6",
-      title: "Rajisthani",
-      author: "@tjdragotta",
-    },
-    {
-      product_image:
-        "https://images.pexels.com/photos/7685494/pexels-photo-7685494.jpeg?auto=compress&cs=tinysrgb&w=600",
-      title: "Rajisthani",
-      author: "@katie_wasserman",
-    },
-    {
-      product_image:
-        "https://images.unsplash.com/photo-1597645587822-e99fa5d45d25",
-      title: "Rajisthani",
-      author: "@silverdalex",
-      rows: 2,
-      cols: 2,
-    },
-    {
-      product_image:
-        "https://i.pinimg.com/originals/99/0a/3b/990a3b1680be2127f5b7b88c4badde05.jpg",
-      title: "Rajisthani basil",
-      author: "@shelleypauls",
-    },
-  ];
+  // Use useEffect to fetch trending products when the component mounts
+  useEffect(() => {
+    fetchAllImages();
+  }, []);
+
+  const handleOpenDialog = (item) => {
+    setDialogOpen(true);
+    setDialogProduct(item);
+  };
+
   const renderImages = () => {
-    return ProductsData.map((item, index) => (
+    return imagesData.map((item, index) => (
       <div className="image-slide" key={index}>
         <ImageListItem key={item.img}>
           <img
             id="gallery-image"
-            src={item.product_image}
+            src={`${ServerURL}/images/${item.images[0].image_name}`}
             alt={item.title}
-            onClick={() => setDialogOpen(true)}
           />
           <ImageListItemBar
             id="gallerySlider_imageTitle"
-            title={item.title}
-            subtitle={item.author}
+            title={item.product_name}
+            subtitle={item.product_description}
             actionIcon={
               <Button
-                onClick={() => navigate("/productdetails")}
+                onClick={() =>
+                  navigate("/productdetails", { state: { product: item } })
+                }
                 id="gallery_button"
                 size="small"
                 variant="outlined"
@@ -148,10 +89,7 @@ const GallerySlider = ({ images }) => {
               </Button>
             }
           />
-          <Button
-            id="quick-view-button"
-            onClick={() => setDialogOpen(true)}
-          >
+          <Button id="quick-view-button" onClick={() => handleOpenDialog(item)}>
             Quick View
           </Button>
         </ImageListItem>
@@ -187,7 +125,7 @@ const GallerySlider = ({ images }) => {
       <QuickView
         open={dialogOpen}
         onClose={() => setDialogOpen(false)}
-        product={product}
+        product={dialogProduct}
       />
     </div>
   );

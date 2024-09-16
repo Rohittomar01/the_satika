@@ -15,7 +15,7 @@ import QuickView from "./User/Pages/QuickView";
 
 function App() {
   return (
-    <Router >
+    <Router>
       <Routes>
         <Route path="dashboard/*" element={<Dashboard />} />
         <Route path="/discounts" element={<Discounts />} />

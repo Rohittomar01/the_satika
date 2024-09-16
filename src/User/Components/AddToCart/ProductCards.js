@@ -15,10 +15,13 @@ import "../../StyleSheets/AddToCart/ProductCards.css";
 import { deleteData, ServerURL } from "../../../Services/ServerServices";
 import Swal from "sweetalert2";
 import { useDispatch } from "react-redux";
-import { setWishListProduct } from "../../../Store/Slices/Products";
+import {
+  setWishListProduct,
+  removeFromCart,
+} from "../../../Store/Slices/Products";
 import { postData } from "../../../Services/ServerServices";
 
-const ProductCards = ({ cartData, userId }) => {
+const ProductCards = ({ cartData, userId,fetchCartData }) => {
   const dispatch = useDispatch();
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
@@ -48,6 +51,7 @@ const ProductCards = ({ cartData, userId }) => {
             "Your item has been removed from the cart.",
             "success"
           );
+          dispatch(removeFromCart(productId));
         } else {
           const errorData = await response.json();
           console.error("Failed to delete data:", errorData.error);
@@ -71,11 +75,15 @@ const ProductCards = ({ cartData, userId }) => {
       added_at: new Date(),
     };
     try {
-      const response = await postData("wishlist/submitWishlist_Data", body);
+      const response = await postData(
+        "wishlist/submitWishlist_Data_In_WishlistTable",
+        body
+      );
       if (response.status === "success") {
         dispatch(setWishListProduct(data));
         setSnackbarMessage("Added this item to wishlist");
         setSnackbarOpen(true);
+        fetchCartData();
       } else {
         setSnackbarMessage("Removed this item from wishlist");
         setSnackbarOpen(true);

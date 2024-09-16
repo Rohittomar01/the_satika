@@ -84,7 +84,6 @@ export default function Home() {
     try {
       const result = await getData(`product/fetch-Trendingproducts`);
       setTrendingProducts(result.data);
-      console.log("trenidng product", result.data);
     } catch (error) {
       console.error("Error fetching banners:", error);
     }

@@ -1,9 +1,6 @@
-import React, { useState, useEffect } from "react";
-// import { Avatar } from "@mui/material";
+import React, { useState, useEffect, useCallback } from "react";
 import "../../../StyleSheets/CategoryCards.css";
 import useEmblaCarousel from "embla-carousel-react";
-import Autoplay from "embla-carousel-autoplay";
-import Fade from "embla-carousel-fade";
 import { Button } from "@mui/material";
 import { getData, ServerURL } from "../../../../Services/ServerServices";
 import {
@@ -18,6 +15,8 @@ export default function CategoryCards() {
   const options = { axis: "x", dragFree: true };
   const [isGrabbing, setIsGrabbing] = useState(false);
   const [category, setCategory] = useState([]);
+  const [canScrollPrev, setCanScrollPrev] = useState(false);
+  const [canScrollNext, setCanScrollNext] = useState(false);
 
   const [emblaRef, emblaApi] = useEmblaCarousel(options);
   const {
@@ -44,17 +43,33 @@ export default function CategoryCards() {
     }
   };
 
+  const checkScrollButtons = useCallback(() => {
+    if (!emblaApi) return;
+    setCanScrollPrev(emblaApi.canScrollPrev());
+    setCanScrollNext(emblaApi.canScrollNext());
+  }, [emblaApi]);
+
+  useEffect(() => {
+    if (!emblaApi) return;
+    emblaApi.on("select", checkScrollButtons);
+    emblaApi.on("reInit", checkScrollButtons);
+    checkScrollButtons();
+  }, [emblaApi, checkScrollButtons]);
+
   useEffect(() => {
     fetchCategories();
   }, []);
 
-  
   const renderCard = () => {
     return category.map((cards) => {
       return (
         <div
-        onClick={() => navigate("/filter", { state: { category_name: cards.category_name } })}
-        className="content-container"
+          onClick={() =>
+            navigate("/filter", {
+              state: { category_name: cards.category_name },
+            })
+          }
+          className="content-container"
           key={cards.id}
         >
           <div className="image-container">
@@ -78,22 +93,29 @@ export default function CategoryCards() {
       );
     });
   };
+
   return (
     <div className="category-superContainer">
       <div className="carousel-control">
         <h1 className="categoryHeading">Category</h1>
         <div className="control__buttonsContainer">
-          <PrevButton onClick={onPrevButtonClick} disabled={prevBtnDisabled} />
-          <NextButton onClick={onNextButtonClick} disabled={nextBtnDisabled} />
+          {/* Conditionally render previous and next buttons */}
+          {canScrollPrev && (
+            <PrevButton
+              onClick={onPrevButtonClick}
+              disabled={prevBtnDisabled}
+            />
+          )}
+          {canScrollNext && (
+            <NextButton
+              onClick={onNextButtonClick}
+              disabled={nextBtnDisabled}
+            />
+          )}
         </div>
       </div>
       <div
         onMouseDown={handleMouseDown}
-        // className={
-        //   isGrabbing
-        //     ? "category_mainContainer_grabbing"
-        //     : "category_mainContainer"
-        // }
         onMouseUp={handleMouseUp}
         onMouseLeave={handleMouseUp}
         ref={emblaRef}

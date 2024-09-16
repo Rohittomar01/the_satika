@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
 import {
@@ -21,13 +21,15 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setWishListProduct } from "../../Store/Slices/Products";
 import { postData, ServerURL } from "../../Services/ServerServices";
+import ShareDialog from "./ShareDialog";
 
 export default function TrendingProducts({ data, heading, buttonDisplay }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
-  const [snackbarOpen, setSnackbarOpen] = React.useState(false);
-  const [snackbarMessage, setSnackbarMessage] = React.useState("");
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [currentProduct, setCurrentProduct] = useState([]); // For storing the product details for sharing
+  const [showShareDialog, setShowShareDialog] = useState(false);
 
   const options = { axis: "x", loop: true, dragFree: true };
 
@@ -51,7 +53,7 @@ export default function TrendingProducts({ data, heading, buttonDisplay }) {
         dispatch(setWishListProduct(data));
         setSnackbarMessage("Added to wishlist");
         setSnackbarOpen(true);
-      }  else{
+      } else {
         setSnackbarMessage("Removed this item from wishlist");
         setSnackbarOpen(true);
       }
@@ -66,12 +68,17 @@ export default function TrendingProducts({ data, heading, buttonDisplay }) {
     setSnackbarOpen(false);
   };
 
+  const handleShare = (product) => {
+    setCurrentProduct(product);
+    setShowShareDialog(true);
+  };
+
   const renderProductCard = () => {
     return data.map((product) => {
       const image_name = product.images[0].image_name;
       return (
         <div className="product-content-container" key={product.id}>
-          <Card className="card-body" sx={{ maxWidth: 240 }}>
+          <Card className="card-body" sx={{ maxWidth: 270 }}>
             <CardMedia
               className="card-media"
               component="img"
@@ -98,7 +105,10 @@ export default function TrendingProducts({ data, heading, buttonDisplay }) {
                 >
                   <FavoriteBorderIcon />
                 </IconButton>
-                <IconButton aria-label="share">
+                <IconButton
+                  onClick={() => handleShare(product)}
+                  aria-label="share"
+                >
                   <ShareIcon />
                 </IconButton>
               </Box>
@@ -146,6 +156,19 @@ export default function TrendingProducts({ data, heading, buttonDisplay }) {
         autoHideDuration={5000}
         onClose={handleCloseSnackbar}
         message={snackbarMessage}
+      />
+      <ShareDialog
+        open={showShareDialog}
+        setOpen={setShowShareDialog}
+        shareUrl={
+          currentProduct ? `${ServerURL}/product/${currentProduct.id}` : ""
+        }
+        quote={
+          currentProduct
+            ? `Check out this amazing product: ${currentProduct.product_name}`
+            : ""
+        }
+        hashtag="#TrendingProduct"
       />
     </div>
   );

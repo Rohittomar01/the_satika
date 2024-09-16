@@ -54,9 +54,9 @@ const PriceDetails = ({ cartData }) => {
         CONTINUE SHOPPING
       </Button>
       <Box className="wishlist-button">
-        <Button fullWidth>
+        {/* <Button fullWidth>
           <Typography variant="body1">Add From Wishlist</Typography>
-        </Button>
+        </Button> */}
         <SignUpDialog open={open} setOpen={setOpen} />
       </Box>
     </Paper>

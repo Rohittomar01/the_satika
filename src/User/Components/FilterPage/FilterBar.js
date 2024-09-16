@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getData, postData } from "../../../Services/ServerServices";
+import { getData } from "../../../Services/ServerServices";
 import {
   Checkbox,
   FormControlLabel,
@@ -9,31 +9,38 @@ import {
   ListItemText,
   Collapse,
   Divider,
-  Typography,
 } from "@mui/material";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
-import { useDispatch } from "react-redux";
-import { setProducts } from "../../../Store/Slices/Products";
+import { useDispatch, useSelector } from "react-redux";
+import { setFilters, setPriceRange } from "../../../Store/Slices/filter";
 
-export default function FilterBar({ resetState, setResetState, categoryName }) {
+export default function FilterBar({ resetState, setResetState }) {
   const dispatch = useDispatch();
+  const filters = useSelector((state) => state.filters || {}); // Safe access
+
+  const {
+    colors: reduxColors = [],
+    brands: reduxBrands = [],
+    crafts: reduxCrafts = [],
+    fabrics: reduxFabrics = [],
+    origins: reduxOrigins = [],
+    priceRange: reduxPriceRange = [0, 10000],
+  } = filters;
+
   const [colors, setColors] = useState([]);
   const [brands, setBrands] = useState([]);
   const [crafts, setCrafts] = useState([]);
   const [fabrics, setFabrics] = useState([]);
   const [origins, setOrigins] = useState([]);
-  // const [products, setProducts] = useState([]);
   const [selectedFilters, setSelectedFilters] = useState({
-    colors: [],
-    brands: [],
-    crafts: [],
-    fabrics: [],
-    origins: [],
+    colors: reduxColors,
+    brands: reduxBrands,
+    crafts: reduxCrafts,
+    fabrics: reduxFabrics,
+    origins: reduxOrigins,
   });
-
-  const [priceRange, setPriceRange] = useState([0, 10000]);
-
+  const [priceRange, setPriceRangeState] = useState([0, 10000]);
   const [openSections, setOpenSections] = useState({
     color: false,
     brand: false,
@@ -44,7 +51,6 @@ export default function FilterBar({ resetState, setResetState, categoryName }) {
   });
 
   useEffect(() => {
-    // Fetch filter options on mount
     const fetchOptions = async () => {
       try {
         const colorResult = await getData("product/fetch-colors");
@@ -69,6 +75,25 @@ export default function FilterBar({ resetState, setResetState, categoryName }) {
     fetchOptions();
   }, []);
 
+  useEffect(() => {
+    dispatch(
+      setFilters({ category: "colors", values: selectedFilters.colors })
+    );
+    dispatch(
+      setFilters({ category: "brands", values: selectedFilters.brands })
+    );
+    dispatch(
+      setFilters({ category: "crafts", values: selectedFilters.crafts })
+    );
+    dispatch(
+      setFilters({ category: "fabrics", values: selectedFilters.fabrics })
+    );
+    dispatch(
+      setFilters({ category: "origins", values: selectedFilters.origins })
+    );
+    dispatch(setPriceRange(priceRange));
+  }, [selectedFilters, priceRange, dispatch]);
+
   const handleClick = (section) => {
     setOpenSections((prevOpenSections) => ({
       ...prevOpenSections,
@@ -88,35 +113,12 @@ export default function FilterBar({ resetState, setResetState, categoryName }) {
       };
     });
   };
-  console.log("price", priceRange);
 
   const handlePriceRangeChange = (event, newValue) => {
-    setPriceRange(newValue);
-  };
-
-  const fetchProducts = async () => {
-    try {
-      const params = {
-        categoryName: categoryName,
-        colors: selectedFilters.colors.join(","),
-        brands: selectedFilters.brands.join(","),
-        crafts: selectedFilters.crafts.join(","),
-        fabrics: selectedFilters.fabrics.join(","),
-        origins: selectedFilters.origins.join(","),
-        minPrice: priceRange[0],
-        maxPrice: priceRange[1],
-      };
-
-      const response = await postData("product/fetch-products", params);
-      dispatch(setProducts(response.data));
-      setResetState(false);
-    } catch (error) {
-      console.error("Error fetching products:", error);
-    }
+    setPriceRangeState(newValue);
   };
 
   useEffect(() => {
-    fetchProducts();
     if (resetState) {
       setSelectedFilters({
         colors: [],
@@ -125,8 +127,9 @@ export default function FilterBar({ resetState, setResetState, categoryName }) {
         fabrics: [],
         origins: [],
       });
+      setPriceRangeState([0, 10000]);
     }
-  }, [selectedFilters, priceRange, resetState]);
+  }, [resetState]);
 
   return (
     <div>
@@ -350,37 +353,26 @@ export default function FilterBar({ resetState, setResetState, categoryName }) {
                   : "'Futura medium Italic',sans-serif",
               },
             }}
-            primary="Price Range"
+            primary="Price"
           />
           {openSections.price ? <ExpandLess /> : <ExpandMore />}
         </ListItemButton>
         <Collapse in={openSections.price} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
-            <ListItemButton sx={{ pl: 6 }}>
-              <Typography id="range-slider" gutterBottom>
-                Price range
-              </Typography>
+            <ListItemButton>
               <Slider
                 value={priceRange}
                 onChange={handlePriceRangeChange}
                 valueLabelDisplay="auto"
-                aria-labelledby="range-slider"
                 min={0}
                 max={10000}
+                step={10}
+                sx={{ width: "80%", mx: "auto" }}
               />
             </ListItemButton>
           </List>
         </Collapse>
-        <Divider />
       </List>
-      {/* <div>
-        <Typography variant="h6">Products:</Typography>
-        <ul>
-          {products.map((product) => (
-            <li key={product.product_id}>{product.color}</li>
-          ))}
-        </ul>
-      </div> */}
     </div>
   );
 }

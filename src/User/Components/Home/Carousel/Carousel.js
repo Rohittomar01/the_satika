@@ -32,7 +32,6 @@ const Carousel = (props) => {
     try {
       const result = await getData("banner/get_banners");
       setBanners(result.data);
-      console.log("banner ru", result.data);
       setLoading(false);
     } catch (error) {
       console.error("Error fetching banners:", error);
@@ -40,13 +39,9 @@ const Carousel = (props) => {
     }
   };
 
-  console.log("banner", banners);
-
   useEffect(() => {
     fetchBanners();
   }, []);
-
-  
 
   return (
     <section className="embla">
@@ -58,7 +53,7 @@ const Carousel = (props) => {
                 style={{
                   height: "100vh",
                   width: "100vw",
-                  objectFit: "cover", 
+                  objectFit:"fill",
                 }}
                 src={`${ServerURL}/images/${data.image_name}`}
                 alt={`Slide ${data.category_id}`}

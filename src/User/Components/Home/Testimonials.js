@@ -1,97 +1,50 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
-import Fade from "embla-carousel-fade";
-import "../../StyleSheets/Testimonials.css";
 import {
   NextButton,
   PrevButton,
   usePrevNextButtons,
 } from "./Category_cards/CarouselArrowsButtons";
 import StarIcon from "@mui/icons-material/Star";
-import { Box, Typography,Button } from "@mui/material";
-
-const reviews = [
-  {
-    id: 1,
-    rating: 5,
-    date: "30/06/24",
-    title: "Taneira T.Nagar Chennai",
-    description:
-      "We had an excellent shopping experience in Pondy bazar Taneira showroom. Wide range of collection, excellent customer service...",
-    reviewer: "Bharathi N.",
-  },
-  {
-    id: 2,
-    rating: 4,
-    date: "01/07/24",
-    title: "Another Review",
-    description:
-      "Great experience with a wide range of products. The staff was very friendly and helpful.",
-    reviewer: "John D.",
-  },
-  {
-    id: 2,
-    rating: 4,
-    date: "01/07/24",
-    title: "Another Review",
-    description:
-      "Great experience with a wide range of products. The staff was very friendly and helpful.",
-    reviewer: "John D.",
-  },
-  {
-    id: 2,
-    rating: 4,
-    date: "01/07/24",
-    title: "Another Review",
-    description:
-      "Great experience with a wide range of products. The staff was very friendly and helpful.",
-    reviewer: "John D.",
-  },
-  {
-    id: 2,
-    rating: 4,
-    date: "01/07/24",
-    title: "Another Review",
-    description:
-      "Great experience with a wide range of products. The staff was very friendly and helpful.",
-    reviewer: "John D.",
-  },
-  {
-    id: 2,
-    rating: 4,
-    date: "01/07/24",
-    title: "Another Review",
-    description:
-      "Great experience with a wide range of products. The staff was very friendly and helpful.",
-    reviewer: "John D.",
-  },
-  {
-    id: 2,
-    rating: 4,
-    date: "01/07/24",
-    title: "Another Review",
-    description:
-      "Great experience with a wide range of products. The staff was very friendly and helpful.",
-    reviewer: "John D.",
-  },
-  // Add more reviews as needed
-];
+import { Typography, Button } from "@mui/material";
+import { getData } from "../../../Services/ServerServices";
+import "../../StyleSheets/Testimonials.css";
 
 export default function Testimonials() {
+  const [reviews, setReviews] = useState([]);
   const options = { axis: "x", dragFree: true, loop: true };
   const [emblaRef, emblaApi] = useEmblaCarousel(options, [
-    Autoplay({ stopOnInteraction: false, stopOnFocusIn: true,stopOnMouseEnter:true }),
-   
+    Autoplay({
+      stopOnInteraction: false,
+      stopOnFocusIn: true,
+      stopOnMouseEnter: true,
+    }),
   ]);
+  const {
+    prevBtnDisabled,
+    nextBtnDisabled,
+    onPrevButtonClick,
+    onNextButtonClick,
+  } = usePrevNextButtons(emblaApi);
 
-  const { prevBtnDisabled, nextBtnDisabled, onPrevButtonClick, onNextButtonClick } = usePrevNextButtons(emblaApi);
+  const fetchReviews = async () => {
+    try {
+      const result = await getData("reviews/fetch_all_reviews"); // Update the endpoint as needed
 
-  useEffect(() => {
-    if (emblaApi) {
-      emblaApi.reInit();
+      const filteredReviews = result.data.filter(
+        (review) => review.rating >= 3 && review.rating <= 5
+      );
+      setReviews(filteredReviews);
+    } catch (error) {
+      console.error("Error fetching reviews:", error);
     }
-  }, [emblaApi]);
+  };
+
+  console.log("testimondata",reviews)
+  useEffect(() => {
+    fetchReviews();
+  }, []);
 
   const renderStars = (rating) => {
     return [...Array(rating)].map((_, index) => (
@@ -100,27 +53,27 @@ export default function Testimonials() {
   };
 
   const renderReview = () => {
-    return reviews.map((review) => {
-      return (
-        <div className="review-card" key={review.id}>
-          <div className="review-header">
-            <div className="review-rating">{renderStars(review.rating)}</div>
-            <div className="review-date">{review.date}</div>
-          </div>
-          <div className="review-content">
-            <Typography variant="h6" id="review-title">
-              {review.title}
-            </Typography>
-            <Typography variant="body2" id="review-description">
-              {review.description}
-            </Typography>
-            <Typography variant="subtitle2" id="review-reviewer">
-              {review.reviewer}
-            </Typography>
+    return reviews.map((review) => (
+      <div className="review-card" key={review.review_id}>
+        <div className="review-header">
+          <div className="review-rating">{renderStars(review.rating)}</div>
+          <div className="review-date">
+            {new Date(review.created_at).toLocaleDateString()}
           </div>
         </div>
-      );
-    });
+        <div className="review-content">
+          <Typography variant="h6" id="review-title">
+            {review.title}
+          </Typography>
+          <Typography variant="body2" id="review-description">
+            {review.comment}
+          </Typography>
+          <Typography variant="subtitle2" id="review-reviewer">
+            {review.user_id}
+          </Typography>
+        </div>
+      </div>
+    ));
   };
 
   return (
@@ -135,9 +88,6 @@ export default function Testimonials() {
       <div className="review-mainContainer" ref={emblaRef}>
         <div className="review-subContainer">{renderReview()}</div>
       </div>
-      {/* <div className="view_more">
-        <Button  variant="outlined">View More</Button>
-      </div> */}
     </div>
   );
 }

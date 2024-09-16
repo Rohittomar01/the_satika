@@ -1,7 +1,8 @@
-import axios from "axios";
+import axios from 'axios';
 
-const ServerURL = "http://localhost:5000";
+const ServerURL = 'http://localhost:5000';
 
+// Function to get data from a URL
 const getData = async (url) => {
   try {
     const response = await axios.get(`${ServerURL}/${url}`);
@@ -12,6 +13,7 @@ const getData = async (url) => {
   }
 };
 
+// Function to post data to a URL
 const postData = async (url, body) => {
   try {
     const response = await axios.post(`${ServerURL}/${url}`, body);
@@ -22,6 +24,7 @@ const postData = async (url, body) => {
   }
 };
 
+// Function to update data at a URL
 const updateData = async (url, body) => {
   try {
     const response = await axios.put(`${ServerURL}/${url}`, body);
@@ -32,6 +35,7 @@ const updateData = async (url, body) => {
   }
 };
 
+// Function to delete data at a URL
 const deleteData = async (url) => {
   try {
     const response = await axios.delete(`${ServerURL}/${url}`);

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   Dialog,
   DialogContent,
@@ -8,16 +8,30 @@ import {
   Button,
   useMediaQuery,
   Divider,
+  Grid,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import ThumbUpAltOutlinedIcon from "@mui/icons-material/ThumbUpAltOutlined";
-import ThumbDownAltOutlinedIcon from "@mui/icons-material/ThumbDownAltOutlined";
 import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
 import { useTheme } from "@mui/material/styles";
+import ShareDialog from "../Common_Components/ShareDialog";
+import { ServerURL } from "../../Services/ServerServices";
 
 const QuickView = ({ open, onClose, product }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const [currentProduct, setCurrentProduct] = useState(null); // For storing the product details for sharing
+  const [showShareDialog, setShowShareDialog] = useState(false);
+
+  useEffect(() => {
+    if (product) {
+      setCurrentProduct(product);
+    }
+  }, [product]);
+
+  const handleShare = (product) => {
+    setCurrentProduct(product);
+    setShowShareDialog(true);
+  };
 
   return (
     <Dialog
@@ -45,72 +59,102 @@ const QuickView = ({ open, onClose, product }) => {
         </IconButton>
       </DialogTitle>
       <DialogContent sx={{ display: "flex", padding: 0, margin: 0 }}>
-        <div
-          style={{
-            marginLeft: "-4%",
-            flex: 1,
-            background: `url(${product.image}) no-repeat center center`,
-            backgroundSize: "cover",
-            minHeight: "50vh",
-            minWidth: "15vw",
-          }}
-        />
-        <div
-          style={{
-            flex: 1,
-            padding:"5%",
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "space-between",
-          }}
-        >
-          <div>
-            <Typography variant="subtitle1" fontFamily="Futura Medium Italic">
-              {product.subtitle}
-            </Typography>
-            <Typography variant="h5" fontFamily="Futura Medium Italic">
-              {product.title}
-            </Typography>
-            <Typography
-              variant="h6"
-              color="textSecondary"
-              fontFamily="Futura Light Italic"
-            >
-              ₹ {product.price}
-            </Typography>
-            <Typography
-              variant="body2"
-              color="textSecondary"
-              fontFamily="Futura Light Italic"
-            >
-              Inclusive of all taxes
-            </Typography>
-          </div>
-          <Divider sx={{ my: 2,marginTop:"35%" }} />
-          <div
+        <Grid container>
+          <Grid
+            item
+            xs={5}
+            lg={5}
+            sm={5}
             style={{
               display: "flex",
-              justifyContent: "space-between",
-              gap: "4%",
+              justifyContent: "center",
+              alignItems: "center",
             }}
           >
-            <Button
-              startIcon={<ThumbUpAltOutlinedIcon />}
-              variant="text"
-              sx={{ marginRight: 1 }}
+            <img
+              style={{ width: "21vw", height: "70vh", objectFit: "cover" }}
+              src={
+                product && product.images && product.images.length > 0
+                  ? `${ServerURL}/images/${product.images[0].image_name}`
+                  : null
+              }
+              alt={product ? product.product_name : "Product Image"}
+            />
+          </Grid>
+          <Grid
+            item
+            xs={7}
+            lg={7}
+            sm={7}
+            style={{
+              flex: 1,
+              padding: "5%",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
+              overflow: "inherit",
+              wordWrap: "break-word",
+              whiteSpace: "normal",
+            }}
+          >
+            <div>
+              <Typography variant="subtitle1" fontFamily="Futura Medium Italic">
+                {product.product_name}
+              </Typography>
+              <Typography variant="h5" fontFamily="Futura Medium Italic">
+                {product.product_description}
+              </Typography>
+              <Typography
+                variant="h6"
+                color="textSecondary"
+                fontFamily="Futura Light Italic"
+              >
+                ₹ {product.price}
+              </Typography>
+              <Typography
+                variant="body2"
+                color="textSecondary"
+                fontFamily="Futura Light Italic"
+              >
+                Inclusive of all taxes
+              </Typography>
+            </div>
+            <Divider sx={{ my: 2, marginTop: "35%" }} />
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                gap: "4%",
+              }}
             >
-              Love This!
-            </Button>
-            <Button
-              startIcon={<ThumbDownAltOutlinedIcon />}
-              variant="text"
-              sx={{ marginRight: 1 }}
-            >
-              Not For Me
-            </Button>
-            <Button variant="text" startIcon={<ShareOutlinedIcon />}></Button>
-          </div>
-        </div>
+              <Button
+                onClick={() => handleShare(product)}
+                variant="text"
+                startIcon={<ShareOutlinedIcon />}
+              >
+                Share
+              </Button>
+            </div>
+
+            <div>
+              <ShareDialog
+                open={showShareDialog}
+                setOpen={setShowShareDialog}
+                shareUrl={
+                  currentProduct
+                    ? `${ServerURL}/product/${currentProduct.id}`
+                    : ""
+                }
+                quote={
+                  currentProduct
+                    ? `Check out this amazing product: ${currentProduct.product_name}`
+                    : ""
+                }
+                hashtag="#TrendingProduct"
+              />
+            </div>
+          </Grid>
+        </Grid>
       </DialogContent>
     </Dialog>
   );

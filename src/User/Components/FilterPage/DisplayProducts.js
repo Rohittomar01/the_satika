@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Card from "@mui/material/Card";
 import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
@@ -14,18 +14,37 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setWishListProduct } from "../../../Store/Slices/Products";
 import { postData, ServerURL } from "../../../Services/ServerServices";
+import { getData } from "../../../Services/ServerServices";
+import filter from "../../../Store/Slices/filter";
+import ShareDialog from "../../Common_Components/ShareDialog";
 
 export default function DisplayProducts() {
   const navigate = useNavigate();
   const products = useSelector((state) => state.products.products);
-  const dispatch = useDispatch();
+  const filters = useSelector((state) => state.filters || {}); // Safe access
 
+  const {
+    colors: reduxColors = [],
+    brands: reduxBrands = [],
+    crafts: reduxCrafts = [],
+    fabrics: reduxFabrics = [],
+    origins: reduxOrigins = [],
+    dropdownValue: reduxDropDownValue = 1,
+    priceRange: reduxPriceRange = [0, 10000],
+  } = filters;
+  console.log("filter ", filters);
+  const dispatch = useDispatch();
+  const [productData, setProductData] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([]);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [currentProduct, setCurrentProduct] = useState([]); // For storing the product details for sharing
+  const [showShareDialog, setShowShareDialog] = useState(false);
 
   const handleNavigate = (product) => {
     navigate("/productdetails", { state: { product: product } });
   };
+ 
 
   const handleSubmit = async (data) => {
     const body = {
@@ -50,15 +69,104 @@ export default function DisplayProducts() {
     }
   };
 
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
+  useEffect(() => {
+    filterProducts();
+  }, [
+    productData,
+    reduxColors,
+    reduxBrands,
+    reduxCrafts,
+    reduxFabrics,
+    reduxOrigins,
+    reduxPriceRange,
+    reduxDropDownValue,
+  ]);
+
+  const fetchProducts = async () => {
+    try {
+      const response = await getData("product/fetch-AllProductsWithImage");
+      setProductData(response.data);
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    }
+  };
+
+  const handleShare = (product) => {
+    setCurrentProduct(product);
+    setShowShareDialog(true);
+  };
+  const filterProducts = () => {
+    const filtered = productData.filter((product) => {
+      const matchesColor =
+        reduxColors.length === 0 ||
+        reduxColors
+          .map((color) => color.toLowerCase())
+          .includes(product.color.toLowerCase());
+
+      const matchesBrand =
+        reduxBrands.length === 0 ||
+        reduxBrands
+          .map((brand) => brand.toLowerCase())
+          .includes(product.brand.toLowerCase());
+
+      const matchesCraft =
+        reduxCrafts.length === 0 ||
+        reduxCrafts
+          .map((craft) => craft.toLowerCase())
+          .includes(product.craft.toLowerCase());
+
+      const matchesFabric =
+        reduxFabrics.length === 0 ||
+        reduxFabrics
+          .map((fabric) => fabric.toLowerCase())
+          .includes(product.fabric.toLowerCase());
+
+      const matchesOrigin =
+        reduxOrigins.length === 0 ||
+        reduxOrigins
+          .map((origin) => origin.toLowerCase())
+          .includes(product.origin.toLowerCase());
+
+      // if (reduxDropDownValue === 1) {
+      //   var matchesDropdown_NewArrival =
+      //     !reduxDropDownValue ||
+      //     parseInt(product.new_arrival) === parseInt(reduxDropDownValue);
+      // } else if (reduxDropDownValue === 2) {
+      //   var matchesDropdown_TopSelling =
+      //     !reduxDropDownValue || product.top_selling === reduxDropDownValue;
+      // }
+
+      const matchesPrice =
+        parseInt(product.price) >= reduxPriceRange[0] &&
+        parseInt(product.price) <= reduxPriceRange[1];
+
+      return (
+        matchesColor &&
+        matchesBrand &&
+        matchesCraft &&
+        matchesFabric &&
+        matchesOrigin
+        // matchesDropdown_NewArrival &&
+        // matchesDropdown_TopSelling
+      );
+    });
+
+    setFilteredProducts(filtered);
+  };
+
   const handleCloseSnackbar = () => {
     setSnackbarOpen(false);
   };
 
   const renderProductCard = () => {
-    return products.map((product) => {
+    return filteredProducts.map((product) => {
       return (
         <div className="products-content-container" key={product.id}>
-          <Card sx={{ maxWidth: 240 }}>
+          <Card sx={{ maxWidth: 200 }}>
             <CardMedia
               className="product-media"
               component="img"
@@ -85,7 +193,10 @@ export default function DisplayProducts() {
                 >
                   <FavoriteBorderIcon />
                 </IconButton>
-                <IconButton aria-label="share">
+                <IconButton
+                  onClick={() => handleShare(product)}
+                  aria-label="share"
+                >
                   <ShareIcon />
                 </IconButton>
               </Box>
@@ -119,6 +230,19 @@ export default function DisplayProducts() {
         autoHideDuration={5000}
         onClose={handleCloseSnackbar}
         message={snackbarMessage}
+      />
+        <ShareDialog
+        open={showShareDialog}
+        setOpen={setShowShareDialog}
+        shareUrl={
+          currentProduct ? `${ServerURL}/product/${currentProduct.id}` : ""
+        }
+        quote={
+          currentProduct
+            ? `Check out this amazing product: ${currentProduct.product_name}`
+            : ""
+        }
+        hashtag="#TrendingProduct"
       />
     </div>
   );

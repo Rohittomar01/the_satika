@@ -17,7 +17,6 @@ export default function NavBar_Drawer(props) {
     console.log(newOpen);
   };
 
-  console.log(props.open);
 
   const DrawerList = (
     <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>
