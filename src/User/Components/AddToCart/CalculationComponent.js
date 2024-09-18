@@ -13,7 +13,7 @@ const PriceDetails = ({ cartData }) => {
     let subTotal = 0;
     let discount = 0;
 
-    cartData.forEach(item => {
+    cartData.forEach((item) => {
       subTotal += item.price;
       discount += item.discount ? parseFloat(item.discount) : 0;
     });

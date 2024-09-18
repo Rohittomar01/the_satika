@@ -32,7 +32,7 @@ export default function DisplayProducts() {
     dropdownValue: reduxDropDownValue = 1,
     priceRange: reduxPriceRange = [0, 10000],
   } = filters;
-  console.log("filter ", filters);
+  // console.log("filter ", filters);
   const dispatch = useDispatch();
   const [productData, setProductData] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);

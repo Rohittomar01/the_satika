@@ -57,7 +57,11 @@ export default function AddToCart() {
         </Box>
       </Grid>
       <Grid item xs={8} sm={8} lg={8}>
-        <ProductCards cartData={cartData} fetchCartData={fetchCartData} userId={userId} />
+        <ProductCards
+          cartData={cartData}
+          fetchCartData={fetchCartData}
+          userId={userId}
+        />
       </Grid>
       <Grid item xs={4} sm={4} lg={4}>
         <CalculationComponent cartData={cartData} />
