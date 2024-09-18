@@ -7,6 +7,7 @@ import {
   Avatar,
   Button,
   FormHelperText,
+  IconButton,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
@@ -15,8 +16,11 @@ import { postData } from "../../Services/ServerServices";
 import "../StyleSheets/Category.css";
 import { useState } from "react";
 import Sweet_Alert from "../../Common_Components/alerts/Sweet_Alert";
+import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
+import { useNavigate } from "react-router-dom";
 
 export default function Category() {
+  const navigate = useNavigate();
   const [file, setFile] = useState(null);
   const {
     register,
@@ -79,12 +83,28 @@ export default function Category() {
     <Box component={"div"} className="category_mainContainer">
       <Paper elevation={4} id="paper">
         <Grid container>
-          <Grid item xs={12} sm={12} md={12} lg={12}>
+          <Grid item xs={6} sm={6} md={6} lg={6}>
             <Typography id="category_mainHeading" variant="h5">
               Category
             </Typography>
           </Grid>
-          <Grid item xs={12} sm={12} md={12} lg={12}>
+          <Grid
+            style={{ display: "flex", justifyContent: "end" }}
+            item
+            xs={6}
+            sm={6}
+            md={6}
+            lg={6}
+          >
+            <IconButton
+              onClick={() => navigate("/dashboard/Categories_List")}
+              aria-label="list"
+            >
+              <FormatListBulletedIcon />
+            </IconButton>
+          </Grid>
+          
+          <Grid item xs={12} sm={12} md={12} lg={12} sx={{mt:3}}>
             <form onSubmit={handleSubmit(onSubmit)}>
               <Grid container spacing={2}>
                 <Grid item xs={12} sm={6} md={6} lg={6}>

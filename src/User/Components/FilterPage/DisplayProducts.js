@@ -44,7 +44,6 @@ export default function DisplayProducts() {
   const handleNavigate = (product) => {
     navigate("/productdetails", { state: { product: product } });
   };
- 
 
   const handleSubmit = async (data) => {
     const body = {
@@ -166,11 +165,11 @@ export default function DisplayProducts() {
     return filteredProducts.map((product) => {
       return (
         <div className="products-content-container" key={product.id}>
-          <Card sx={{ maxWidth: 200 }}>
+          <Card sx={{ maxWidth: 240, objectFit: "fit" }}>
             <CardMedia
               className="product-media"
               component="img"
-              image={`${ServerURL}/images/${product.images[0].image_name}`}
+              image={`${ServerURL}/images/${product.image_name}`}
               alt={product.product_name}
             />
             <CardContent>
@@ -224,25 +223,35 @@ export default function DisplayProducts() {
         alignItems: "center",
       }}
     >
-      <div className="sub_container">{renderProductCard()}</div>
+      <div
+        className="sub_container"
+        style={{
+          maxHeight: "400px", // Adjust this height based on your layout needs
+          overflowY: "scroll", // Enable vertical scrolling
+          scrollbarWidth: "none", // For Firefox to hide scrollbars
+          msOverflowStyle: "none", // For Internet Explorer and Edge
+        }}
+      >
+        <div className="sub_container">{renderProductCard()}</div>
+        <ShareDialog
+          open={showShareDialog}
+          setOpen={setShowShareDialog}
+          shareUrl={
+            currentProduct ? `${ServerURL}/product/${currentProduct.id}` : ""
+          }
+          quote={
+            currentProduct
+              ? `Check out this amazing product: ${currentProduct.product_name}`
+              : ""
+          }
+          hashtag="#TrendingProduct"
+        />
+      </div>
       <Snackbar
         open={snackbarOpen}
         autoHideDuration={5000}
         onClose={handleCloseSnackbar}
         message={snackbarMessage}
-      />
-        <ShareDialog
-        open={showShareDialog}
-        setOpen={setShowShareDialog}
-        shareUrl={
-          currentProduct ? `${ServerURL}/product/${currentProduct.id}` : ""
-        }
-        quote={
-          currentProduct
-            ? `Check out this amazing product: ${currentProduct.product_name}`
-            : ""
-        }
-        hashtag="#TrendingProduct"
       />
     </div>
   );

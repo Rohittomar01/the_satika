@@ -83,16 +83,16 @@ export default function FilterPage() {
             <div role="presentation" onClick={handleClick}>
               <Breadcrumbs aria-label="breadcrumb">
                 <Link underline="hover" color="inherit" href="/">
-                  MUI
+                  Category
                 </Link>
                 <Link
                   underline="hover"
                   color="inherit"
                   href="/material-ui/getting-started/installation/"
                 >
-                  Core
+                  Trending
                 </Link>
-                <Typography color="text.primary">Breadcrumbs</Typography>
+                <Typography color="text.primary">Sarees</Typography>
               </Breadcrumbs>
             </div>
           </Grid> */}

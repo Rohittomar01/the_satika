@@ -79,14 +79,14 @@
     0 4px 8px rgba(0, 0, 0, 0.2);
   transition: box-shadow 0.3s ease;
   width: 3.6rem;
-  height: 3rem;
+  height: 3.3rem;
   z-index: 1;
   border-radius: 50%;
   color: var(--text-body);
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: lightgray;
+  background-color: rgb(0, 0, 0);
   color: #fff;
 }
 
@@ -130,7 +130,7 @@
   left: 5%;
   right: 0;
   border-radius: 2px 2px 10px 10px;
-  width: 16.4vw;
+  width: 14.2vw;
   padding: 1rem;
   background: rgba(0, 0, 0, 0.7);
   color: white;

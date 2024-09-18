@@ -179,6 +179,7 @@ const ProductsList = () => {
         </Typography>
         <Tooltip title={hover ? "Add New Product" : ""} arrow>
         <IconButton
+        onMouseEnter={()=>setHover(true)}
             onClick={() => navigate("/dashboard/product")}
             aria-label="add"
           >

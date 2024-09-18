@@ -45,42 +45,58 @@ const Carousel = (props) => {
 
   return (
     <section className="embla">
-      <div className="embla__viewport" ref={emblaRef}>
-        <div className="embla__container">
-          {banners.map((data) => (
-            <div className="embla__slide" key={data.category_id}>
-              <img
-                style={{
-                  height: "100vh",
-                  width: "100vw",
-                  objectFit:"fill",
-                }}
-                src={`${ServerURL}/images/${data.image_name}`}
-                alt={`Slide ${data.category_id}`}
+      {loading ? (
+        <CircularProgress />
+      ) : banners.length > 0 ? (
+        <>
+          <div className="embla__viewport" ref={emblaRef}>
+            <div className="embla__container">
+              {banners.map((data) => (
+                <div className="embla__slide" key={data.category_id}>
+                  <img
+                    style={{
+                      height: "100%",
+                      width: "100%",
+                      objectFit: "cover",
+                    }}
+                    src={`${ServerURL}/images/${data.image_name}`}
+                    alt={`Slide ${data.category_id}`}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="embla__controls">
+            <div className="embla__buttons">
+              <PrevButton
+                onClick={onPrevButtonClick}
+                disabled={prevBtnDisabled}
+              />
+              <NextButton
+                onClick={onNextButtonClick}
+                disabled={nextBtnDisabled}
               />
             </div>
-          ))}
-        </div>
-      </div>
 
-      <div className="embla__controls">
-        <div className="embla__buttons">
-          <PrevButton onClick={onPrevButtonClick} disabled={prevBtnDisabled} />
-          <NextButton onClick={onNextButtonClick} disabled={nextBtnDisabled} />
+            {/* <div className="embla__dots">
+              {scrollSnaps.map((_, index) => (
+                <DotButton
+                  key={index}
+                  onClick={() => onDotButtonClick(index)}
+                  className={"embla__dot".concat(
+                    index === selectedIndex ? " embla__dot--selected" : ""
+                  )}
+                />
+              ))}
+            </div> */}
+          </div>
+        </>
+      ) : (
+        <div className="no-banners">
+          <p>There are no banners available.</p>
         </div>
-
-        {/* <div className="embla__dots">
-          {scrollSnaps.map((_, index) => (
-            <DotButton
-              key={index}
-              onClick={() => onDotButtonClick(index)}
-              className={"embla__dot".concat(
-                index === selectedIndex ? " embla__dot--selected" : ""
-              )}
-            />
-          ))}
-        </div> */}
-      </div>
+      )}
     </section>
   );
 };

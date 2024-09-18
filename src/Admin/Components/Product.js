@@ -130,8 +130,8 @@ export default function Product() {
 
           if (fileResponse && fileResponse.message) {
             await Sweet_Alert({ title: fileResponse.message, icon: "success" });
-            // reset();
-            // setFile(null);
+            reset();
+            setFile(null);
           } else {
             await Sweet_Alert({
               title:
