@@ -3,10 +3,11 @@
   flex-direction: row;
   flex-wrap: wrap;
   width: 100%;
-  height: 78vh;
+  height: 84vh;
   align-items: center;
   justify-content: center;
-  overflow: scroll;
+  overflow-x: hidden;
+  overflow-y: scroll;
 }
 .products-content-container {
   justify-content: center;
@@ -39,3 +40,83 @@
   height: 30px;
   font-size:10px;
 }
+
+.card-body {
+  overflow: hidden;
+  position: relative;
+}
+
+.add-to-cart-button {
+  opacity: 0;
+  visibility: visible;
+  position: absolute;
+  width: 100%; 
+  background-color: #000;
+  color: white;
+  text-align: center;
+  padding: 10px 0;
+  border-radius: 0;
+  font-size: 1em;
+}
+#iconButtonDiv {
+  display: "flex";
+  flex-direction: row;
+  align-items: center;
+  justify-content: center; 
+  border-radius: 200px;
+  background: rgba(255, 255, 255, 0.833);
+  padding: 25%;
+  height: 25px;
+ cursor: pointer;
+}
+ #iconButtonSpan {
+  display: "none";
+ }
+
+
+
+.card-body:hover .add-to-cart-button {
+  background: #000;
+  opacity: 1;
+  transition: transform 0.3s ease;
+  visibility: visible;
+  transform: translateY(-100);
+}
+
+/* Card Image */
+.card-media {
+  object-fit: cover;
+  height: 60vh;
+  transition: transform 0.3s ease;
+}
+
+/* Overlay favorite and share icons */
+.card-body .MuiBox-root {
+  z-index: 10; /* Ensure these icons stay on top */
+}
+
+/* Product Content (Price, Name, etc.) */
+.card-body .MuiCardContent-root {
+  text-align: center;
+  z-index: 10; /* Ensure the content stays visible */
+}
+
+/* Product Content Container */
+.product-content-container {
+  padding: 1%;
+  position: relative;
+}
+
+/* Responsive media query adjustments */
+@media (max-width: 768px) {
+  .card-media {
+    height: 45vh; /* Adjust card media height for smaller screens */
+  }
+}
+
+@media (max-width: 468px) {
+  .card-media {
+    height: 35vh; /* Adjust card media height for mobile */
+  }
+}
+

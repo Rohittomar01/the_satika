@@ -10,6 +10,11 @@ import StarIcon from "@mui/icons-material/Star";
 import { Typography, Button } from "@mui/material";
 import { getData } from "../../../Services/ServerServices";
 import "../../StyleSheets/Testimonials.css";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 export default function Testimonials() {
   const [reviews, setReviews] = useState([]);
@@ -41,10 +46,40 @@ export default function Testimonials() {
     }
   };
 
-  console.log("testimondata",reviews)
   useEffect(() => {
     fetchReviews();
   }, []);
+
+  // Use GSAP to animate review cards
+  useGSAP(() => {
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: ".review-superContainer",
+        start: "top 80%",
+        end: "bottom",
+        toggleActions: "restart reverse restart reverse",
+        fastScrollEnd: true,
+      },
+    });
+
+    tl.from(".review-card", {
+      opacity: 0,
+      duration: 0.8,
+      stagger: 0.1,
+    });
+
+    tl.from(
+      ".review-card .review-content,.review-rating",
+      {
+        x: () => gsap.utils.random(-100, 200),
+        y: () => gsap.utils.random(-100, 200),
+        opacity: 0,
+        duration: 0.5,
+        stagger: 0.2,
+      },
+      "-=0.6"
+    );
+  }, [reviews]);
 
   const renderStars = (rating) => {
     return [...Array(rating)].map((_, index) => (

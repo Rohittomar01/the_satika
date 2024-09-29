@@ -23,6 +23,8 @@ import { Badge } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import "../StyleSheets/Common_Components/NavBar.css";
 import { getData } from "../../Services/ServerServices";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
   "& .MuiBadge-badge": {
@@ -34,13 +36,21 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
 }));
 
 export default function NavBar() {
-  const product = useSelector((state) => state.products.addToCartProducts);
-  // console.log("navv p", product);
+  const totalItems = useSelector((state) => state.addtocart.totalItems);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [auth, setAuth] = React.useState(true);
   const [open, setOpen] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
+
+  useGSAP(() => {
+    gsap.from("#companyName_container span:nth-child(2)", {
+      opacity: 0,
+      y: 10,
+      delay: 1.1,
+      duration: 0.5,
+    });
+  });
 
   const fetchCartData = async () => {
     const user_id = 1;
@@ -69,6 +79,16 @@ export default function NavBar() {
     window.scrollTo(0, 0);
     fetchCartData();
   }, []);
+
+  useGSAP(() => {
+    gsap.from("#drawer", {
+      x: 10,
+      opacity: 0,
+      duration: 2,
+      stagger: 0.3,
+      delay: 1,
+    });
+  }, [open]);
 
   return (
     <Box component={"div"} sx={{ flexGrow: 1 }}>
@@ -120,8 +140,9 @@ export default function NavBar() {
             <Grid className="company_name_grid" item xs={9} sm={9} lg={9}>
               <div id="companyName_container">
                 <span component="div" className="companyName">
-                  The Satika
+                  The
                 </span>
+                <span className="companyName">Satika</span>
               </div>
             </Grid>
             <Grid className="actions_buttons_grids" item xs={2} sm={2} lg={2}>
@@ -137,7 +158,7 @@ export default function NavBar() {
                   onClick={() => navigate("/addtocart")}
                   aria-label="cart"
                 >
-                  <StyledBadge badgeContent={product.length} color="secondary">
+                  <StyledBadge badgeContent={totalItems} color="secondary">
                     <ShoppingCartIcon />
                   </StyledBadge>
                 </IconButton>
@@ -177,7 +198,9 @@ export default function NavBar() {
               </div>
             </Grid>
           </Grid>
-          <NavBar_Drawer open={open} setOpen={setOpen} />
+          <div id="drawer" style={{ overflow: "hidden" }}>
+            <NavBar_Drawer open={open} setOpen={setOpen} />
+          </div>
         </Toolbar>
       </AppBar>
     </Box>

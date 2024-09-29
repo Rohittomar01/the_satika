@@ -64,14 +64,12 @@ export default function FilterPage() {
   }, []);
 
   return (
-    <div>
+    <div style={{ height: "120vh" }}>
       <Grid container className="main_grid">
         <Grid item xs={12} xl={12} sm={12}>
           <NavBar />
         </Grid>
-        {/* <Grid item xs={12} xl={12} sm={12}>
-          <BreadCrumps />
-        </Grid> */}
+
         <Grid
           className="grid_container02"
           container
@@ -79,23 +77,6 @@ export default function FilterPage() {
           xl={11.5}
           sm={11.5}
         >
-          {/* <Grid item xs={12} xl={12} sm={12}>
-            <div role="presentation" onClick={handleClick}>
-              <Breadcrumbs aria-label="breadcrumb">
-                <Link underline="hover" color="inherit" href="/">
-                  Category
-                </Link>
-                <Link
-                  underline="hover"
-                  color="inherit"
-                  href="/material-ui/getting-started/installation/"
-                >
-                  Trending
-                </Link>
-                <Typography color="text.primary">Sarees</Typography>
-              </Breadcrumbs>
-            </div>
-          </Grid> */}
           <Grid item xs={4} xl={4} sm={4}>
             <div className="filter_actions">
               <div>
@@ -128,6 +109,7 @@ export default function FilterPage() {
                 control={control}
                 render={({ field }) => (
                   <Select
+                    defaultValue={1}
                     labelId="demo-select-small-label"
                     id="demo-select-small"
                     value={field.value}
@@ -137,7 +119,7 @@ export default function FilterPage() {
                       dispatch(setDropdownValue(e.target.value));
                     }}
                   >
-                    <MenuItem value="">
+                    <MenuItem id="menuItem" value={0}>
                       <em>None</em>
                     </MenuItem>
                     <MenuItem id="menuItem" value={1}>

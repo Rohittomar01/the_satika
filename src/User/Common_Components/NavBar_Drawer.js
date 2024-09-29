@@ -10,6 +10,8 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap-trial";
 
 export default function NavBar_Drawer(props) {
   const toggleDrawer = (newOpen) => () => {
@@ -17,12 +19,22 @@ export default function NavBar_Drawer(props) {
     console.log(newOpen);
   };
 
+  useGSAP(() => {
+    const tl = gsap.timeline();
+    tl.from("#drawerBox", {
+      x: 10,
+      opacity: 0,
+      duration: 0.5,
+      stagger: 0.1,
+      delay: 0.2,
+    });
+  }, [props.open]);
 
   const DrawerList = (
     <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>
       <List>
         {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
-          <ListItem key={text} disablePadding>
+          <ListItem id="drawerBox" key={text} disablePadding>
             <ListItemButton>
               <ListItemIcon>
                 {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
@@ -35,7 +47,7 @@ export default function NavBar_Drawer(props) {
       <Divider />
       <List>
         {["All mail", "Trash", "Spam"].map((text, index) => (
-          <ListItem key={text} disablePadding>
+          <ListItem id="drawerBox" key={text} disablePadding>
             <ListItemButton>
               <ListItemIcon>
                 {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
@@ -50,7 +62,25 @@ export default function NavBar_Drawer(props) {
 
   return (
     <div>
-      <Drawer open={props.open} onClose={toggleDrawer(false)}>
+      <Drawer
+        ModalProps={{
+          keepMounted: true,
+        }}
+        PaperProps={{
+          sx: {
+            borderTopRightRadius: "24px",
+            // borderBottomRightRadius: "24px",
+            paddingTop: "2%",
+            display: {
+              display: "flex",
+              alignItems: "center",
+            },
+          },
+        }}
+        transitionDuration={500}
+        open={props.open}
+        onClose={toggleDrawer(false)}
+      >
         {DrawerList}
       </Drawer>
     </div>

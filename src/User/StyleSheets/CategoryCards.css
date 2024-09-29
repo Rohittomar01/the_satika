@@ -21,7 +21,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 1rem;
+  padding: 0.4rem;
+  cursor: pointer;
   position: relative;
 }
 
@@ -36,7 +37,6 @@
 }
 
 .category-subContainer {
-  backface-visibility: hidden;
   display: flex;
   gap: 2vw;
   touch-action: pan-x pinch-zoom;
@@ -45,11 +45,10 @@
   flex-direction: row;
 }
 
-.card-heading {
-  font-family: sans-serif;
+#card-heading {
   font-size: 1.5rem;
   text-align: center;
-  margin-top: 15%;
+  margin-top: 5%;
 }
 
 .carousel-control {
@@ -91,8 +90,8 @@
 }
 
 .image-container {
-  width: 15rem;
-  height: 21rem;
+  width: 17rem;
+  height: 25rem;
   overflow: hidden;
   border-radius: 4%;
   position: relative;
@@ -101,8 +100,8 @@
 }
 
 .image-container img {
-  width: 100%;
-  height: 100%;
+  width: 110%;
+  height: 110%;
   object-fit: cover;
 }
 
@@ -118,10 +117,25 @@
   white-space: normal;
 }
 
+#button_Container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 125%;
+}
 #Explore_Button {
+  border: none;
+  cursor: pointer;
+  padding: 2%;
+  width: 25%;
+  text-align: end;
+  border-bottom: 2px solid white;
   color: #fff;
-  border-color: #fff;
-  font-family: sans-serif;
+  transition: all 0.3s ease-out;
+  font-family: "Futura light Italic", sans-serif;
+}
+#Explore_Button:hover {
+  width: 100%;
 }
 
 .card-content {
@@ -132,19 +146,30 @@
   border-radius: 2px 2px 10px 10px;
   width: 14.2vw;
   padding: 1rem;
-  background: rgba(0, 0, 0, 0.7);
   color: white;
   transform: translateY(100%);
   transition: transform 0.3s ease;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  /* justify-content: center; */
+  /* align-items: center; */
   flex-direction: column;
   opacity: 0;
 }
 
 .content-container:hover .image-container {
+  position: relative;
+}
+
+.content-container:hover .image-container::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.952), rgba(0, 0, 0, 0));
   filter: blur(4px);
+  z-index: 1;
 }
 
 .content-container:hover .card-content {

@@ -15,3 +15,16 @@
   gap: 2%;
   margin-top: 2%
 }
+.totalcartItemsGrid{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#totalcartItemsBox{
+  margin-top: 2%;
+  width: 90%;
+}
+#totalcartItems{
+  font-family: "Futura Bold Italic";
+}
+

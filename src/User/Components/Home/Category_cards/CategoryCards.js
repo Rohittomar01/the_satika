@@ -1,4 +1,4 @@
-import React, { useState, useEffect ,useCallback} from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import "../../../StyleSheets/CategoryCards.css";
 import useEmblaCarousel from "embla-carousel-react";
 import { Button } from "@mui/material";
@@ -9,6 +9,11 @@ import {
   usePrevNextButtons,
 } from "./CarouselArrowsButtons";
 import { useNavigate } from "react-router-dom";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap-trial/ScrollTrigger";
+
+gsap.registerPlugin({ ScrollTrigger,useGSAP});
 
 export default function CategoryCards() {
   const navigate = useNavigate();
@@ -60,6 +65,24 @@ export default function CategoryCards() {
     fetchCategories();
   }, []);
 
+  useGSAP(() => {
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: ".category-superContainer",
+        start: "top 60%",
+        end: "bottom",
+        toggleActions: "restart reverse restart reverse",
+        fastScrollEnd: true,
+      },
+    });
+    tl.from(".content-container", {
+      opacity: 0,
+      y: 30,
+      stagger: 0.2,
+      duration: 1,
+    });
+  }, [category]);
+
   const renderCard = () => {
     const reversedCategories = [...category].reverse();
     return reversedCategories.map((cards) => (
@@ -76,16 +99,18 @@ export default function CategoryCards() {
             src={`${ServerURL}/images/${cards.category_pic}`}
           />
         </div>
-        <h3 id="card-heading">{cards.category_name}</h3>
+        <span id="card-heading">{cards.category_name}</span>
         <div className="card-content">
           <p className="card-detail">{cards.category_description}</p>
-          <Button
-            onClick={() => navigate("/filter")}
-            variant="outlined"
-            id="Explore_Button"
-          >
-            Explore
-          </Button>
+          <div id="button_Container">
+            <span
+              onClick={() => navigate("/filter")}
+              variant="outlined"
+              id="Explore_Button"
+            >
+              Explore
+            </span>
+          </div>
         </div>
       </div>
     ));
@@ -96,19 +121,12 @@ export default function CategoryCards() {
       <div className="carousel-control">
         <h1 className="categoryHeading">Category</h1>
         <div className="control__buttonsContainer">
-          {/* Conditionally render previous and next buttons */}
-          {canScrollPrev && (
-            <PrevButton
-              onClick={onPrevButtonClick}
-              disabled={prevBtnDisabled}
-            />
-          )}
-          {canScrollNext && (
-            <NextButton
-              onClick={onNextButtonClick}
-              disabled={nextBtnDisabled}
-            />
-          )}
+          {/* {canScrollPrev && ( */}
+          <PrevButton onClick={onPrevButtonClick} disabled={prevBtnDisabled} />
+          {/* )} */}
+          {/* {canScrollNext && ( */}
+          <NextButton onClick={onNextButtonClick} disabled={nextBtnDisabled} />
+          {/* )} */}
         </div>
       </div>
 

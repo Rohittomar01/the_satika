@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Grid, Box } from "@mui/material";
+import { Grid, Box, Typography } from "@mui/material";
 import "../StyleSheets/AddToCart/AddToCart.css";
 import NavBar from "../Common_Components/NavBar";
 import StepperComponent from "../Components/AddToCart/Stepper";
@@ -9,9 +9,10 @@ import { getData } from "../../Services/ServerServices";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import EmptyCart from "../Components/AddToCart/EmptyCart";
 
 export default function AddToCart() {
-  const product = useSelector((state) => state.products.addToCartProducts);
+  const cartItems = useSelector((state) => state.addtocart.products);
   const navigate = useNavigate();
   const [cartData, setCartData] = useState([]);
   const userId = 1;
@@ -19,7 +20,7 @@ export default function AddToCart() {
   useEffect(() => {
     window.scrollTo(0, 0);
     fetchCartData();
-  }, [product]);
+  }, [cartItems]);
 
   const fetchCartData = async () => {
     const user_id = 1;
@@ -27,24 +28,15 @@ export default function AddToCart() {
       const response = await getData(
         `addtocart/fetchCart_Data?user_id=${user_id}`
       );
-      if (response.data.length === 0) {
-        Swal.fire({
-          title: "Your cart is empty!",
-          text: "Would you like to browse products and add items to your cart?",
-          icon: "info",
-          confirmButtonText: "Go to Home Page",
-        }).then((result) => {
-          if (result.isConfirmed) {
-            navigate("/");
-          }
-        });
-      } else {
-        setCartData(response.data);
-      }
+      setCartData(response.data);
     } catch (error) {
       console.error("Error fetching cart data:", error);
     }
   };
+
+  if (cartItems.length === 0) {
+    return <EmptyCart />;
+  }
 
   return (
     <Grid container>
@@ -54,6 +46,13 @@ export default function AddToCart() {
       <Grid className="stepper_container" item xs={12} sm={12} lg={12}>
         <Box className="stepper_container_Box" component={"div"}>
           <StepperComponent />
+        </Box>
+      </Grid>
+      <Grid className="totalcartItemsGrid" item xs={12} sm={12} lg={12}>
+        <Box id="totalcartItemsBox">
+          <Typography id="totalcartItems">
+            {cartItems.length === 0 ? "" : `Items:${cartItems.length}`}
+          </Typography>
         </Box>
       </Grid>
       <Grid item xs={8} sm={8} lg={8}>

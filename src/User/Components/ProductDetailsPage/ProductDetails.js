@@ -15,7 +15,8 @@ import {
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { useDispatch } from "react-redux";
-import { setWishListProduct, addToCart } from "../../../Store/Slices/Products";
+import { addToCart } from "../../../Store/Slices/addToCart";
+import { setWishListProduct } from "../../../Store/Slices/Products";
 import { postData } from "../../../Services/ServerServices"; // Ensure this is correctly implemented
 import "../../StyleSheets/ProductDetailsPage/ProductDetails.css";
 
@@ -26,28 +27,34 @@ const ProductDetail = ({ product }) => {
   const [addFavourite, setAddFavourite] = useState(false);
 
   const handleAddToCart = async (product) => {
+    const quantity = 1;
     const body = {
-      user_id: 1,
-      product_id: product.product_id,
-      added_at: new Date(),
+      ...product,
+      quantity,
     };
-    try {
-      const response = await postData("addtocart/submitCart_Data", body);
-      if (response.status === "success") {
-        dispatch(addToCart(product));
-        setSnackbarMessage(response.message);
-        setSnackbarOpen(true);
-        console.log("Product added to cart successfully:", response);
-      } else {
-        setSnackbarMessage(response.message);
-        setSnackbarOpen(true);
-        console.log("Product added to cart successfully:", response);
-      }
-    } catch (error) {
-      console.error("Failed to add product to cart:", error);
-      setSnackbarMessage("Failed to add product to cart.");
-      setSnackbarOpen(true);
-    }
+    dispatch(addToCart(body));
+    // const body = {
+    //   user_id: 1,
+    //   product_id: product.product_id,
+    //   added_at: new Date(),
+    // };
+    // try {
+    //   const response = await postData("addtocart/submitCart_Data", body);
+    //   if (response.status === "success") {
+    //     dispatch(addToCart(product));
+    //     setSnackbarMessage(response.message);
+    //     setSnackbarOpen(true);
+    //     console.log("Product added to cart successfully:", response);
+    //   } else {
+    //     setSnackbarMessage(response.message);
+    //     setSnackbarOpen(true);
+    //     console.log("Product added to cart successfully:", response);
+    //   }
+    // } catch (error) {
+    //   console.error("Failed to add product to cart:", error);
+    //   setSnackbarMessage("Failed to add product to cart.");
+    //   setSnackbarOpen(true);
+    // }
   };
 
   const handleSubmit = async (data) => {
@@ -119,7 +126,7 @@ const ProductDetail = ({ product }) => {
           aria-label="add to favorites"
         >
           {addFavourite ? (
-            <FavoriteIcon id="favourite_Icon" sx={{color:"red"}} />
+            <FavoriteIcon id="favourite_Icon" sx={{ color: "red" }} />
           ) : (
             <FavoriteBorderIcon id="favourite_Icon" />
           )}
@@ -129,7 +136,7 @@ const ProductDetail = ({ product }) => {
           id="add-to-bag-button"
           onClick={() => handleAddToCart(product)}
         >
-          ADD TO BAG
+          Add To Cart
         </Button>
       </Box>
 

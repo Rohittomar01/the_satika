@@ -4,10 +4,11 @@ import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import CardActions from "@mui/material/CardActions";
 import IconButton from "@mui/material/IconButton";
+import FavoriteIcon from "@mui/icons-material/Favorite";
 import Typography from "@mui/material/Typography";
 import ShareIcon from "@mui/icons-material/Share";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import { Box, Button, Snackbar } from "@mui/material";
+import { Box, Button, Paper, Snackbar } from "@mui/material";
 import "../../StyleSheets/FilterPage/DisplayProducts.css";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -17,11 +18,14 @@ import { postData, ServerURL } from "../../../Services/ServerServices";
 import { getData } from "../../../Services/ServerServices";
 import filter from "../../../Store/Slices/filter";
 import ShareDialog from "../../Common_Components/ShareDialog";
+import { useGSAP } from "@gsap/react";
+import { ScrollTrigger } from "gsap-trial/ScrollTrigger";
+import gsap from "gsap";
 
 export default function DisplayProducts() {
   const navigate = useNavigate();
   const products = useSelector((state) => state.products.products);
-  const filters = useSelector((state) => state.filters || {}); // Safe access
+  const filters = useSelector((state) => state.filters || {}); 
 
   const {
     colors: reduxColors = [],
@@ -30,10 +34,11 @@ export default function DisplayProducts() {
     fabrics: reduxFabrics = [],
     origins: reduxOrigins = [],
     dropdownValue: reduxDropDownValue = 1,
-    priceRange: reduxPriceRange = [0, 10000],
+    priceRange: reduxPriceRange = [0,1000000],
   } = filters;
   // console.log("filter ", filters);
   const dispatch = useDispatch();
+  const [wishlist, setWishlist] = React.useState({});
   const [productData, setProductData] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
@@ -54,6 +59,10 @@ export default function DisplayProducts() {
     try {
       const response = await postData("wishlist/submitWishlist_Data", body);
       if (response.status === "success") {
+        setWishlist((prevState) => ({
+          ...prevState,
+          [data.product_id]: !prevState[data.product_id],
+        }));
         dispatch(setWishListProduct(data));
         setSnackbarMessage("Added to wishlist");
         setSnackbarOpen(true);
@@ -130,87 +139,204 @@ export default function DisplayProducts() {
           .map((origin) => origin.toLowerCase())
           .includes(product.origin.toLowerCase());
 
-      // if (reduxDropDownValue === 1) {
-      //   var matchesDropdown_NewArrival =
-      //     !reduxDropDownValue ||
-      //     parseInt(product.new_arrival) === parseInt(reduxDropDownValue);
-      // } else if (reduxDropDownValue === 2) {
-      //   var matchesDropdown_TopSelling =
-      //     !reduxDropDownValue || product.top_selling === reduxDropDownValue;
-      // }
+      if (reduxDropDownValue === 1) {
+        var matchesDropdown_NewArrival =
+               parseInt(product.new_arrival) === parseInt(reduxDropDownValue);
+      } else if (reduxDropDownValue === 2) {
+        var matchesDropdown_TopSelling =
+           parseInt(product.top_selling) === parseInt(reduxDropDownValue);
+      }
+      else if (reduxDropDownValue === 0) {
+        var matchesDropdown_NewArrival = true
+      }
 
       const matchesPrice =
-        parseInt(product.price) >= reduxPriceRange[0] &&
+       parseInt(product.price) >= reduxPriceRange[0] &&
         parseInt(product.price) <= reduxPriceRange[1];
+      
+      console.log("matches dropdown ",reduxPriceRange)
 
       return (
         matchesColor &&
         matchesBrand &&
         matchesCraft &&
         matchesFabric &&
-        matchesOrigin
-        // matchesDropdown_NewArrival &&
-        // matchesDropdown_TopSelling
+        matchesOrigin &&
+        matchesPrice &&
+        matchesDropdown_NewArrival ||
+        matchesDropdown_TopSelling
       );
     });
 
     setFilteredProducts(filtered);
   };
 
+  if (filteredProducts.length === 0) {
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "400px", // Adjust height as needed
+        }}
+      >
+        <Typography
+          variant="h5"
+          color="text.secondary"
+          sx={{ fontFamily: "Futura Light Italic", textAlign: "center" }}
+        >
+          No results found
+        </Typography>
+      </div>
+    );
+  }
   const handleCloseSnackbar = () => {
     setSnackbarOpen(false);
   };
+  
+  // useGSAP(() => {
+  //   const tl = gsap.timeline({
+  //     scrollTrigger: {
+  //       trigger: ".product-superContainer",
+  //       start: "top 80%",
+  //       end: "bottom",
+  //       toggleActions: "restart reverse restart reverse",
+  //       fastScrollEnd: true,
+  //     },
+  //   });
+  //   tl.from(".product-content-container", {
+  //     opacity: 0,
+  //     stagger: 0.2,
+  //     duration: 1,
+  //   });
+  //   gsap.from("#iconButtonDiv", {
+  //     scrollTrigger: {
+  //       trigger: ".product-superContainer",
+  //       start: "top 80%",
+  //       end: "bottom",
+  //       toggleActions: "restart reverse restart reverse",
+  //       fastScrollEnd: true,
+  //     },
+  //     opacity: 0,
+  //     y: 10,
+  //     stagger: 0.2,
+  //     delay:0.2,
+  //     duration: 0.2,
+  //   })
+  // }, [filteredProducts]);
 
   const renderProductCard = () => {
     return filteredProducts.map((product) => {
       return (
-        <div className="products-content-container" key={product.id}>
-          <Card sx={{ maxWidth: 240, objectFit: "fit" }}>
-            <CardMedia
-              className="product-media"
-              component="img"
-              image={`${ServerURL}/images/${product.image_name}`}
-              alt={product.product_name}
-            />
-            <CardContent>
-              <Typography
-                id="card-description"
-                variant="body2"
-                color="text.secondary"
-              >
-                {product.product_description}
-              </Typography>
-              <Typography id="card-price" component={"h3"}>
-                Rs.{product.price}
-              </Typography>
-            </CardContent>
-            <CardActions className="card-action-container" disableSpacing>
-              <Box component={"div"}>
-                <IconButton
-                  onClick={() => handleSubmit(product)}
-                  aria-label="add to favorites"
-                >
-                  <FavoriteBorderIcon />
-                </IconButton>
-                <IconButton
-                  onClick={() => handleShare(product)}
-                  aria-label="share"
-                >
-                  <ShareIcon />
-                </IconButton>
-              </Box>
-              <Box>
-                <Button
-                  onClick={() => handleNavigate(product)}
-                  id="buy_now_button"
-                  variant="outlined"
-                >
-                  Buy Now
-                </Button>
-              </Box>
-            </CardActions>
-          </Card>
-        </div>
+        <div
+        // onMouseEnter={handleMouseEnter}
+        className="product-content-container"
+        key={product.id}
+      >
+        <Card
+          elevation={0}
+          className="card-body"
+          sx={{
+            maxWidth: 280,
+            minWidth: 250,
+            maxHeight: 600,
+            position: "relative",
+          }}
+        >
+          {/* Overlay favorite and view icons */}
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              position: "absolute",
+              top: "48vh",
+              right: "11vw",
+              gap: 2,
+            }}
+          >
+            <div id="iconButtonDiv"  onClick={() => handleSubmit(product)}>
+             
+              {wishlist[product.product_id] ? (
+                <FavoriteIcon sx={{ color: "red" }} />
+              ) : (
+                <FavoriteBorderIcon />
+            )} 
+             
+              <span style={{display:"none"}}>Favorite</span>
+            </div>
+            <div id="iconButtonDiv"   onClick={() => handleShare(product)}>
+              {/* <IconButton
+                onClick={() => handleShare(product)}
+                aria-label="share"
+                sx={{
+                  bgcolor: "rgba(255, 255, 255, 0.833)",
+                  padding: "12%",
+                  color: "grey",
+                  // borderRadius: "50%",
+                  marginTop: "2%",
+                }}
+              > */}
+                <ShareIcon />
+              {/* </IconButton> */}
+            </div>
+          </Box>
+
+          {/* Image */}
+          <CardMedia
+            className="card-media"
+            component="img"
+            sx={{ objectFit: "cover", height: "62vh", width: "30vw" }}
+            image={`${ServerURL}/images/${product.images[0].image_name}`}
+            alt={product.product_name || "No product name available"} // Fallback alt text
+          />
+
+          {/* Add To Cart Button */}
+          <Button
+            onClick={() =>
+              navigate("/productdetails", { state: { product } })
+            }
+            variant="contained"
+            className="add-to-cart-button"
+            sx={{
+              backgroundColor: "#F76C6C",
+              color: "white",
+              width: "100%",
+              borderRadius: 0,
+              textTransform: "none",
+              fontSize: "1em",
+              padding: "10px 0",
+              position: "absolute",
+              bottom: 0,
+              left: 0,
+              transition: "opacity 0.3s ease",
+            }}
+          >
+            Add To Cart
+          </Button>
+
+          {/* Product Info */}
+          <CardContent sx={{ textAlign: "center" }}>
+            <Typography
+              variant="body2"
+              color="text.secondary"
+              sx={{
+                fontSize: "1em",
+                marginBottom: "0.5em",
+                fontFamily: "Futura Light Italic",
+              }}
+            >
+              {product.product_name || "No product name available"}
+            </Typography>
+            <Typography
+              sx={{ fontFamily: "Futura Light Italic" }}
+              variant="h6"
+            >
+              Rs. {product.price || "N/A"}
+            </Typography>
+          </CardContent>
+        </Card>
+      </div>
       );
     });
   };
@@ -223,16 +349,17 @@ export default function DisplayProducts() {
         alignItems: "center",
       }}
     >
-      <div
+      <Paper
+        elevation={0}
         className="sub_container"
         style={{
-          maxHeight: "400px", // Adjust this height based on your layout needs
+          maxHeight: "600px", // Adjust this height based on your layout needs
           overflowY: "scroll", // Enable vertical scrolling
           scrollbarWidth: "none", // For Firefox to hide scrollbars
           msOverflowStyle: "none", // For Internet Explorer and Edge
         }}
       >
-        <div className="sub_container">{renderProductCard()}</div>
+        <div className="sub_container" >{renderProductCard()}</div>
         <ShareDialog
           open={showShareDialog}
           setOpen={setShowShareDialog}
@@ -246,7 +373,7 @@ export default function DisplayProducts() {
           }
           hashtag="#TrendingProduct"
         />
-      </div>
+      </Paper>
       <Snackbar
         open={snackbarOpen}
         autoHideDuration={5000}

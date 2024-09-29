@@ -77,15 +77,27 @@
   src: url("../../../Fonts/Futura-CondensedLight.otf") format("opentype");
 }
 
-.companyName {
+
+#companyName_container span:nth-child(1){
   font-family: "Futura";
-  flex-grow: 1;
+  display: inline-block;
   letter-spacing: 0.8vw;
   color: black;
-  font-size: 1.875rem; /* Base font size for larger screens */
+  font-size: 1.875rem; 
   line-height: 1.875rem;
-  text-transform: uppercase;
+  margin-right:1.2rem;
+  text-transform: uppercase; 
 }
+#companyName_container span:nth-child(2){
+  font-family: "Futura";
+  display: inline-block;
+  letter-spacing: 0.8vw;
+  color: black;
+  font-size: 1.875rem; 
+  line-height: 1.875rem;
+  text-transform: uppercase; 
+}
+
 .actions_buttons {
   display: flex;
   gap: 2%;

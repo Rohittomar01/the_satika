@@ -1,8 +1,15 @@
-import React from "react";
+// src/components/ProductDetailsPage/Reviews.js
+
+import React, { useEffect, useRef } from "react";
 import { Box, Typography, Avatar, Grid, Rating } from "@mui/material";
 import "../../StyleSheets/ProductDetailsPage/Reviews.css";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
 
-const reviews = [
+gsap.registerPlugin(ScrollTrigger);
+
+const reviewsData = [
   {
     name: "John Doe",
     avatar: "https://via.placeholder.com/40",
@@ -17,16 +24,48 @@ const reviews = [
     date: "14-Jul-2024",
     review: "Absolutely love it! Will buy again.",
   },
+  // Add more reviews as needed
 ];
 
 const Reviews = () => {
+  const reviewsRef = useRef([]);
+
+  useGSAP(() => {
+    reviewsRef.current.forEach((el, index) => {
+      gsap.fromTo(
+        el,
+        {
+          opacity: 0,
+          y: 50,
+        },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+          ease: "power3.out",
+          scrollTrigger: {
+            id: `review-${index + 1}`,
+            trigger: el,
+            start: "top 80%",
+            toggleActions: "play none none reverse",
+            
+          },
+        }
+      );
+    });
+  }, []);
+
   return (
     <Box className="review-container">
       <Typography variant="h6" id="review-title">
         Customer Reviews
       </Typography>
-      {reviews.map((review, index) => (
-        <Box key={index} className="review-paper">
+      {reviewsData.map((review, index) => (
+        <Box
+          key={index}
+          className="review-paper"
+          ref={(el) => (reviewsRef.current[index] = el)}
+        >
           <Grid container spacing={2}>
             <Grid item>
               <Avatar

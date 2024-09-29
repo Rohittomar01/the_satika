@@ -25,7 +25,7 @@ export default function FilterBar({ resetState, setResetState }) {
     crafts: reduxCrafts = [],
     fabrics: reduxFabrics = [],
     origins: reduxOrigins = [],
-    priceRange: reduxPriceRange = [0, 10000],
+    priceRange: reduxPriceRange = [0, 1000000],
   } = filters;
 
   const [colors, setColors] = useState([]);
@@ -40,7 +40,7 @@ export default function FilterBar({ resetState, setResetState }) {
     fabrics: reduxFabrics,
     origins: reduxOrigins,
   });
-  const [priceRange, setPriceRangeState] = useState([0, 10000]);
+  const [priceRange, setPriceRangeState] = useState([0, 1000000]);
   const [openSections, setOpenSections] = useState({
     color: false,
     brand: false,
@@ -127,7 +127,7 @@ export default function FilterBar({ resetState, setResetState }) {
         fabrics: [],
         origins: [],
       });
-      setPriceRangeState([0, 10000]);
+      setPriceRangeState([0,1000000]);
     }
   }, [resetState]);
 
@@ -172,6 +172,7 @@ export default function FilterBar({ resetState, setResetState }) {
                     />
                   }
                   label={color.color_name}
+                  sx={{fontFamily:"Futura medium Italic',sans-serif"}}
                 />
               </ListItemButton>
             ))}
@@ -365,7 +366,7 @@ export default function FilterBar({ resetState, setResetState }) {
                 onChange={handlePriceRangeChange}
                 valueLabelDisplay="auto"
                 min={0}
-                max={10000}
+                max={1000000}
                 step={10}
                 sx={{ width: "80%", mx: "auto" }}
               />
