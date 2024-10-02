@@ -37,6 +37,7 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
 
 export default function NavBar() {
   const totalItems = useSelector((state) => state.addtocart.totalItems);
+  const wishlistItems = useSelector((state) => state.wishlist.wishlist);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [auth, setAuth] = React.useState(true);
@@ -80,18 +81,9 @@ export default function NavBar() {
     fetchCartData();
   }, []);
 
-  useGSAP(() => {
-    gsap.from("#drawer", {
-      x: 10,
-      opacity: 0,
-      duration: 2,
-      stagger: 0.3,
-      delay: 1,
-    });
-  }, [open]);
-
+  
   return (
-    <Box component={"div"} sx={{ flexGrow: 1 }}>
+    <Box component={"div"}  sx={{ flexGrow: 1 }}>
       <FormGroup>
         <FormControlLabel
           sx={{ display: "none" }}
@@ -151,7 +143,9 @@ export default function NavBar() {
                   className="nav_icons"
                   onClick={() => navigate("/wishlist")}
                 >
-                  <FavoriteBorderIcon />{" "}
+                  <StyledBadge badgeContent={wishlistItems.length} color="secondary">
+                  <FavoriteBorderIcon />
+                  </StyledBadge>
                 </IconButton>
                 <IconButton
                   className="nav_icons"
@@ -198,7 +192,7 @@ export default function NavBar() {
               </div>
             </Grid>
           </Grid>
-          <div id="drawer" style={{ overflow: "hidden" }}>
+          <div  style={{ overflow: "hidden" }}>
             <NavBar_Drawer open={open} setOpen={setOpen} />
           </div>
         </Toolbar>

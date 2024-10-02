@@ -18,7 +18,6 @@ import { useTheme } from "@mui/material/styles";
 const QuickView = ({ open, onClose, product }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  console.log(product);
 
   return (
     <Dialog
@@ -31,8 +30,8 @@ const QuickView = ({ open, onClose, product }) => {
           display: "flex",
           flexDirection: isMobile ? "column" : "row",
           padding: 0,
-          width: "65vw",
-          height: "62vh",
+          width: "60vw",
+          height: "65vh",
         },
       }}
     >
@@ -46,78 +45,87 @@ const QuickView = ({ open, onClose, product }) => {
         </IconButton>
       </DialogTitle>
       <DialogContent sx={{ display: "flex", padding: 0, margin: 0 }}>
-  <div
-    style={{
-      marginLeft: isMobile ? "0" : "-4%",
-      flex: 1,
-      background: `url(${product?.images}) no-repeat center center`,
-      backgroundSize: "cover",
-      backgroundPosition: "center",
-      backgroundRepeat: "no-repeat",
-      backgroundSize: "cover",
-    }}
-  />
-  <div
-    style={{
-      flex: 1,
-      padding: "5%",
-      display: "flex",
-      flexDirection: "column",
-      justifyContent: "space-between",
-    }}
-  >
-    <div>
-      <Typography variant="subtitle1" fontFamily="Futura Medium Italic">
-        {product?.subtitle}
-      </Typography>
-      <Typography variant="h5" fontFamily="Futura Medium Italic">
-        {product?.title}
-      </Typography>
-      <Typography
-        variant="h6"
-        color="textSecondary"
-        fontFamily="Futura Light Italic"
-      >
-        ₹ {product?.price}
-      </Typography>
-      <Typography
-        variant="body2"
-        color="textSecondary"
-        fontFamily="Futura Light Italic"
-      >
-        Inclusive of all taxes
-      </Typography>
-    </div>
-    <Divider sx={{ my: 2, marginTop: "35%" }} />
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "space-between",
-        gap: "4%",
-      }}
-    >
-      <Button
-        startIcon={<ThumbUpAltOutlinedIcon />}
-        variant="text"
-        sx={{ marginRight: 1 }}
-      >
-        Love This!
-      </Button>
-      <Button
-        startIcon={<ThumbDownAltOutlinedIcon />}
-        variant="text"
-        sx={{ marginRight: 1 }}
-      >
-        Not For Me
-      </Button>
-      <Button variant="text" startIcon={<ShareOutlinedIcon />}></Button>
-    </div>
-  </div>
-</DialogContent>
-
+        <div
+          style={{
+            marginLeft: isMobile ? "0" : "-4%",
+            flex: 1,
+            display: "flex",
+            justifyContent: "center", 
+            alignItems: "center", 
+          }}
+        >
+          {/* Image inside a div */}
+          <img
+            src={product?.images} 
+            alt={product?.title}
+            style={{
+              maxWidth: "100%",
+              borderRadius:"5%",
+              maxHeight: "90%",
+              marginLeft:"7%",
+              objectFit: "cover",
+            }}
+          />
+        </div>
+        <div
+          style={{
+            flex: 1,
+            padding: "5%",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-between",
+          }}
+        >
+          <div>
+            <Typography variant="subtitle1" fontFamily="Futura Medium Italic">
+              {product?.subtitle}
+            </Typography>
+            <Typography variant="h5" fontFamily="Futura Medium Italic">
+              {product?.title}
+            </Typography>
+            <Typography
+              variant="h6"
+              color="textSecondary"
+              fontFamily="Futura Light Italic"
+            >
+              ₹ {product?.price}
+            </Typography>
+            <Typography
+              variant="body2"
+              color="textSecondary"
+              fontFamily="Futura Light Italic"
+            >
+              Inclusive of all taxes
+            </Typography>
+          </div>
+          <Divider sx={{ my: 2, marginTop: "35%" }} />
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              gap: "4%",
+            }}
+          >
+            <Button
+              startIcon={<ThumbUpAltOutlinedIcon />}
+              variant="text"
+              sx={{ marginRight: 1 }}
+            >
+              Love This!
+            </Button>
+            <Button
+              startIcon={<ThumbDownAltOutlinedIcon />}
+              variant="text"
+              sx={{ marginRight: 1 }}
+            >
+              Not For Me
+            </Button>
+            <Button variant="text" startIcon={<ShareOutlinedIcon />} />
+          </div>
+        </div>
+      </DialogContent>
     </Dialog>
   );
 };
-
 
 export default QuickView;

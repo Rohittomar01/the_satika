@@ -17,15 +17,12 @@ import { deleteData, ServerURL } from "../../../Services/ServerServices";
 import Swal from "sweetalert2";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  setWishListProduct,
-  removeFromCart,
-} from "../../../Store/Slices/Products";
-import {
-  removeItem,
+  removeCartItem,
   incrementItems,
   decrementItems,
 } from "../../../Store/Slices/addToCart";
-import { postData } from "../../../Services/ServerServices";
+import { addToWishlist } from "../../../Store/Slices/wishList";
+// import { postData } from "../../../Services/ServerServices";
 import { Link } from "react-router-dom"; // Import Link for navigation
 
 const ProductCards = ({ cartData, userId, fetchCartData }) => {
@@ -48,7 +45,7 @@ const ProductCards = ({ cartData, userId, fetchCartData }) => {
 
     if (result.isConfirmed) {
       try {
-        dispatch(removeItem(productId));
+        dispatch(removeCartItem(productId));
       } catch (error) {
         console.error("Error deleting data:", error);
         Swal.fire(
@@ -96,6 +93,10 @@ const ProductCards = ({ cartData, userId, fetchCartData }) => {
   const handleDecrement = (product_id) => {
     dispatch(decrementItems(product_id));
   };
+  const handleAddToWishList = (item) => {
+    dispatch(addToWishlist(item));
+    dispatch(removeCartItem(item.product_id));
+  };
 
   return (
     <Box className="card-container">
@@ -110,7 +111,7 @@ const ProductCards = ({ cartData, userId, fetchCartData }) => {
         </Box>
       ) : (
         cardItems.products.map((item) => (
-          <Card className="card" key={item.product_id}>
+          <Card elevation={2} className="card" key={item.product_id}>
             <Box className="content_container">
               <Box className="media-container">
                 <CardMedia
@@ -148,7 +149,12 @@ const ProductCards = ({ cartData, userId, fetchCartData }) => {
                   {item.description || "Inclusive of all taxes"}
                 </Typography>
                 <Box className="quantity-control">
-                  <IconButton  onClick={() => handleDecrement(item.product_id)} id="iconButton" variant="outlined" size="small">
+                  <IconButton
+                    onClick={() => handleDecrement(item.product_id)}
+                    id="iconButton"
+                    variant="outlined"
+                    size="small"
+                  >
                     -
                   </IconButton>
                   <Typography
@@ -184,6 +190,7 @@ const ProductCards = ({ cartData, userId, fetchCartData }) => {
                 // onClick={() => handleSubmit(item)}
                 className="wishlist-button"
                 startIcon={<FavoriteBorderIcon />}
+                onClick={() => handleAddToWishList(item)}
               >
                 Move to Wishlist
               </Button>

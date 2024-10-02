@@ -1,31 +1,41 @@
+// src/Components/FilterPage/DisplayProducts.jsx
+
 import React, { useEffect, useState } from "react";
-import Card from "@mui/material/Card";
-import CardMedia from "@mui/material/CardMedia";
-import CardContent from "@mui/material/CardContent";
-import CardActions from "@mui/material/CardActions";
-import IconButton from "@mui/material/IconButton";
+import {
+  Card,
+  CardMedia,
+  CardContent,
+  IconButton,
+  Typography,
+  Box,
+  Button,
+  Paper,
+  Snackbar,
+} from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-import Typography from "@mui/material/Typography";
-import ShareIcon from "@mui/icons-material/Share";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import { Box, Button, Paper, Snackbar } from "@mui/material";
-import "../../StyleSheets/FilterPage/DisplayProducts.css";
-import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import ShareIcon from "@mui/icons-material/Share";
+import { useSelector, useDispatch } from "react-redux";
+import { addToWishlist, removeFromWishlist } from "../../../Store/Slices/wishList";
 import { setWishListProduct } from "../../../Store/Slices/Products";
-import { postData, ServerURL } from "../../../Services/ServerServices";
-import { getData } from "../../../Services/ServerServices";
-import filter from "../../../Store/Slices/filter";
+import { postData, ServerURL, getData } from "../../../Services/ServerServices";
+import { useNavigate } from "react-router-dom";
 import ShareDialog from "../../Common_Components/ShareDialog";
-import { useGSAP } from "@gsap/react";
-import { ScrollTrigger } from "gsap-trial/ScrollTrigger";
+import "../../StyleSheets/FilterPage/DisplayProducts.css";
 import gsap from "gsap";
+import { ScrollTrigger } from "gsap-trial/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
+
+gsap.registerPlugin(ScrollTrigger);
 
 export default function DisplayProducts() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  // Select wishlist and products from Redux store
+  const wishlist = useSelector((state) => state.wishlist.wishlist);
   const products = useSelector((state) => state.products.products);
-  const filters = useSelector((state) => state.filters || {}); 
+  const filters = useSelector((state) => state.filters || {});
 
   const {
     colors: reduxColors = [],
@@ -34,53 +44,22 @@ export default function DisplayProducts() {
     fabrics: reduxFabrics = [],
     origins: reduxOrigins = [],
     dropdownValue: reduxDropDownValue = 1,
-    priceRange: reduxPriceRange = [0,1000000],
+    priceRange: reduxPriceRange = [0, 1000000],
   } = filters;
-  // console.log("filter ", filters);
-  const dispatch = useDispatch();
-  const [wishlist, setWishlist] = React.useState({});
+
   const [productData, setProductData] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
-  const [currentProduct, setCurrentProduct] = useState([]); // For storing the product details for sharing
+  const [currentProduct, setCurrentProduct] = useState(null); // For storing the product details for sharing
   const [showShareDialog, setShowShareDialog] = useState(false);
 
-  const handleNavigate = (product) => {
-    navigate("/productdetails", { state: { product: product } });
-  };
-
-  const handleSubmit = async (data) => {
-    const body = {
-      user_id: 1,
-      product_id: data.product_id,
-      added_at: new Date(),
-    };
-    try {
-      const response = await postData("wishlist/submitWishlist_Data", body);
-      if (response.status === "success") {
-        setWishlist((prevState) => ({
-          ...prevState,
-          [data.product_id]: !prevState[data.product_id],
-        }));
-        dispatch(setWishListProduct(data));
-        setSnackbarMessage("Added to wishlist");
-        setSnackbarOpen(true);
-      } else {
-        setSnackbarMessage("Removed this item from wishlist");
-        setSnackbarOpen(true);
-      }
-    } catch (error) {
-      console.error("Failed to submit data:", error);
-      setSnackbarMessage("Failed to add to favorites");
-      setSnackbarOpen(true);
-    }
-  };
-
+  // Fetch products on component mount
   useEffect(() => {
     fetchProducts();
   }, []);
 
+  // Filter products whenever productData or filters change
   useEffect(() => {
     filterProducts();
   }, [
@@ -94,107 +73,7 @@ export default function DisplayProducts() {
     reduxDropDownValue,
   ]);
 
-  const fetchProducts = async () => {
-    try {
-      const response = await getData("product/fetch-AllProductsWithImage");
-      setProductData(response.data);
-    } catch (error) {
-      console.error("Error fetching products:", error);
-    }
-  };
-
-  const handleShare = (product) => {
-    setCurrentProduct(product);
-    setShowShareDialog(true);
-  };
-  const filterProducts = () => {
-    const filtered = productData.filter((product) => {
-      const matchesColor =
-        reduxColors.length === 0 ||
-        reduxColors
-          .map((color) => color.toLowerCase())
-          .includes(product.color.toLowerCase());
-
-      const matchesBrand =
-        reduxBrands.length === 0 ||
-        reduxBrands
-          .map((brand) => brand.toLowerCase())
-          .includes(product.brand.toLowerCase());
-
-      const matchesCraft =
-        reduxCrafts.length === 0 ||
-        reduxCrafts
-          .map((craft) => craft.toLowerCase())
-          .includes(product.craft.toLowerCase());
-
-      const matchesFabric =
-        reduxFabrics.length === 0 ||
-        reduxFabrics
-          .map((fabric) => fabric.toLowerCase())
-          .includes(product.fabric.toLowerCase());
-
-      const matchesOrigin =
-        reduxOrigins.length === 0 ||
-        reduxOrigins
-          .map((origin) => origin.toLowerCase())
-          .includes(product.origin.toLowerCase());
-
-      if (reduxDropDownValue === 1) {
-        var matchesDropdown_NewArrival =
-               parseInt(product.new_arrival) === parseInt(reduxDropDownValue);
-      } else if (reduxDropDownValue === 2) {
-        var matchesDropdown_TopSelling =
-           parseInt(product.top_selling) === parseInt(reduxDropDownValue);
-      }
-      else if (reduxDropDownValue === 0) {
-        var matchesDropdown_NewArrival = true
-      }
-
-      const matchesPrice =
-       parseInt(product.price) >= reduxPriceRange[0] &&
-        parseInt(product.price) <= reduxPriceRange[1];
-      
-      console.log("matches dropdown ",reduxPriceRange)
-
-      return (
-        matchesColor &&
-        matchesBrand &&
-        matchesCraft &&
-        matchesFabric &&
-        matchesOrigin &&
-        matchesPrice &&
-        matchesDropdown_NewArrival ||
-        matchesDropdown_TopSelling
-      );
-    });
-
-    setFilteredProducts(filtered);
-  };
-
-  if (filteredProducts.length === 0) {
-    return (
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "400px", // Adjust height as needed
-        }}
-      >
-        <Typography
-          variant="h5"
-          color="text.secondary"
-          sx={{ fontFamily: "Futura Light Italic", textAlign: "center" }}
-        >
-          No results found
-        </Typography>
-      </div>
-    );
-  }
-  const handleCloseSnackbar = () => {
-    setSnackbarOpen(false);
-  };
-  
+  // GSAP Animations
   // useGSAP(() => {
   //   const tl = gsap.timeline({
   //     scrollTrigger: {
@@ -221,134 +100,252 @@ export default function DisplayProducts() {
   //     opacity: 0,
   //     y: 10,
   //     stagger: 0.2,
-  //     delay:0.2,
+  //     delay: 0.2,
   //     duration: 0.2,
-  //   })
+  //   });
   // }, [filteredProducts]);
 
+  // Function to fetch products from the server
+  const fetchProducts = async () => {
+    try {
+      const response = await getData("product/fetch-AllProductsWithImage");
+      setProductData(response.data);
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    }
+  };
+
+  // Function to filter products based on applied filters
+  const filterProducts = () => {
+    const filtered = productData.filter((product) => {
+      const matchesColor =
+        reduxColors.length === 0 ||
+        reduxColors.map((color) => color.toLowerCase()).includes(product.color.toLowerCase());
+
+      const matchesBrand =
+        reduxBrands.length === 0 ||
+        reduxBrands.map((brand) => brand.toLowerCase()).includes(product.brand.toLowerCase());
+
+      const matchesCraft =
+        reduxCrafts.length === 0 ||
+        reduxCrafts.map((craft) => craft.toLowerCase()).includes(product.craft.toLowerCase());
+
+      const matchesFabric =
+        reduxFabrics.length === 0 ||
+        reduxFabrics.map((fabric) => fabric.toLowerCase()).includes(product.fabric.toLowerCase());
+
+      const matchesOrigin =
+        reduxOrigins.length === 0 ||
+        reduxOrigins.map((origin) => origin.toLowerCase()).includes(product.origin.toLowerCase());
+
+      let matchesDropdown = true;
+      if (reduxDropDownValue === 1) {
+        matchesDropdown = parseInt(product.new_arrival) === parseInt(reduxDropDownValue);
+      } else if (reduxDropDownValue === 2) {
+        matchesDropdown = parseInt(product.top_selling) === parseInt(reduxDropDownValue);
+      } else if (reduxDropDownValue === 0) {
+        matchesDropdown = true;
+      }
+
+      const matchesPrice =
+        parseInt(product.price) >= reduxPriceRange[0] &&
+        parseInt(product.price) <= reduxPriceRange[1];
+
+      return (
+        matchesColor &&
+        matchesBrand &&
+        matchesCraft &&
+        matchesFabric &&
+        matchesOrigin &&
+        matchesPrice &&
+        matchesDropdown
+      );
+    });
+
+    setFilteredProducts(filtered);
+  };
+
+  // Handle adding/removing items to/from wishlist
+  const handleWishlistToggle = async (product) => {
+    const isInWishlist = wishlist.some((item) => item.product_id === product.product_id);
+
+    if (isInWishlist) {
+      // Remove from wishlist
+      dispatch(removeFromWishlist(product.product_id));
+      setSnackbarMessage("Removed from wishlist");
+    } else {
+      // Add to wishlist
+      dispatch(addToWishlist(product));
+      setSnackbarMessage("Added to wishlist");
+    }
+
+    setSnackbarOpen(true);
+  };
+
+  // Handle sharing a product
+  const handleShare = (product) => {
+    setCurrentProduct(product);
+    setShowShareDialog(true);
+  };
+
+  // Handle closing the Snackbar
+  const handleCloseSnackbar = () => {
+    setSnackbarOpen(false);
+  };
+
+  // Navigate to product details
+  const handleNavigate = (product) => {
+    navigate("/productdetails", { state: { product: product } });
+  };
+
+  // Render each product card
   const renderProductCard = () => {
     return filteredProducts.map((product) => {
+      const image_name =
+        product.images && product.images.length > 0
+          ? product.images[0].image_name
+          : "default-image.jpg";
+
+      const isInWishlist = wishlist.some((item) => item.product_id === product.product_id);
+
       return (
-        <div
-        // onMouseEnter={handleMouseEnter}
-        className="product-content-container"
-        key={product.id}
-      >
-        <Card
-          elevation={0}
-          className="card-body"
-          sx={{
-            maxWidth: 280,
-            minWidth: 250,
-            maxHeight: 600,
-            position: "relative",
-          }}
-        >
-          {/* Overlay favorite and view icons */}
-          <Box
+        <div className="product-content-container" key={product.id}>
+          <Card
+            elevation={0}
+            className="card-body"
             sx={{
-              display: "flex",
-              flexDirection: "row",
-              position: "absolute",
-              top: "48vh",
-              right: "11vw",
-              gap: 2,
+              maxWidth: 280,
+              minWidth: 250,
+              maxHeight: 600,
+              position: "relative",
             }}
           >
-            <div id="iconButtonDiv"  onClick={() => handleSubmit(product)}>
-             
-              {wishlist[product.product_id] ? (
-                <FavoriteIcon sx={{ color: "red" }} />
-              ) : (
-                <FavoriteBorderIcon />
-            )} 
-             
-              <span style={{display:"none"}}>Favorite</span>
-            </div>
-            <div id="iconButtonDiv"   onClick={() => handleShare(product)}>
-              {/* <IconButton
-                onClick={() => handleShare(product)}
-                aria-label="share"
-                sx={{
-                  bgcolor: "rgba(255, 255, 255, 0.833)",
-                  padding: "12%",
-                  color: "grey",
-                  // borderRadius: "50%",
-                  marginTop: "2%",
-                }}
-              > */}
-                <ShareIcon />
-              {/* </IconButton> */}
-            </div>
-          </Box>
-
-          {/* Image */}
-          <CardMedia
-            className="card-media"
-            component="img"
-            sx={{ objectFit: "cover", height: "62vh", width: "30vw" }}
-            image={`${ServerURL}/images/${product.images[0].image_name}`}
-            alt={product.product_name || "No product name available"} // Fallback alt text
-          />
-
-          {/* Add To Cart Button */}
-          <Button
-            onClick={() =>
-              navigate("/productdetails", { state: { product } })
-            }
-            variant="contained"
-            className="add-to-cart-button"
-            sx={{
-              backgroundColor: "#F76C6C",
-              color: "white",
-              width: "100%",
-              borderRadius: 0,
-              textTransform: "none",
-              fontSize: "1em",
-              padding: "10px 0",
-              position: "absolute",
-              bottom: 0,
-              left: 0,
-              transition: "opacity 0.3s ease",
-            }}
-          >
-            Add To Cart
-          </Button>
-
-          {/* Product Info */}
-          <CardContent sx={{ textAlign: "center" }}>
-            <Typography
-              variant="body2"
-              color="text.secondary"
+            {/* Overlay favorite and share icons */}
+            <Box
               sx={{
-                fontSize: "1em",
-                marginBottom: "0.5em",
-                fontFamily: "Futura Light Italic",
+                display: "flex",
+                flexDirection: "row",
+                position: "absolute",
+                top: "48vh",
+                right: "11vw",
+                gap: 2,
               }}
             >
-              {product.product_name || "No product name available"}
-            </Typography>
-            <Typography
-              sx={{ fontFamily: "Futura Light Italic" }}
-              variant="h6"
+              <div
+                id="iconButtonDiv"
+                onClick={() => handleWishlistToggle(product)}
+                style={{ cursor: "pointer" }}
+                aria-label={isInWishlist ? "Remove from wishlist" : "Add to wishlist"}
+                role="button"
+                tabIndex={0}
+                onKeyPress={(e) => {
+                  if (e.key === "Enter") handleWishlistToggle(product);
+                }}
+              >
+                {isInWishlist ? (
+                  <FavoriteIcon sx={{ color: "red" }} />
+                ) : (
+                  <FavoriteBorderIcon />
+                )}
+                <span style={{ display: "none" }}>Favorite</span>
+              </div>
+              <div
+                id="iconButtonDiv"
+                onClick={() => handleShare(product)}
+                style={{ cursor: "pointer" }}
+                aria-label="Share"
+                role="button"
+                tabIndex={0}
+                onKeyPress={(e) => {
+                  if (e.key === "Enter") handleShare(product);
+                }}
+              >
+                <ShareIcon />
+                <span style={{ display: "none" }}>Share</span>
+              </div>
+            </Box>
+
+            {/* Product Image */}
+            <CardMedia
+              className="card-media"
+              component="img"
+              sx={{ objectFit: "cover", height: "62vh", width: "30vw" }}
+              image={`${ServerURL}/images/${image_name}`}
+              alt={product.product_name || "No product name available"} // Fallback alt text
+            />
+
+            {/* Add To Cart Button */}
+            <Button
+              onClick={() => handleNavigate(product)}
+              variant="contained"
+              className="add-to-cart-button"
+              sx={{
+                backgroundColor: "#F76C6C",
+                color: "white",
+                width: "100%",
+                borderRadius: 0,
+                textTransform: "none",
+                fontSize: "1em",
+                padding: "10px 0",
+                position: "absolute",
+                bottom: 0,
+                left: 0,
+                transition: "opacity 0.3s ease",
+              }}
             >
-              Rs. {product.price || "N/A"}
-            </Typography>
-          </CardContent>
-        </Card>
-      </div>
+              Add To Cart
+            </Button>
+
+            {/* Product Info */}
+            <CardContent sx={{ textAlign: "center" }}>
+              <Typography
+                variant="body2"
+                color="text.secondary"
+                sx={{
+                  fontSize: "1em",
+                  marginBottom: "0.5em",
+                  fontFamily: "Futura Light Italic",
+                }}
+              >
+                {product.product_name || "No product name available"}
+              </Typography>
+              <Typography
+                sx={{ fontFamily: "Futura Light Italic" }}
+                variant="h6"
+              >
+                Rs. {product.price || "N/A"}
+              </Typography>
+            </CardContent>
+          </Card>
+        </div>
       );
     });
   };
 
+  // If no products match the filters, display a message
+  if (filteredProducts.length === 0) {
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "400px", // Adjust height as needed
+        }}
+      >
+        <Typography
+          variant="h5"
+          color="text.secondary"
+          sx={{ fontFamily: "Futura Light Italic", textAlign: "center" }}
+        >
+          No results found
+        </Typography>
+      </div>
+    );
+  }
+
   return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
+    <div className="product-superContainer">
       <Paper
         elevation={0}
         className="sub_container"
@@ -359,7 +356,7 @@ export default function DisplayProducts() {
           msOverflowStyle: "none", // For Internet Explorer and Edge
         }}
       >
-        <div className="sub_container" >{renderProductCard()}</div>
+        <div className="sub_container">{renderProductCard()}</div>
         <ShareDialog
           open={showShareDialog}
           setOpen={setShowShareDialog}
@@ -379,6 +376,7 @@ export default function DisplayProducts() {
         autoHideDuration={5000}
         onClose={handleCloseSnackbar}
         message={snackbarMessage}
+        anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
       />
     </div>
   );

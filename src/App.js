@@ -9,9 +9,9 @@ import AddToCart from "./User/Pages/AddToCart";
 import Gallery from "./User/Pages/Gallery";
 import OTPDialog from "./User/Components/OTPDialog/OTPDialog";
 import WishList from "./User/Pages/WishList";
-import AddressFormDialog from "./User/Pages/AddressFormDialog";
 import SignUpDialog from "./User/Pages/SignUpDialog";
 import QuickView from "./User/Pages/QuickView";
+import CheckoutComponent from "./User/Pages/checkOutPage";
 
 function App() {
   return (
@@ -27,10 +27,10 @@ function App() {
         <Route path="/gallery" element={<Gallery />} />
         <Route path="/wishlist" element={<WishList />} />
         <Route path="/otp" element={<OTPDialog />} />
-        <Route path="/address" element={<AddressFormDialog />} />
         <Route path="/SignUpDialog" element={<SignUpDialog />} />
         <Route path="/OTPDialog" element={<OTPDialog />} />
         <Route path="/quickview" element={<QuickView />} />
+        <Route path="/checkout" element={<CheckoutComponent />} />
       </Routes>
     </Router>
   );

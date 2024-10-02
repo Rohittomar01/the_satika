@@ -1,80 +1,101 @@
-/* .signup-dialog{
-  padding: 3%;
-
-} */
-.signup-dialog-title {
-  justify-content: center;
-  gap: 5%;
-  text-align: center;
-  font-size: 1.5rem;
-  position: relative;
+#signup-dialog {
+  border-radius: 20px;
 }
 
-.signup-dialog-close-button {
-margin-left: 4%;
- 
+#signup-dialog-content {
+  display: flex;
+  padding: 20px;
+  background-color: #f0f4f8; /* Light background color */
+  border-radius: 20px;
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
 }
 
-.signup-dialog-content {
+#signup-dialog-close-button {
+  position: absolute;
+  right: 15px;
+  top: 15px;
+}
+
+#signup-dialog-form-container {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+#signup-dialog-image {
+  width: 50%;
+  height: 60vh;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-right: 20px;
+}
+
+#dialogTitle {
+  display: flex;
+  justify-content: end;
+}
+
+#signup-dialog-form {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px;
-  text-align: center;
-}
-
-.signup-dialog-image {
+  gap: 5%;
   width: 100%;
-  height: 34.5vh;
-  border-radius: 10px;
 }
-
-.signup-dialog-offer-text {
-  margin: 15px 0;
-  font-size: 1rem;
-}
-
-.signup-dialog-input-group {
+#textFieldContainer{
   display: flex;
+  flex-direction: column;
   justify-content: center;
+  align-items: center;
   width: 100%;
-  margin-bottom: 15px;
+  gap: 20px;
 }
 
-.signup-dialog-country-code {
-  flex: 1;
-  margin-right: 5px;
-}
 
-.signup-dialog-mobile-input {
-  flex: 3;
-}
-
-.signup-dialog-button {
-  background-color: #f8a5c2;
+#signup-dialog-button {
+  background-color: #000;
   color: white;
-  padding: 0 0 0 10px;
-  border: none;
-  border-radius: 5px;
+  padding: 10px 20px;
   width: 100%;
-  cursor: pointer;
+  max-width: 350px;
+  font-size: 1rem;
+  border-radius: 10px;
+  text-transform: none;
+  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.2);
 }
 
-.signup-dialog-guest {
-  justify-content: center;
+#signup-dialog-button:hover {
+  background-color: #0056b3;
 }
 
-.signup-dialog-guest-button {
-  color: #f8a5c2;
-  cursor: pointer;
+#signup-dialog-title {
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10px;
 }
 
-@media (min-width: 768px) {
-  .signup-dialog-title {
-    font-size: 2rem;
+#signup-dialog-subtitle {
+  color: #666;
+  margin-bottom: 20px;
+}
+
+/* Responsive Styling */
+@media (max-width: 600px) {
+  #signup-dialog-content {
+    padding: 15px;
+    flex-direction: column;
   }
 
-  .signup-dialog-offer-text {
-    font-size: 1.2rem;
+  #signup-dialog-image {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+
+  #signup-dialog-input {
+    max-width: 300px;
+  }
+
+  #signup-dialog-button {
+    max-width: 300px;
   }
 }

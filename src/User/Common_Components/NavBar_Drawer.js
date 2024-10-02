@@ -8,15 +8,19 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
-import { useGSAP } from "@gsap/react";
+import PersonIcon from "@mui/icons-material/Person";
+import ShoppingBagIcon from "@mui/icons-material/ShoppingBag";
+import TrackChangesIcon from "@mui/icons-material/TrackChanges";
+import SwapHorizIcon from "@mui/icons-material/SwapHoriz";
+import SupportAgentIcon from "@mui/icons-material/SupportAgent";
+import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import gsap from "gsap-trial";
+import { useGSAP } from "@gsap/react";
+import { Typography } from "@mui/material";
 
 export default function NavBar_Drawer(props) {
   const toggleDrawer = (newOpen) => () => {
     props.setOpen(newOpen);
-    console.log(newOpen);
   };
 
   useGSAP(() => {
@@ -33,26 +37,34 @@ export default function NavBar_Drawer(props) {
   const DrawerList = (
     <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>
       <List>
-        {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
-          <ListItem id="drawerBox" key={text} disablePadding>
+        {/* First section */}
+        {[
+          { text: "Profile", icon: <PersonIcon /> },
+          { text: "Orders", icon: <ShoppingBagIcon /> },
+          { text: "Track Order", icon: <TrackChangesIcon /> },
+          { text: "Exchange Request", icon: <SwapHorizIcon /> },
+        ].map((item) => (
+          <ListItem id="drawerBox" key={item.text} disablePadding>
             <ListItemButton>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
+              <ListItemIcon>{item.icon}</ListItemIcon>
+              <ListItemText primary={item.text} />
             </ListItemButton>
           </ListItem>
         ))}
       </List>
+
       <Divider />
+
+      {/* Second section */}
       <List>
-        {["All mail", "Trash", "Spam"].map((text, index) => (
-          <ListItem id="drawerBox" key={text} disablePadding>
+        {[
+          { text: "Offers", icon: <LocalOfferIcon /> },
+          { text: "Customer Support", icon: <SupportAgentIcon /> },
+        ].map((item) => (
+          <ListItem id="drawerBox" key={item.text} disablePadding>
             <ListItemButton>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
+              <ListItemIcon>{item.icon}</ListItemIcon>
+              <ListItemText primary={item.text} />
             </ListItemButton>
           </ListItem>
         ))}
@@ -69,12 +81,9 @@ export default function NavBar_Drawer(props) {
         PaperProps={{
           sx: {
             borderTopRightRadius: "24px",
-            // borderBottomRightRadius: "24px",
             paddingTop: "2%",
-            display: {
-              display: "flex",
-              alignItems: "center",
-            },
+            display: "flex",
+            alignItems: "center",
           },
         }}
         transitionDuration={500}

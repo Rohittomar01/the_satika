@@ -1,103 +1,93 @@
 import React, { useState } from "react";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
-import DialogTitle from "@mui/material/DialogTitle";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
-import useMediaQuery from "@mui/material/useMediaQuery";
-import { useTheme } from "@mui/material/styles";
 import TextField from "@mui/material/TextField";
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
-import InputLabel from "@mui/material/InputLabel";
-import FormControl from "@mui/material/FormControl";
 import OTPDialog from "../Components/OTPDialog/OTPDialog";
 import "../StyleSheets/SignUpDialog.css";
+import { DialogTitle, Typography } from "@mui/material";
 
 export default function SignUpDialog(props) {
   const [otpOpen, setOtpOpen] = useState(false);
-  const theme = useTheme();
-  const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
+  const [mobileNumber, setMobileNumber] = useState("");
+  const [isMobileValid, setIsMobileValid] = useState(false);
+  const [otp, setOtp] = useState(null);
 
   const handleClose = () => {
     props.setOpen(false);
-    setOtpOpen(true);
   };
 
   const handleOtpOpen = () => {
-    props.setOpen(false);
-    setOtpOpen(true);
+    const otp = Math.floor(1000 + Math.random() * 9000);
+    if (otp) {
+      alert(otp);
+      setOtp(otp);
+      setOtpOpen(true);
+      props.setOpen(false);
+    }
   };
 
   return (
     <React.Fragment>
       <Dialog
-        fullScreen={fullScreen}
         open={props.open}
         onClose={handleClose}
         aria-labelledby="signup-dialog-title"
-        className="signup-dialog"
+        id="signup-dialog"
       >
-        <DialogTitle id="signup-dialog-title" className="signup-dialog-title">
-          Sign up to get FLAT 10% off on your first order
+        <DialogTitle id="dialogTitle">
           <IconButton
             aria-label="close"
             onClick={handleClose}
-            className="signup-dialog-close-button"
+            id="signup-dialog-close-button"
           >
             <CloseIcon />
           </IconButton>
         </DialogTitle>
-        <DialogContent className="signup-dialog-content">
-          <img
-            src="https://t4.ftcdn.net/jpg/06/52/30/37/240_F_652303724_bvPQ9zr1cTQfF3GPPDUSwQN978jn3Lkc.jpg"
-            alt="Signup offer"
-            className="signup-dialog-image"
-          />
-          <p className="signup-dialog-offer-text">
-            Use Code <strong>“WELCOME”</strong>
-          </p>
-          <div className="signup-dialog-input-group">
-            <FormControl
-              variant="outlined"
-              className="signup-dialog-country-code"
-            >
-              <InputLabel>Country Code</InputLabel>
-              <Select label="Country Code" defaultValue="+91">
-                <MenuItem value="+91">+91</MenuItem>
-                {/* Add other country codes here */}
-              </Select>
-            </FormControl>
-            <TextField
-              variant="outlined"
-              label="Enter mobile number"
-              className="signup-dialog-mobile-input"
+
+        <DialogContent id="signup-dialog-content">
+          <div id="signup-dialog-form-container">
+            <img
+              src="https://t4.ftcdn.net/jpg/06/52/30/37/240_F_652303724_bvPQ9zr1cTQfF3GPPDUSwQN978jn3Lkc.jpg"
+              alt="Signup illustration"
+              id="signup-dialog-image"
             />
+            <form id="signup-dialog-form">
+              <Typography variant="h6" id="signup-dialog-title">
+                Join Us for Exciting Updates!
+              </Typography>
+              <Typography variant="body2" id="signup-dialog-subtitle">
+                Enter your mobile number to receive an OTP and get started.
+              </Typography>
+              <div id="textFieldContainer">
+                <TextField
+                  fullWidth
+                  label="Mobile No."
+                  variant="outlined"
+                  type="tel"
+                  id="signup-dialog-input"
+                  inputProps={{
+                    pattern: "[0-9]{10}",
+                    maxLength: 10,
+                  }}
+                  value={mobileNumber}
+                  onChange={(e) => setMobileNumber(e.target.value)}
+                />
+                <Button
+                  variant="contained"
+                  id="signup-dialog-button"
+                  onClick={() => handleOtpOpen()}
+                >
+                  Get OTP
+                </Button>
+              </div>
+            </form>
           </div>
         </DialogContent>
-        <DialogActions>
-          <Button
-            variant="contained"
-            className="signup-dialog-button"
-            onClick={() => handleOtpOpen()}
-          >
-            SIGNUP / LOGIN
-          </Button>
-        </DialogActions>
-        <DialogActions className="signup-dialog-guest">
-          <Button
-            fullWidth
-            variant="text"
-            className="signup-dialog-guest-button"
-            onClick={handleClose}
-          >
-            Checkout As Guest
-          </Button>
-        </DialogActions>
-        <OTPDialog otpOpen={otpOpen} setOtpOpen={setOtpOpen} />
       </Dialog>
+      <OTPDialog otpOpen={otpOpen} setOtpOpen={setOtpOpen} otp={otp} />
     </React.Fragment>
   );
 }

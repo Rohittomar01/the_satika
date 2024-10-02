@@ -2,12 +2,18 @@ import React, { useState, useEffect } from "react";
 import { Box, Typography, Button, Divider, Paper } from "@mui/material";
 import "../../StyleSheets/AddToCart/CalculationComponent.css";
 import SignUpDialog from "../../Pages/SignUpDialog";
+import { useSelector } from "react-redux";
+import { getDetails } from "../../../Store/Slices/addToCart";
+import { useNavigate } from "react-router-dom";
 
 const PriceDetails = ({ cartData }) => {
+  const cartitems = useSelector((state) => state.addtocart);
+  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [subTotal, setSubTotal] = useState(0);
   const [discount, setDiscount] = useState(0);
   const [total, setTotal] = useState(0);
+  const TotalAmount=cartitems.totalPrice-discount
 
   useEffect(() => {
     let subTotal = 0;
@@ -21,26 +27,33 @@ const PriceDetails = ({ cartData }) => {
     setSubTotal(subTotal);
     setDiscount(discount);
     setTotal(subTotal - discount);
+
   }, [cartData]);
+
+  
 
   return (
     <Paper elevation={3} className="price-details">
       <Box className="row">
-        <Typography variant="body1">Sub Total</Typography>
-        <Typography variant="body1">₹ {subTotal}</Typography>
+        <Typography variant="body1">Total Items:</Typography>
+        <Typography variant="body1">{cartitems.totalItems}</Typography>
       </Box>
       <Box className="row">
-        <Typography variant="body1">Shipping</Typography>
+        <Typography variant="body1">Sub Total:</Typography>
+        <Typography variant="body1">₹ {cartitems.totalPrice}</Typography>
+      </Box>
+      <Box className="row">
+        <Typography variant="body1">Shipping:</Typography>
         <Typography variant="body1">Free</Typography>
       </Box>
       <Box className="row">
-        <Typography variant="body1">Discount</Typography>
+        <Typography variant="body1">Discount:</Typography>
         <Typography variant="body1">₹ {discount}</Typography>
       </Box>
       <Divider className="divider" />
       <Box className="total">
         <Typography variant="h6">TOTAL</Typography>
-        <Typography variant="h6">₹ {total}</Typography>
+        <Typography variant="h6">₹ {TotalAmount}</Typography>
       </Box>
       <Button
         onClick={() => setOpen(true)}
@@ -48,9 +61,9 @@ const PriceDetails = ({ cartData }) => {
         fullWidth
         className="buy-button"
       >
-        BUY FOR ₹ {total}
+        BUY FOR ₹ {TotalAmount}
       </Button>
-      <Button variant="outlined" fullWidth className="continue-button">
+      <Button onClick={()=>navigate("/filter")} variant="outlined" fullWidth className="continue-button">
         CONTINUE SHOPPING
       </Button>
       <Box className="wishlist-button">

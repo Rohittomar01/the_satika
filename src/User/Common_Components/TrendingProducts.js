@@ -1,6 +1,5 @@
 import React, { useState, useRef } from "react";
 import useEmblaCarousel from "embla-carousel-react";
-import Autoplay from "embla-carousel-autoplay";
 import {
   NextButton,
   PrevButton,
@@ -10,17 +9,15 @@ import "../StyleSheets/Common_Components/TrendingProducts.css";
 import Card from "@mui/material/Card";
 import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
-import CardActions from "@mui/material/CardActions";
-import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShareIcon from "@mui/icons-material/Share";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { Box, Button, Snackbar } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { setWishListProduct } from "../../Store/Slices/Products";
-import { postData, ServerURL } from "../../Services/ServerServices";
+import { useDispatch, useSelector } from "react-redux";
+import { addToWishlist, removeFromWishlist } from "../../Store/Slices/wishList";
+import { ServerURL } from "../../Services/ServerServices";
 import ShareDialog from "./ShareDialog";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap-trial/ScrollTrigger";
@@ -34,11 +31,10 @@ export default function TrendingProducts({ data, heading, buttonDisplay }) {
   const cardRef = useRef(null);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
-  const [currentProduct, setCurrentProduct] = useState([]); // For storing the product details for sharing
+  const [currentProduct, setCurrentProduct] = useState(null); // For storing the product details for sharing
   const [showShareDialog, setShowShareDialog] = useState(false);
 
-  // Track wishlist status for each product
-  const [wishlist, setWishlist] = React.useState({});
+  const wishlist = useSelector((state) => state.wishlist.wishlist);
 
   const options = { axis: "x", loop: true, dragFree: true };
 
@@ -50,36 +46,20 @@ export default function TrendingProducts({ data, heading, buttonDisplay }) {
     onNextButtonClick,
   } = usePrevNextButtons(emblaApi);
 
-  const handleSubmit = async (data) => {
-    const body = {
-      user_id: 1,
-      product_id: data.product_id,
-      added_at: new Date(),
-    };
-    try {
-      const response = await postData("wishlist/submitWishlist_Data", body);
-      if (response.status === "success") {
-        // Toggle wishlist status
-        setWishlist((prevState) => ({
-          ...prevState,
-          [data.product_id]: !prevState[data.product_id],
-        }));
-        dispatch(setWishListProduct(data));
-        setSnackbarMessage(
-          wishlist[data.product_id]
-            ? "Removed from wishlist"
-            : "Added to wishlist"
-        );
-        setSnackbarOpen(true);
-      } else {
-        setSnackbarMessage("Removed this item from wishlist");
-        setSnackbarOpen(true);
-      }
-    } catch (error) {
-      console.error("Failed to submit data:", error);
-      setSnackbarMessage("Failed to add to favorites");
-      setSnackbarOpen(true);
+  const handleWishlistToggle = (product) => {
+    const isInWishlist = wishlist.some(
+      (item) => item.product_id === product.product_id
+    );
+
+    if (isInWishlist) {
+      dispatch(removeFromWishlist(product.product_id));
+      setSnackbarMessage("Removed from wishlist");
+    } else {
+      dispatch(addToWishlist(product));
+      setSnackbarMessage("Added to wishlist");
     }
+
+    setSnackbarOpen(true);
   };
 
   const handleCloseSnackbar = () => {
@@ -117,21 +97,10 @@ export default function TrendingProducts({ data, heading, buttonDisplay }) {
       opacity: 0,
       y: 10,
       stagger: 0.2,
-      delay:0.2,
+      delay: 0.2,
       duration: 0.2,
-    })
+    });
   }, [data]);
-
-  // const handleMouseEnter = () => {
-  //   console.log("jasdjs");
-  //   gsap.from(cardRef.current, {
-  //     opacity: 0,
-  //     visibility: "none",
-  //     y: 20,
-  //     duration: 0.4,
-  //     ease: "power3.out",
-  //   });
-  // };
 
   const renderProductCard = () => {
     if (!Array.isArray(data)) {
@@ -145,9 +114,12 @@ export default function TrendingProducts({ data, heading, buttonDisplay }) {
           ? product.images[0].image_name
           : "default-image.jpg";
 
+      const isInWishlist = wishlist.some(
+        (item) => item.product_id === product.product_id
+      );
+
       return (
         <div
-          // onMouseEnter={handleMouseEnter}
           ref={cardRef}
           className="product-content-container"
           key={product.id}
@@ -162,7 +134,7 @@ export default function TrendingProducts({ data, heading, buttonDisplay }) {
               position: "relative",
             }}
           >
-            {/* Overlay favorite and view icons */}
+            {/* Overlay favorite and share icons */}
             <Box
               sx={{
                 display: "flex",
@@ -173,43 +145,29 @@ export default function TrendingProducts({ data, heading, buttonDisplay }) {
                 gap: 2,
               }}
             >
-              <div id="iconButtonDiv"  onClick={() => handleSubmit(product)}>
-                {/* <IconButton
-                  onClick={() => handleSubmit(product)}
-                  aria-label="add to favorites"
-                  sx={{
-                    color: "grey",
-                    bgcolor: "rgba(255, 255, 255, 0.833)",
-                    padding: "13%",
-                    borderRadius: "50%",
-                  }}
-                > */}
-                {wishlist[product.product_id] ? (
+              <div
+                id="iconButtonDiv"
+                onClick={() => handleWishlistToggle(product)}
+                style={{ cursor: "pointer" }}
+              >
+                {isInWishlist ? (
                   <FavoriteIcon sx={{ color: "red" }} />
                 ) : (
                   <FavoriteBorderIcon />
                 )}
-                {/* </IconButton> */}
-                <span style={{display:"none"}}>Favorite</span>
+                <span style={{ display: "none" }}>Favorite</span>
               </div>
-              <div id="iconButtonDiv"   onClick={() => handleShare(product)}>
-                {/* <IconButton
-                  onClick={() => handleShare(product)}
-                  aria-label="share"
-                  sx={{
-                    bgcolor: "rgba(255, 255, 255, 0.833)",
-                    padding: "12%",
-                    color: "grey",
-                    // borderRadius: "50%",
-                    marginTop: "2%",
-                  }}
-                > */}
-                  <ShareIcon />
-                {/* </IconButton> */}
+              <div
+                id="iconButtonDiv"
+                onClick={() => handleShare(product)}
+                style={{ cursor: "pointer" }}
+              >
+                <ShareIcon />
+                <span style={{ display: "none" }}>Share</span>
               </div>
             </Box>
 
-            {/* Image */}
+            {/* Product Image */}
             <CardMedia
               className="card-media"
               component="img"
@@ -270,6 +228,7 @@ export default function TrendingProducts({ data, heading, buttonDisplay }) {
 
   return (
     <div className="product-superContainer">
+      {/* Carousel Control */}
       <div className="carousel-control">
         <h1 className="productHeading">{heading}</h1>
         <div className="control__buttonsContainer">
@@ -277,9 +236,13 @@ export default function TrendingProducts({ data, heading, buttonDisplay }) {
           <NextButton onClick={onNextButtonClick} disabled={nextBtnDisabled} />
         </div>
       </div>
+
+      {/* Carousel Main Container */}
       <div className="product-mainContainer" ref={emblaRef}>
         <div className="product-subContainer">{renderProductCard()}</div>
       </div>
+
+      {/* View More Button */}
       <div className="view_moreButton">
         <Button
           className="animated-border-button"
@@ -290,12 +253,17 @@ export default function TrendingProducts({ data, heading, buttonDisplay }) {
           View More
         </Button>
       </div>
+
+      {/* Snackbar for Notifications */}
       <Snackbar
         open={snackbarOpen}
         autoHideDuration={5000}
         onClose={handleCloseSnackbar}
         message={snackbarMessage}
+        anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
       />
+
+      {/* Share Dialog */}
       <ShareDialog
         open={showShareDialog}
         setOpen={setShowShareDialog}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { getData } from "../../Services/ServerServices";
 import NavBar from "../Common_Components/NavBar";
 import Carousel from "../Components/Home/Carousel/Carousel";
@@ -8,9 +8,15 @@ import GallerySlider from "../Components/Home/GallerySlider";
 import Testimonials from "../Components/Home/Testimonials";
 import Footer from "../Common_Components/Footer";
 import Footer_02 from "../Common_Components/Footer_02";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap-trial/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
+
+gsap.registerPlugin(ScrollTrigger);
 
 export default function Home() {
   const [trendingProducts, setTrendingProducts] = useState([]);
+  const navRef = useRef();
   const OPTIONS = { axis: "y", loop: true };
   const SLIDES = [
     {
@@ -93,12 +99,56 @@ export default function Home() {
     fetchTrendingProducts();
   }, []);
 
+  // useGSAP(() => {
+  //   gsap.to("#navBar",{
+  //     scrollTrigger: {
+  //       trigger: "#carousel",
+  //       start: "20%",
+  //       end: "60%",
+  //       toggleActions:"play none none none none",
+  //     },
+
+  //     position: "relative",
+  //     y:-20,
+  //     width:"100%"
+  //   });
+
+  // });
+
+  useGSAP(() => {
+    gsap.fromTo(
+      "#navBar",
+      {
+        scrollTrigger: {
+          trigger: "#carousel",
+          start: "100%",
+          end: "45%",
+          toggleActions: "play none none reverse",
+        },
+        y: 0,
+      },
+      {
+        scrollTrigger: {
+          trigger: navRef.current,
+          start: "10%",
+          toggleActions: "play none none reverse",
+        },
+        position: "fixed",
+        y: 0,
+        duration: 0,
+        zIndex: 10,
+        width: "100%",
+        ease: "power1.in",
+      }
+    );
+  });
+
   return (
-    <div >
-      <div>
+    <div ref={navRef} style={{ position: "relative" }}>
+      <div id="navBar">
         <NavBar />
       </div>
-      <div>
+      <div id="carousel">
         <Carousel slides={SLIDES} options={OPTIONS} />
       </div>
       <div style={{ width: "100%" }}>

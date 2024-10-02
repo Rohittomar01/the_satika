@@ -8,12 +8,14 @@ import CalculationComponent from "../Components/AddToCart/CalculationComponent";
 import { getData } from "../../Services/ServerServices";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector,useDispatch } from "react-redux";
 import EmptyCart from "../Components/AddToCart/EmptyCart";
+import { getDetails } from "../../Store/Slices/addToCart";
 
 export default function AddToCart() {
-  const cartItems = useSelector((state) => state.addtocart.products);
+  const cartItems = useSelector((state) => state.addtocart);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [cartData, setCartData] = useState([]);
   const userId = 1;
 
@@ -21,6 +23,12 @@ export default function AddToCart() {
     window.scrollTo(0, 0);
     fetchCartData();
   }, [cartItems]);
+
+  useEffect(() => {
+    {
+      dispatch(getDetails());
+    }
+  }, [cartItems.totalItems]);
 
   const fetchCartData = async () => {
     const user_id = 1;
@@ -34,7 +42,7 @@ export default function AddToCart() {
     }
   };
 
-  if (cartItems.length === 0) {
+  if (cartItems.products.length === 0) {
     return <EmptyCart />;
   }
 
@@ -51,11 +59,13 @@ export default function AddToCart() {
       <Grid className="totalcartItemsGrid" item xs={12} sm={12} lg={12}>
         <Box id="totalcartItemsBox">
           <Typography id="totalcartItems">
-            {cartItems.length === 0 ? "" : `Items:${cartItems.length}`}
+            {cartItems.products.length === 0
+              ? ""
+              : `Items:${cartItems.products.length}`}
           </Typography>
         </Box>
       </Grid>
-      <Grid item xs={8} sm={8} lg={8}>
+      <Grid style={{ marginTop: "1.5%" }} item xs={8} sm={8} lg={8}>
         <ProductCards
           cartData={cartData}
           fetchCartData={fetchCartData}

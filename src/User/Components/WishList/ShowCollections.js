@@ -20,9 +20,7 @@ import { useSelector } from "react-redux";
 import { getData, ServerURL } from "../../../Services/ServerServices";
 
 export default function ShowCollections() {
-  const wishlist_Store = useSelector(
-    (state) => state.products.wishListProducts
-  );
+  const wishlistItems = useSelector((state) => state.wishlist.wishlist);
   const [products, setProducts] = useState([]);
   const userId = 1;
 
@@ -39,7 +37,7 @@ export default function ShowCollections() {
 
   useEffect(() => {
     fetchProducts();
-  }, [wishlist_Store]);
+  }, [wishlistItems]);
 
   const options = { axis: "x", loop: true, dragFree: true };
   const [emblaRef, emblaApi] = useEmblaCarousel(options);
@@ -70,7 +68,7 @@ export default function ShowCollections() {
     //   );
     // }
 
-    return products.map((product) => (
+    return wishlistItems.map((product) => (
       <div className="product-content-container" key={product.product_id}>
         <Card sx={{ maxWidth: 240 }}>
           <CardMedia

@@ -13,16 +13,30 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import CloseIcon from "@mui/icons-material/Close";
 import OtpInput from "react-otp-input";
 import "../../StyleSheets/OTPDialog.css";
-
+import { useNavigate } from "react-router-dom";
+import AddressFormDialog from "../../Pages/AddressFormDialog";
 export default function OTPDialog(props) {
   const [otp, setOtp] = useState("");
+  const [error, setError] = useState("");
+  const [openAdressDialog, setAddressDialogOpen] = useState(false);
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
+  const navigate = useNavigate();
+
+  const correctOtp = props.otp;
 
   const handleClose = () => {
     props.setOtpOpen(false);
   };
-  console.log("otp dialog", props.otpOpen);
+
+  const handleVerify = () => {
+    if (parseInt(otp) === parseInt(correctOtp)) {
+      setAddressDialogOpen(true);
+      props.setOtpOpen(false);
+    } else {
+      setError("Invalid OTP. Please try again.");
+    }
+  };
 
   return (
     <React.Fragment>
@@ -51,25 +65,41 @@ export default function OTPDialog(props) {
             align="center"
             className="otp-dialog-subtitle"
           >
-            Enter the 6 digit OTP sent to your mobile number{" "}
+            Enter the 4-digit OTP sent to your mobile number
             <div>+91 9285524467</div>
           </Typography>
           <div className="otp-input-group">
             <OtpInput
+              className="otpinput"
               value={otp}
               onChange={setOtp}
-              numInputs={6}
+              numInputs={4}
               renderSeparator={<span style={{ padding: "0 10px" }}> - </span>}
-              renderInput={(props) => <input {...props} />}
-              inputStyle={{ height: "6vh", width: "3vw" }}
+              renderInput={(props) => (
+                <input style={{ borderRadius: 200 }} {...props} />
+              )}
+              inputStyle={{
+                height: "7vh",
+                width: "3.5vw",
+                borderRadius: "50%",
+              }}
               containerStyle={{
                 display: "flex",
                 justifyContent: "center",
-                width: "30vw",
+                width: "35vw",
               }}
               shouldAutoFocus={true}
             />
           </div>
+          {error && (
+            <Typography
+              variant="body2"
+              align="center"
+              style={{ color: "red", marginTop: "10px" }}
+            >
+              {error}
+            </Typography>
+          )}
           <Typography
             variant="body2"
             align="center"
@@ -80,21 +110,19 @@ export default function OTPDialog(props) {
         </DialogContent>
         <DialogActions id="otp_dialog_action">
           <Button
+            fullWidth
             variant="contained"
-            onClick={handleClose}
-            className="otp-dialog-button"
+            onClick={handleVerify} 
+            id="otp-dialog-button"
           >
             CONTINUE
           </Button>
-          <Button
-            variant="outlined"
-            onClick={handleClose}
-            id="otp-dialog-cancle_button"
-          >
-            Cancle
-          </Button>
         </DialogActions>
       </Dialog>
+      <AddressFormDialog
+        open={openAdressDialog}
+        setOpen={setAddressDialogOpen}
+      />
     </React.Fragment>
   );
 }
